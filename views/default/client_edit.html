@@ -1,0 +1,19 @@
+{{extend 'layout.html'}}
+
+<h1>{{=client.name}}</h1>
+
+
+<table width="" cellspacing="" cellpadding="" border="">
+  <thead>
+    <th>{{=T('Matter')}}</th>
+  </thead>
+  <tbody>
+    {{for matter in matters:}}
+    <tr>
+      <td>{{=A(matter.name,_href=URL('matter_edit'))}}</td>
+    </tr>
+    {{pass}}
+  </tbody>
+</table>
+<br/>
+{{=A(T('Back'), _href=URL('clients'))}}

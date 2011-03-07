@@ -1,0 +1,14 @@
+{{extend 'layout.html'}}
+
+<table width="" cellspacing="" cellpadding="" border="">
+  <thead>
+    <th>{{=T('Name')}}</th>
+  </thead>
+  <tbody>
+    {{for client in clients:}}
+    <tr>
+      <td>{{=A(client.name, _href=URL('client_edit', args=client.id))}}</td>
+    </tr>
+    {{pass}}
+  </tbody>
+</table>
