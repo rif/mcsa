@@ -1,22 +1,25 @@
 {{extend 'layout.html'}}
-
 <h1>{{=client.name if client else T('New Client')}}</h1>
 
 {{=form}}
-
 {{if matters:}}
-<table width="" cellspacing="" cellpadding="" border="">
+<table>
   <thead>
-    <th>{{=T('Matter')}} [{{=A(T('New'), _href=URL('matter_edit'))}}]</th>
+    <tr>
+      <th>{{=T('Matters')}} [{{=A(T('New'), _href=URL('matter_edit', args=client.id))}}]</th>
+    </tr>
   </thead>
   <tbody>
     {{for matter in matters:}}
     <tr>
-      <td>{{=A(matter.name,_href=URL('matter_edit', args=matter.id))}}</td>
+      <td>{{=A(matter.name,_href=URL('matter_edit', args=(client.id, matter.id)))}}</td>
     </tr>
     {{pass}}
   </tbody>
 </table>
+{{elif len(request.args)>0:}}
+{{=A(T('New matter'), _href=URL('matter_edit', args=client.id))}}
 {{pass}}
 <br/>
+
 {{=A(T('Back'), _href=URL('clients'))}}

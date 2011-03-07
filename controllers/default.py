@@ -13,19 +13,21 @@ def client_edit():
     if len(request.args) > 0:
         client = db.client(request.args[0])
         matters = db(db.matter.client==client).select()
-        form=crud.update(db.client, client)
+        form=crud.update(db.client, client, next=URL('clients'))
     else:
-        form = crud.create(db.client,next=URL('clients'))
+        form = crud.create(db.client, next=URL('clients'))
     return dict(form=form, client=client, matters=matters)
 
 def matter_edit():
     matter = None
-    if len(request.args) > 0:
+    client = db.client(request.args[0])
+    db.matter.client.default = client
+    if len(request.args) > 1:
         matter = db.matter(request.args[0])
         form=crud.update(db.matter, matter)
     else:
         form = crud.create(db.matter)
-    return dict(form=form, matter=matter)
+    return dict(form=form, matter=matter, client=client)
 
 
 def user():

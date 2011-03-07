@@ -3,3 +3,6 @@
 {{=matter.name if matter else T('New matter')}}
 
 {{=form}}
+
+<br/>
+{{=A(T('Back'), _href=URL('client_edit', args=client.id))}}
