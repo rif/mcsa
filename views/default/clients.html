@@ -2,16 +2,18 @@
 
 <h1>Clients [{{=A(T('New'), _href=URL('client_edit'))}}]</h1>
 
-<table width="" cellspacing="" cellpadding="" border="">
+<table>
   <thead>
-    <th>{{=T('Client')}}</th>
-    <th>{{=T('Billable')}}</th>
+    <tr>
+      <th>{{=T('Client')}}</th>
+      <th>{{=T('Billable')}}</th>
+    </tr>
   </thead>
   <tbody>
     {{for client in clients:}}
     <tr>
       <td>{{=A(client.name, _href=URL('client_edit', args=client.id))}}</td>
-      <td>{{=client.billable}}
+      <td>{{=client.billable}}</td>
     </tr>
     {{pass}}
   </tbody>
