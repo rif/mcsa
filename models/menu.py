@@ -21,5 +21,6 @@ response.meta.copyright = 'Copyright 2007-2010'
 ##########################################
 
 response.menu = [
-    (T('Home'), False, URL('default','index'), [])
+    (T('Home'), False, URL('default','index'), []),
+    (T('Clients'), False, URL('default', 'clients'), [])
     ]
