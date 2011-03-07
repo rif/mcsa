@@ -60,6 +60,24 @@ auth.messages.reset_password = 'Click on the link http://'+request.env.http_host
 
 crud.settings.auth = None                      # =auth to enforce authorization on crud
 
+def duration(row):
+    delta = row.end - row.start
+    minutes = delta.days * 24 * 60 + delta.seconds / 60
+    return minutes / 6 * 0.1
+
+def cost(row):
+    rate = 0.0
+    delta = row.end - row.start
+    minutes = delta.days * 24 * 60 + delta.seconds / 60
+    duration = minutes / 6 * 0.1
+    if row.rate:
+        rate = row.rate
+    else:
+        project = db(db.project.id==row.project).select()[0]
+        rate = project.rate
+    if duration and row.billable:
+        return duration * rate
+    return 0
 
 db.define_table('client',
                 Field('name', required=True),
@@ -72,4 +90,19 @@ db.define_table('matter',
                 Field('name', required=True),
                 format='%(name)s'
                 )
+                
+db.define_table('time_entry',
+                Field('client', db.client),
+                Field('matter', db.matter),
+                Field('user', db.auth_user, default=auth.user_id, update=auth.user_id, writable=False, readable=False),
+                Field('description'),
+                Field('start', 'datetime'),
+                Field('end', 'datetime'),
+                Field('duration',compute=duration),#lambda r:r.end - r.start),
+                #Field('cost',compute=cost),
+                Field('rate', 'double'),
+                Field('billable', 'boolean', default=True),
+                Field('billed', 'boolean', default=False),
+                Field('creation_time', 'datetime', readable=False, writable=False, default=request.now),
+                format='%(description)s')
                 

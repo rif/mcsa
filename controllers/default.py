@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 def index():
-    return dict(link=A('Clients', _href=URL('clients')))
+    entries = db(db.time_entry.id>0).select()
+    return dict(entries=entries)
 
 def clients():
     clients = db(db.client.id>0).select()
@@ -29,6 +30,14 @@ def matter_edit():
         form = crud.create(db.matter)
     return dict(form=form, matter=matter, client=client)
 
+def entry_edit():
+    entry = None
+    if len(request.args) > 0:
+        entry = db.time_entry(request.args[0])
+        form=crud.update(db.time_entry, entry, next=URL('index'))
+    else:
+        form = crud.create(db.time_entry, next=URL('index'))
+    return dict(form=form, entry=entry)
 
 def user():
     """
