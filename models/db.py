@@ -63,6 +63,7 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 
 db.define_table('client',
                 Field('name', required=True),
+                Field('billable', 'boolean', default=True),
                 format='%(name)s'
                 )
 
