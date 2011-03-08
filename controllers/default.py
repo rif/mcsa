@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 def index():
-    entries = db(db.time_entry.id>0).select()
-    return dict(entries=entries)
+    entries = db(db.time_entry).select()
+    return locals()
 
 def clients():
-    clients = db(db.client.id>0).select()
-    return dict(clients=clients)
+    clients = db(db.client).select()
+    return locals()
 
 def client_edit():
     client = None
@@ -17,7 +17,16 @@ def client_edit():
         form=crud.update(db.client, client, next=URL('clients'))
     else:
         form = crud.create(db.client, next=URL('clients'))
-    return dict(form=form, client=client, matters=matters)
+    return locals()
+
+def matters_callback():
+    client = db.client(request.args[0])
+    matters = db(db.matter.client==client).select()
+    option_list = [OPTION('')]
+    for row in matters:
+        option_list.append(OPTION(row.name, _value=row.id))
+    return SELECT(*option_list, _id='time_entry_matter', _class='reference', _name='matter')
+    
 
 def matter_edit():
     matter = None
@@ -28,7 +37,7 @@ def matter_edit():
         form=crud.update(db.matter, matter)
     else:
         form = crud.create(db.matter)
-    return dict(form=form, matter=matter, client=client)
+    return locals()
 
 def entry_edit():
     entry = None
@@ -37,7 +46,7 @@ def entry_edit():
         form=crud.update(db.time_entry, entry, next=URL('index'))
     else:
         form = crud.create(db.time_entry, next=URL('index'))
-    return dict(form=form, entry=entry)
+    return locals()
 
 def user():
     """
