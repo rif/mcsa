@@ -51,6 +51,7 @@ def entry_edit():
     entry = None
     if len(request.args) > 0:
         entry = db.time_entry(request.args[0])
+        db.time_entry.matter.requires = IS_IN_DB(db(db.matter.client==entry.client), 'matter.id', '%(name)s')
         form=crud.update(db.time_entry, entry, next=URL('index'))
     else:
         form = crud.create(db.time_entry, next=URL('index'))
