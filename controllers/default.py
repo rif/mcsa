@@ -64,6 +64,14 @@ def matters_callback():
         option_list.append(OPTION(row.name, _value=row.id))
     return SELECT(*option_list, _id='time_entry_matter', _class='reference', _name='matter')
 
+def segment_callback():
+    matter = db.matter(request.args[0])
+    segments = db(db.segment.matter==matter).select()
+    option_list = [OPTION('')]
+    for row in segments:
+        option_list.append(OPTION(row.name, _value=row.id))
+    return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
+
 
 def user():
     """
