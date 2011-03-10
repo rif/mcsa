@@ -60,11 +60,6 @@ auth.messages.reset_password = 'Click on the link http://'+request.env.http_host
 
 crud.settings.auth = None                      # =auth to enforce authorization on crud
 
-def duration(row):
-    delta = row.end - row.start
-    minutes = delta.days * 24 * 60 + delta.seconds / 60
-    return minutes / 6 * 0.1
-
 def cost(row):
     rate = 0.0
     delta = row.end - row.start
@@ -90,19 +85,28 @@ db.define_table('matter',
                 Field('name', required=True),
                 format='%(name)s'
                 )
+
+db.define_table('segment',
+                Field('matter', db.matter, readable=False, writable=False),
+                Field('name', required=True),
+                format='%(name)s'
+                )
                 
 db.define_table('time_entry',
                 Field('client', db.client),
                 Field('matter', db.matter),
+                Field('segment', db.segment),
+                Field('code_classification', requires=IS_IN_SET(['Meeting', 'Discussion', 'Telephone Call', 'Review/Analyse', 'Draft/Revise', 'Legal Research', 'Travel', 'Other'])),
                 Field('user', db.auth_user, default=auth.user_id, update=auth.user_id, writable=False, readable=False),
-                Field('description'),
-                Field('start', 'datetime'),
-                Field('end', 'datetime'),
-                Field('duration',compute=duration),#lambda r:r.end - r.start),
+                Field('description', 'text'),
+                Field('special_notes', 'text'),
+                Field('related_disbursements', 'list:string', requires=IS_IN_SET(['Mobile', 'Telephone', 'Travel', 'Meals', 'Other'], multiple=True)),
+                Field('date', 'date'),
+                Field('duration', 'double', requires=IS_FLOAT_IN_RANGE(0.1,24)),
                 #Field('cost',compute=cost),
                 Field('rate', 'double'),
                 Field('billable', 'boolean', default=True),
                 Field('billed', 'boolean', default=False),
                 Field('creation_time', 'datetime', readable=False, writable=False, default=request.now),
-                format='%(description)s')
-                
+                format='%(description)s'
+                )                
