@@ -1,6 +1,31 @@
 {{extend 'layout.html'}}
 
-{{=form}}
+{{=form.custom.begin}}
+<table width="20px" cellspacing="" cellpadding="" border="1">
+  <tbody>
+    <tr>
+      <td colspan="3">Fee Earner</td>
+      <td><label>Date:</label> {{=form.custom.widget.date}}</td>
+      <td><label>Duration: </label> {{=form.custom.widget.duration}}</td>
+    </tr>
+    <tr>
+      <td><label>Client:</label> {{=form.custom.widget.client}}</td>
+      <td><label>Matter:</label> <span id="matter_span">{{=form.custom.widget.matter}}</span></td>
+      <td><label>Segment:</label> {{=form.custom.widget.segment}}</td>
+      <td colspan="2"><label>Code classification:</label> {{=form.custom.widget.code_classification}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="5">{{=form.custom.widget.description}}</td>
+    </tr>
+    <tr>
+      <td colspan="3">{{=form.custom.widget.special_notes}}</td>
+      <td colspan="2"><label>Related Disbursements:</label><br/>{{=form.custom.widget.related_disbursements}}</td>
+    </tr>
+  </tbody>
+</table>
+{{=form.custom.submit}}
+{{=form.custom.end}}
 
 <script type="text/javascript">
   $(function(){
@@ -13,7 +38,7 @@
   $("#time_entry_matter").hide();
   } else {
   $("#time_entry_matter").show();
-  $("#time_entry_matter__row .w2p_fw").load("{{=URL('matters_callback')}}/" + client.val());
+  $("#matter_span").load("{{=URL('matters_callback')}}/" + client.val());
   }
   });
   });

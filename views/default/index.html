@@ -9,8 +9,8 @@
       <th>{{=T('Description')}}</th>
       <th>{{=T('Client')}}</th>
       <th>{{=T('Matter')}}</th>
-      <th>{{=T('Start')}}</th>
-      <th>{{=T('End')}}</th>
+      <th>{{=T('Date')}}</th>
+      <th>{{=T('Duration')}}</th>
       <th>{{=T('Rate')}}</th>
     </tr>
   </thead>
@@ -20,8 +20,8 @@
       <td>{{=A(entry.description, _href=URL('entry_edit', args=entry.id))}}</td>
       <td>{{=entry.client.name}}</td>
       <td>{{=entry.matter.name}}</td>
-      <td>{{=entry.start}}</td>
-      <td>{{=entry.end}}</td>
+      <td>{{=entry.date}}</td>
+      <td>{{=entry.duration}}</td>
       <td>{{=entry.rate}}</td>
     </tr>
     {{pass}}
