@@ -504,12 +504,11 @@ a.button:hover span.icon.user { background-position: 0 -869px }
 /*****************************************************
  *  HERE YOU CAN START TO WRITE YOUR OWN DIVS
  */
-
-
-
-
-
-
+#time_entry input {width:10em;}
+#time_entry select {width:15em;}
+#time_entry textarea {width:100%;}
+#time_entry .head {background-color: #3875d7; color: white;}
+#time_entry .shead {background-color: #aed5fe;}
 
 /*
  * Media queries for responsive design

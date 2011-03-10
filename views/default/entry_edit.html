@@ -1,26 +1,44 @@
 {{extend 'layout.html'}}
 
 {{=form.custom.begin}}
-<table width="20px" cellspacing="" cellpadding="" border="1">
+<table id="time_entry">
   <tbody>
-    <tr>
+    <tr class="head">
       <td colspan="3">Fee Earner</td>
-      <td><label>Date:</label> {{=form.custom.widget.date}}</td>
-      <td><label>Duration: </label> {{=form.custom.widget.duration}}</td>
+      <td>Date</td>
+      <td>Duration</td>
     </tr>
     <tr>
-      <td><label>Client:</label> {{=form.custom.widget.client}}</td>
-      <td><label>Matter:</label> <span id="matter_span">{{=form.custom.widget.matter}}</span></td>
-      <td><label>Segment:</label> {{=form.custom.widget.segment}}</td>
-      <td colspan="2"><label>Code classification:</label> {{=form.custom.widget.code_classification}}</td>
+      <td colspan="3">Fee Earner</td>
+      <td>{{=form.custom.widget.date}}</td>
+      <td>{{=form.custom.widget.duration}}</td>
+    </tr>
+    <tr class="shead">
+      <td>Client</td>
+      <td>Matter</td>
+      <td>Segment</td>
+      <td colspan="2">Code classification</td>
+    </tr>
+    <tr>
+      <td>{{=form.custom.widget.client}}</td>
+      <td><span id="matter_span">{{=form.custom.widget.matter}}</span></td>
+      <td>{{=form.custom.widget.segment}}</td>
+      <td colspan="2">{{=form.custom.widget.code_classification}}</td>
       <td></td>
+    </tr>
+    <tr class="shead">
+      <td colspan="5">Description</td>
     </tr>
     <tr>
       <td colspan="5">{{=form.custom.widget.description}}</td>
     </tr>
+    <tr class="shead">
+      <td colspan="3">Special Notes</td>
+      <td colspan="2">Related Disbursement</td>
+    </tr>
     <tr>
       <td colspan="3">{{=form.custom.widget.special_notes}}</td>
-      <td colspan="2"><label>Related Disbursements:</label><br/>{{=form.custom.widget.related_disbursements}}</td>
+      <td colspan="2">{{=form.custom.widget.related_disbursements}}</td>
     </tr>
   </tbody>
 </table>
@@ -31,13 +49,14 @@
   $(function(){
   client = $("#time_entry_client");
   if(client.val() == "") {
-  $("#time_entry_matter").hide();
+  $("#time_entry_matter").attr("disabled","disabled");
   }
   client.change(function(){
   if(client.val() == "") {
-  $("#time_entry_matter").hide();
+  $("#time_entry_matter").val("");
+  $("#time_entry_matter").attr("disabled","disabled");
   } else {
-  $("#time_entry_matter").show();
+  $("#time_entry_matter").attr("disabled","");
   $("#matter_span").load("{{=URL('matters_callback')}}/" + client.val());
   }
   });
