@@ -24,13 +24,27 @@ def client_edit():
 @auth.requires_membership('admin')
 def matter_edit():
     matter = None
+    segments = None
     client = db.client(request.args[0])
     db.matter.client.default = client
     if len(request.args) > 1:
-        matter = db.matter(request.args[0])
-        form=crud.update(db.matter, matter)
+        matter = db.matter(request.args[1])
+        segments = db(db.segment.matter==matter).select()
+        form=crud.update(db.matter, matter, next = (URL('client_edit', args=client.id)), message=T('Matter updated'))
     else:
-        form = crud.create(db.matter)
+        form = crud.create(db.matter, next = (URL('client_edit', args=client.id)), message=T('Matter created'))
+    return locals()
+
+@auth.requires_membership('admin')
+def segment_edit():
+    segment = None
+    matter = db.matter(request.args[0])
+    db.segment.matter.default = matter
+    if len(request.args) > 1:
+        segment = db.segment(request.args[1])
+        form=crud.update(db.segment, segment, next = (URL('matter_edit', args=(matter.client, matter.id))), message=T('Segment updated'))
+    else:
+        form = crud.create(db.segment, next = (URL('matter_edit', args=(matter.client, matter.id))), message=T('Segment created'))
     return locals()
 
 def entry_edit():
