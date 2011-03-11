@@ -19,7 +19,7 @@
     {{pass}}
   </tbody>
 </table>
-{{elif len(request.args)>0:}}
+{{elif len(request.args)>1:}}
 {{=A(T('New segment'), _href=URL('segment_edit', args=matter.id))}}
 {{pass}}
 <br/>

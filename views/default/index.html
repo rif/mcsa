@@ -17,7 +17,7 @@
   <tbody>
     {{for entry in entries:}}
     <tr>
-      <td>{{=A(entry.description, _href=URL('entry_edit', args=entry.id))}}</td>
+      <td>{{=A(entry.description[:20] +"...", _href=URL('entry_edit', args=entry.id))}}</td>
       <td>{{=entry.client.name}}</td>
       <td>{{=entry.matter.name}}</td>
       <td>{{=entry.date}}</td>
