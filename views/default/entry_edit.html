@@ -54,15 +54,15 @@
   child.attr("disabled","");
   target.load(url + parent.val(), callback);
   }
-  }
-  
+  }  
   $(function(){
   client = $("#time_entry_client");
   matter = $("#time_entry_matter");
-  
+
   if(client.val() == "") {
   matter.attr("disabled","disabled");
-  }
+  } 
+
   if(matter.val() == "") {
   $("#time_entry_segment").attr("disabled","disabled");
   }
@@ -82,3 +82,4 @@
   });
   });
 </script>
+

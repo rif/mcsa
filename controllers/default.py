@@ -51,7 +51,9 @@ def entry_edit():
     entry = None
     if len(request.args) > 0:
         entry = db.time_entry(request.args[0])
-        db.time_entry.matter.requires = IS_IN_DB(db(db.matter.client==entry.client), 'matter.id', '%(name)s')
+        #the requirements bellow do not work beacause it will not allow to change clients
+        #db.time_entry.matter.requires=IS_IN_DB(db(db.matter.client==entry.client),db.matter.id, '%(name)s')
+        #db.time_entry.segment.requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment.matter==entry.matter),db.segment.id, '%(name)s'))
         form=crud.update(db.time_entry, entry, next=URL('index'))
     else:
         form = crud.create(db.time_entry, next=URL('index'))
@@ -61,16 +63,16 @@ def matters_callback():
     client = db.client(request.args[0])
     matters = db(db.matter.client==client).select()
     option_list = [OPTION('')]
-    for row in matters:
-        option_list.append(OPTION(row.name, _value=row.id))
+    for mat in matters:
+        option_list.append(OPTION(mat.name, _value=mat.id))
     return SELECT(*option_list, _id='time_entry_matter', _class='reference', _name='matter')
 
 def segment_callback():
     matter = db.matter(request.args[0])
     segments = db(db.segment.matter==matter).select()
     option_list = [OPTION('')]
-    for row in segments:
-        option_list.append(OPTION(row.name, _value=row.id))
+    for seg in segments:
+        option_list.append(OPTION(seg.name, _value=seg.id))
     return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
 
 
