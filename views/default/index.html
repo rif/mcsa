@@ -9,6 +9,7 @@
       <th>{{=T('Description')}}</th>
       <th>{{=T('Client')}}</th>
       <th>{{=T('Matter')}}</th>
+      <th>{{=T('Segment')}}</th>
       <th>{{=T('Date')}}</th>
       <th>{{=T('Duration')}}</th>
       <th>{{=T('Rate')}}</th>
@@ -20,6 +21,7 @@
       <td>{{=A(entry.description[:20] +"...", _href=URL('entry_edit', args=entry.id))}}</td>
       <td>{{=entry.client.name}}</td>
       <td>{{=entry.matter.name}}</td>
+      <td>{{if entry.segment:}}{{=entry.segment.name}}{{pass}}</td>
       <td>{{=entry.date}}</td>
       <td>{{=entry.duration}}</td>
       <td>{{=entry.rate}}</td>
@@ -27,7 +29,6 @@
     {{pass}}
   </tbody>
 </table>
-
 
 {{block left_sidebar}}New Left Sidebar Content{{end}}
 {{block right_sidebar}}New Right Sidebar Content{{end}}
