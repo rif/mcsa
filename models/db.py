@@ -75,8 +75,8 @@ def cost(row):
     return 0
 
 db.define_table('client',
-                Field('name', required=True),
-                Field('billable', 'boolean', default=True, unique=True),
+                Field('name', required=True, unique=True),
+                Field('billable', 'boolean', default=True),
                 format='%(name)s'
                 )
 
@@ -95,10 +95,10 @@ db.define_table('segment',
 db.define_table('time_entry',
                 Field('client', db.client),
                 Field('matter', db.matter),
-                Field('segment', db.segment, required=False, requires=None),
+                Field('segment', db.segment),
                 Field('code_classification', requires=IS_IN_SET(['Other', 'Meeting', 'Discussion', 'Telephone Call', 'Review/Analyse', 'Draft/Revise', 'Legal Research', 'Travel'], zero=None), default='Other'),
                 Field('user', db.auth_user, default=auth.user_id, update=auth.user_id, writable=False, readable=False),
-                Field('description', 'text'),
+                Field('description', 'text', required=True),
                 Field('special_notes', 'text'),
                 Field('related_disbursements', 'list:string', requires=IS_IN_SET(['Mobile', 'Telephone', 'Travel', 'Meals', 'Other'], multiple=True)),
                 Field('date', 'date'),
