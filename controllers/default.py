@@ -49,8 +49,10 @@ def segment_edit():
 
 def entry_edit():
     entry = None
+    user = None
     if len(request.args) > 0:
         entry = db.time_entry(request.args[0])
+        user = db.auth_user(entry.created_by)
         #the requirements bellow do not work beacause it will not allow to change clients
         #db.time_entry.matter.requires=IS_IN_DB(db(db.matter.client==entry.client),db.matter.id, '%(name)s')
         #db.time_entry.segment.requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment.matter==entry.matter),db.segment.id, '%(name)s'))
