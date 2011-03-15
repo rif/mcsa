@@ -1,8 +1,3 @@
-{{extend 'layout.html'}}
-
-{{=segment.name if segment else T('New segment')}}
-
-{{=form}}
-<br/>
-
-{{=A(T('Back'), _href=URL('matter_edit', args=(matter.client, matter.id)))}}
+<td>{{=form.custom.begin}}
+  {{=form.custom.widget.name}} {{=form.custom.submit}}
+{{=form.custom.end}}</td>
