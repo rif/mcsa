@@ -1,8 +1,12 @@
 {{extend 'layout.html'}}
 
-<h1>Clients [{{=A(T('New'), _href=URL('client_edit'))}}]</h1>
+<h1>Clients</h1>
+
+<div id="new-area">
+</div>
 
 <ul id="clients">
+  <li id="cl_new">{{=A(T('New client'), _href=URL('client_new'), cid='new-area')}}</li>
   {{for client in clients:}}
   <li>
     <span id={{='cl_' + str(client.id)}}>
@@ -14,7 +18,7 @@
     </span>
     <a class="expander" href="#">+</a>
     <ul style="display:none;">
-      <li>{{=A(T('New matter'), _href=URL('matter_edit', args=client.id))}}</li>
+      <li>{{=A(T('New matter'), _href=URL('matter_new'))}}</li>
       {{for matter in db(db.matter.client==client).select():}}
       <li>
 	<span id={{='mt_' + str(matter.id)}}>
@@ -25,7 +29,7 @@
 	</span>
 	<a class="expander" href="#">+</a>
 	<ul style="display:none;">
-	  {{=A(T('New segment'), _href=URL('segment_edit', args=matter.id))}}
+	  {{=A(T('New segment'), _href=URL('segment_new'))}}
 	  {{for segment in db(db.segment.matter==matter).select():}}
 	  <li>
 	    <span id={{='sg_' + str(segment.id)}}>
@@ -42,7 +46,6 @@
     </ul>
   </li>  
   {{pass}}
-  <li id="cl_new">{{=A(T('New Client'), _href=URL('client_edit1'), cid='cl_new')}}</li>
 </ul>
 
 <script type="text/javascript">
