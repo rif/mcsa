@@ -2,22 +2,42 @@
 
 <h1>Clients [{{=A(T('New'), _href=URL('client_edit'))}}]</h1>
 
-<ul>
+<ul id="clients">
   {{for client in clients:}}
   <li id={{='cl_' + str(client.id)}}>
     <div>
       <span>{{=A(client.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))}}</span>
       <span>{{=client.billable}}</span>
     </div>    
+  </li>
+  <a class="expander" href="#">+</a>
+  <ul style="display:none;">
+    {{for matter in db(db.matter.client==client).select():}}
+    <li id={{='mt_' + str(matter.id)}}>
+      <div>
+	<span>{{=A(matter.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))}}</span>
+      </div>    
+    </li>
     <ul>
-      {{for matter in db(db.matter.client==client).select():}}
-      <li id={{='mt_' + str(matter.id)}}>
+      {{for segment in db(db.segment.matter==matter).select():}}
+      <li id={{='sg_' + str(segment.id)}}>
 	<div>
-	  <span>{{=A(matter.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))}}</span>
+	  <span>{{=A(segment.name, _href=URL('segment_edit1', args=segment.id), cid='sg_' + str(segment.id))}}</span>
 	</div>    
       </li>
       {{pass}}
     </ul>
-  </li>
+    {{pass}}
+  </ul>
   {{pass}}
+  <li id="cl_new">{{=A(T('New Client'), _href=URL('client_edit1'), cid='cl_new')}}</li>
 </ul>
+
+<script type="text/javascript">
+  $(function(){
+  $(".expander").click(function(e){
+  $(this).nextAll("ul:first").slideToggle();
+  e.preventDefault();
+  });
+  });
+</script>

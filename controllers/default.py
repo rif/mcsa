@@ -21,6 +21,7 @@ def client_edit():
         form = crud.create(db.client, next=URL('clients'))
     return locals()
 
+@auth.requires_membership('admin')
 def client_edit1():
     client = db.client(request.args[0])
     form=SQLFORM(db.client, client)
@@ -49,6 +50,18 @@ def matter_edit():
     return locals()
 
 @auth.requires_membership('admin')
+def matter_edit1():
+    matter = db.matter(request.args[0])
+    form=SQLFORM(db.matter, matter)
+    if form.accepts(request.vars):
+        return DIV(SPAN(A(form.vars.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))))
+    elif form.errors:
+        response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
+        return DIV(SPAN(A(matter.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))))
+    return locals()
+
+
+@auth.requires_membership('admin')
 def segment_edit():
     segment = None
     matter = db.matter(request.args[0])
@@ -59,6 +72,18 @@ def segment_edit():
     else:
         form = crud.create(db.segment, next = (URL('matter_edit', args=(matter.client, matter.id))), message=T('Segment created'))
     return locals()
+
+@auth.requires_membership('admin')
+def segment_edit1():
+    segment = db.segment(request.args[0])
+    form=SQLFORM(db.segment, segment)
+    if form.accepts(request.vars):
+        return DIV(SPAN(A(form.vars.name, _href=URL('segment_edit1', args=segment.id), cid='mt_' + str(segment.id))))
+    elif form.errors:
+        response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
+        return DIV(SPAN(A(segment.name, _href=URL('segment_edit1', args=segment.id), cid='mt_' + str(segment.id))))
+    return locals()
+
 
 def entry_edit():
     entry = None
