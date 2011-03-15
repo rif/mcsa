@@ -22,16 +22,24 @@ def client_edit():
     return locals()
 
 @auth.requires_membership('admin')
+def client_delete():
+    client = db(db.client.id==request.args[0]) or redirect(URL('clients'))
+    client.delete()
+    return ''
+
+@auth.requires_membership('admin')
 def client_edit1():
     client = db.client(request.args[0])
     form=SQLFORM(db.client, client)
     if form.accepts(request.vars):
-        return DIV(SPAN(A(form.vars.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))),
-                   SPAN(form.vars.billable))
+        return SPAN(SPAN(A(form.vars.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))),
+                    SPAN(form.vars.billable),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('client_delete', args=client.id))))
     elif form.errors:
         response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
-        return DIV(SPAN(A(client.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))),
-                   SPAN(client.billable))
+        return SPAN(SPAN(A(client.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))),
+                    SPAN(client.billable),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('client_delete', args=client.id))))
     return locals()
 
         
@@ -54,12 +62,19 @@ def matter_edit1():
     matter = db.matter(request.args[0])
     form=SQLFORM(db.matter, matter)
     if form.accepts(request.vars):
-        return DIV(SPAN(A(form.vars.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))))
+        return SPAN(SPAN(A(form.vars.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('matter_delete', args=matter.id))))
     elif form.errors:
         response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
-        return DIV(SPAN(A(matter.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))))
+        return SPAN(SPAN(A(matter.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('matter_delete', args=matter.id))))
     return locals()
 
+@auth.requires_membership('admin')
+def matter_delete():
+    matter = db(db.matter.id==request.args[0]) or redirect(URL('clients'))
+    matter.delete()
+    return ''
 
 @auth.requires_membership('admin')
 def segment_edit():
@@ -78,12 +93,19 @@ def segment_edit1():
     segment = db.segment(request.args[0])
     form=SQLFORM(db.segment, segment)
     if form.accepts(request.vars):
-        return DIV(SPAN(A(form.vars.name, _href=URL('segment_edit1', args=segment.id), cid='mt_' + str(segment.id))))
+        return SPAN(SPAN(A(form.vars.name, _href=URL('segment_edit1', args=segment.id), cid='mt_' + str(segment.id))),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('segment_delete', args=segment.id))))
     elif form.errors:
         response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
-        return DIV(SPAN(A(segment.name, _href=URL('segment_edit1', args=segment.id), cid='mt_' + str(segment.id))))
+        return SPAN(SPAN(A(segment.name, _href=URL('segment_edit1', args=segment.id), cid='mt_' + str(segment.id))),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('segment_delete', args=segment.id))))
     return locals()
 
+@auth.requires_membership('admin')
+def segment_delete():
+    segment = db(db.segment.id==request.args[0]) or redirect(URL('clients'))
+    segment.delete()
+    return ''
 
 def entry_edit():
     entry = None
