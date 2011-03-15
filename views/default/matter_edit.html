@@ -1,27 +1,3 @@
-{{extend 'layout.html'}}
-
-{{=matter.name if matter else T('New matter')}}
-
-{{=form}}
-
-{{if segments:}}
-<table>
-  <thead>
-    <tr>
-      <th>{{=T('Segments')}} [{{=A(T('New'), _href=URL('segment_edit', args=matter.id))}}]</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{for segment in segments:}}
-    <tr>
-      <td>{{=A(segment.name,_href=URL('segment_edit', args=(matter.id, segment.id)))}}</td>
-    </tr>
-    {{pass}}
-  </tbody>
-</table>
-{{elif len(request.args)>1:}}
-{{=A(T('New segment'), _href=URL('segment_edit', args=matter.id))}}
-{{pass}}
-<br/>
-
-{{=A(T('Back'), _href=URL('client_edit', args=client.id))}}
+<td>{{=form.custom.begin}}
+  {{=form.custom.widget.name}} {{=form.custom.submit}}
+{{=form.custom.end}}</td>
