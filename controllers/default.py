@@ -38,11 +38,12 @@ def client_edit():
         
 @auth.requires_membership('admin')
 def matter_new():
+    db.matter.client.default = db.client(request.args[0])
     form = crud.create(db.matter, next=URL('clients'), message=T('Matter created'))
     return locals()
 
 @auth.requires_membership('admin')
-def matter_edit1():
+def matter_edit():
     matter = db.matter(request.args[0])
     form=SQLFORM(db.matter, matter)
     if form.accepts(request.vars):
@@ -62,6 +63,7 @@ def matter_delete():
 
 @auth.requires_membership('admin')
 def segment_new():
+    db.segment.matter.default = db.matter(request.args[0])
     form = crud.create(db.segment, next=URL('clients'), message=T('Segment created'))
     return locals()
 
