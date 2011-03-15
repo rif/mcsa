@@ -6,35 +6,35 @@
 </div>
 
 <ul id="clients">
-  <li id="cl_new">{{=A(T('New client'), _href=URL('client_new'), cid='new-area')}}</li>
+  {{=A(T('New client'), _href=URL('client_new'), cid='new-area')}}
   {{for client in clients:}}
   <li>
     <span id={{='cl_' + str(client.id)}}>
       <span>
-	<span>{{=A(client.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))}}</span>
+	<span>{{=A(client.name, _href=URL('client_edit', args=client.id), cid='cl_' + str(client.id))}}</span>
 	<span>{{=client.billable}}</span>
 	<span>{{=A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('client_delete', args=client.id))}}</span>
       </span>    
     </span>
     <a class="expander" href="#">+</a>
     <ul style="display:none;">
-      <li>{{=A(T('New matter'), _href=URL('matter_new'))}}</li>
+      {{=A(T('New matter'), _href=URL('matter_new', args=client.id), cid="new-area")}}
       {{for matter in db(db.matter.client==client).select():}}
       <li>
 	<span id={{='mt_' + str(matter.id)}}>
 	  <span>
-	    <span>{{=A(matter.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))}}</span>
+	    <span>{{=A(matter.name, _href=URL('matter_edit', args=matter.id), cid='mt_' + str(matter.id))}}</span>
 	    <span>{{=A('x', _onclick="$(this).parents('li:first').remove();$.get($(this).attr('href')); return false;", _href=URL('matter_delete', args=matter.id))}}</span>
 	  </span>    
 	</span>
 	<a class="expander" href="#">+</a>
 	<ul style="display:none;">
-	  {{=A(T('New segment'), _href=URL('segment_new'))}}
+	  {{=A(T('New segment'), _href=URL('segment_new', args=matter.id), cid="new-area")}}
 	  {{for segment in db(db.segment.matter==matter).select():}}
 	  <li>
 	    <span id={{='sg_' + str(segment.id)}}>
 	      <span>
-		<span>{{=A(segment.name, _href=URL('segment_edit1', args=segment.id), cid='sg_' + str(segment.id))}}</span>
+		<span>{{=A(segment.name, _href=URL('segment_edit', args=segment.id), cid='sg_' + str(segment.id))}}</span>
 		<span>{{=A('x', _onclick="$(this).parents('li:first').remove();$.get($(this).attr('href')); return false;", _href=URL('segment_delete', args=segment.id))}}</span>
 	      </span>    
 	    </span>
