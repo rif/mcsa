@@ -16,11 +16,24 @@ def client_edit():
     if len(request.args) > 0:
         client = db.client(request.args[0])
         matters = db(db.matter.client==client).select()
-        form=crud.update(db.client, client, next=URL('clients'))
+        form=crud.update(db.client, client, deletable=False)
     else:
         form = crud.create(db.client, next=URL('clients'))
     return locals()
-    
+
+def client_edit1():
+    client = db.client(request.args[0])
+    form=SQLFORM(db.client, client)
+    if form.accepts(request.vars):
+        return DIV(SPAN(A(form.vars.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))),
+                   SPAN(form.vars.billable))
+    elif form.errors:
+        response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
+        return DIV(SPAN(A(client.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))),
+                   SPAN(client.billable))
+    return locals()
+
+        
 @auth.requires_membership('admin')
 def matter_edit():
     matter = None
