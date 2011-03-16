@@ -9,7 +9,7 @@ def clients():
     clients = db(db.client).select()
     return locals()
 
-def __edit(request, odb, edit_link, delete_link):
+def __edit(request, odb, edit_link):
     if len(request.args) > 0 and request.vars.new != 1:
         obj = odb(request.args[0])
         form=crud.update(odb, obj, deletable=False)
@@ -20,8 +20,6 @@ def __edit(request, odb, edit_link, delete_link):
             SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid='cl_' + str(form.vars.id))),
             ' ', 
             SPAN(form.vars.billable) if form.vars.billable else ' ',
-            ' ',
-            SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL(delete_link, args=form.vars.id))),
             ' ', _id=form.vars.id)
     return response.render('default/form.html', locals())
 
@@ -32,7 +30,7 @@ def __delete(odb):
 
 @auth.requires_membership('admin')
 def client_edit():
-    return __edit(request, db.client, 'client_edit', 'client_delete')
+    return __edit(request, db.client, 'client_edit')
 
 @auth.requires_membership('admin')
 def client_delete():
@@ -42,7 +40,7 @@ def client_delete():
 def matter_edit():
     if request.vars.new == 'True':
         db.matter.client.default = db.client(request.args[0])    
-    return __edit(request, db.matter, 'matter_edit', 'matter_delete')
+    return __edit(request, db.matter, 'matter_edit')
 
 @auth.requires_membership('admin')
 def matter_delete():
@@ -52,7 +50,7 @@ def matter_delete():
 def segment_edit():
     if request.vars.new == 'True':
         db.segment.matter.default = db.matter(request.args[0])    
-    return __edit(request, db.segment, 'segment_edit', 'segment_delete')
+    return __edit(request, db.segment, 'segment_edit')
 
 @auth.requires_membership('admin')
 def segment_delete():
