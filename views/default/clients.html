@@ -2,7 +2,7 @@
 
 <h1>Clients</h1>
 
-<ul id="clients">
+<ul id="cl">
   {{=A(T('New client'), _class='new-link', _href=URL('client_edit'), cid="new-area")}}
   {{for client in clients:}}
   <li>
@@ -14,8 +14,8 @@
       </span>    
     </span>
     <a class="expander" href="#">+</a>
-    <ul style="display:none;">
-      {{=A(T('New matter'), _href=URL('matter_edit', args=client.id), cid="new-area")}}
+    <ul id="mt" style="display:none;">
+      {{=A(T('New matter'), _class='new-link', _href=URL('matter_edit', args=client.id, vars=dict(new=True)), cid="new-area")}}
       {{for matter in db(db.matter.client==client).select():}}
       <li>
 	<span id={{='mt_' + str(matter.id)}}>
@@ -25,8 +25,8 @@
 	  </span>    
 	</span>
 	<a class="expander" href="#">+</a>
-	<ul style="display:none;">
-	  {{=A(T('New segment'), _href=URL('segment_edit', args=matter.id), cid="new-area")}}
+	<ul id="sg" style="display:none;">
+	  {{=A(T('New segment'), _class='new-link', _href=URL('segment_edit', args=matter.id, vars=dict(new=True)), cid="new-area")}}
 	  {{for segment in db(db.segment.matter==matter).select():}}
 	  <li>
 	    <span id={{='sg_' + str(segment.id)}}>
@@ -53,9 +53,13 @@
   });
   $(".new-link").click(function(e){
   $(this).parent().append('{{=LI(SPAN(_id="new-area"))}}');
-  $("#new-area").ajaxComplete(function(event,request,settings) {
+  newArea = $("#new-area");
+  newArea.ajaxComplete(function(event,request,settings) {
   if (settings.type == 'POST' && request.responseText.indexOf('span') != -1) {
-  $("#new-area").replaceWith($("#new-area").html());
+  head = newArea.parents("ul:first").attr("id");
+  tail = $("#new-area>span").attr("id");
+  $("#new-area>span").attr("id", "");
+  newArea.attr("id", head + "_" + tail);
   }
   });
   });

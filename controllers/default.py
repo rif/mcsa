@@ -9,64 +9,54 @@ def clients():
     clients = db(db.client).select()
     return locals()
 
-@auth.requires_membership('admin')
-def client_delete():
-    client = db(db.client.id==request.args[0]) or redirect(URL('clients'))
-    client.delete()
-    return ''
-
 def __edit(request, odb, edit_link, delete_link):
-    if len(request.args) > 0:
-        client = odb(request.args[0])
-        form=crud.update(odb, client, deletable=False)
+    if len(request.args) > 0 and request.vars.new != 1:
+        obj = odb(request.args[0])
+        form=crud.update(odb, obj, deletable=False)
     else:
         form = crud.create(odb)
     if form.accepts(request.vars):
-        return SPAN(SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid='cl_' + str(form.vars.id))),
-                    SPAN(form.vars.billable),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL(delete_link, args=form.vars.id))))
+        return SPAN(
+            SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid='cl_' + str(form.vars.id))),
+            ' ', 
+            SPAN(form.vars.billable) if form.vars.billable else ' ',
+            ' ',
+            SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL(delete_link, args=form.vars.id))),
+            ' ', _id=form.vars.id)
     return response.render('default/form.html', locals())
 
+def __delete(odb):
+    obj = db(odb.id==request.args[0]) or redirect(URL('clients'))
+    obj.delete()
+    return ''
 
 @auth.requires_membership('admin')
 def client_edit():
     return __edit(request, db.client, 'client_edit', 'client_delete')
 
 @auth.requires_membership('admin')
+def client_delete():
+    return __delete(db.client)
+
+@auth.requires_membership('admin')
 def matter_edit():
-    if len(request.args) > 0:
-        matter = db.matter(request.args[0])
-        form=crud.update(db.matter, matter, deletable=False)
-    else:
-        form=crud.create(db.matter)
-    if form.accepts(request.vars):
-        return SPAN(SPAN(A(form.vars.name, _href=URL('matter_edit', args=form.vars.id), cid='mt_' + str(form.vars.id))),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('matter_delete', args=form.vars.id))))
-    return response.render('default/form.html', locals())
+    if request.vars.new == 'True':
+        db.matter.client.default = db.client(request.args[0])    
+    return __edit(request, db.matter, 'matter_edit', 'matter_delete')
 
 @auth.requires_membership('admin')
 def matter_delete():
-    matter = db(db.matter.id==request.args[0]) or redirect(URL('clients'))
-    matter.delete()
-    return ''
+    return __delete(db.matter)
 
 @auth.requires_membership('admin')
 def segment_edit():
-    if len(request.args) > 0:
-        segment = db.segment(request.args[0])
-        form=crud.update(db.segment, segment, deletable=False)
-    else:
-        form=crud.create(db.segment)
-    if form.accepts(request.vars):
-        return SPAN(SPAN(A(form.vars.name, _href=URL('segment_edit', args=form.vars.id), cid='mt_' + str(form.vars.id))),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('segment_delete', args=form.vars.id))))
-    return response.render('default/form.html', locals())
+    if request.vars.new == 'True':
+        db.segment.matter.default = db.matter(request.args[0])    
+    return __edit(request, db.segment, 'segment_edit', 'segment_delete')
 
 @auth.requires_membership('admin')
 def segment_delete():
-    segment = db(db.segment.id==request.args[0]) or redirect(URL('clients'))
-    segment.delete()
-    return ''
+    return __delete(db.segment)
 
 def entry_edit():
     entry = None
