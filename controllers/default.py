@@ -10,50 +10,39 @@ def clients():
     return locals()
 
 @auth.requires_membership('admin')
-def client_new():
-    form = crud.create(db.client, next=URL('clients'))
-    return locals()
-
-@auth.requires_membership('admin')
 def client_delete():
     client = db(db.client.id==request.args[0]) or redirect(URL('clients'))
     client.delete()
     return ''
 
+def __edit(request, odb, edit_link, delete_link):
+    if len(request.args) > 0:
+        client = odb(request.args[0])
+        form=crud.update(odb, client, deletable=False)
+    else:
+        form = crud.create(odb)
+    if form.accepts(request.vars):
+        return SPAN(SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid='cl_' + str(form.vars.id))),
+                    SPAN(form.vars.billable),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL(delete_link, args=form.vars.id))))
+    return response.render('default/form.html', locals())
+
+
 @auth.requires_membership('admin')
 def client_edit():
-    client = db.client(request.args[0])
-    form=SQLFORM(db.client, client)
-    if form.accepts(request.vars):
-        return SPAN(SPAN(A(form.vars.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))),
-                    SPAN(form.vars.billable),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('client_delete', args=client.id))))
-    elif form.errors:
-        response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
-        return SPAN(SPAN(A(client.name, _href=URL('client_edit1', args=client.id), cid='cl_' + str(client.id))),
-                    SPAN(client.billable),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('client_delete', args=client.id))))
-    return locals()
-
-        
-@auth.requires_membership('admin')
-def matter_new():
-    db.matter.client.default = db.client(request.args[0])
-    form = crud.create(db.matter, next=URL('clients'), message=T('Matter created'))
-    return locals()
+    return __edit(request, db.client, 'client_edit', 'client_delete')
 
 @auth.requires_membership('admin')
 def matter_edit():
-    matter = db.matter(request.args[0])
-    form=SQLFORM(db.matter, matter)
+    if len(request.args) > 0:
+        matter = db.matter(request.args[0])
+        form=crud.update(db.matter, matter, deletable=False)
+    else:
+        form=crud.create(db.matter)
     if form.accepts(request.vars):
-        return SPAN(SPAN(A(form.vars.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('matter_delete', args=matter.id))))
-    elif form.errors:
-        response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
-        return SPAN(SPAN(A(matter.name, _href=URL('matter_edit1', args=matter.id), cid='mt_' + str(matter.id))),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('matter_delete', args=matter.id))))
-    return locals()
+        return SPAN(SPAN(A(form.vars.name, _href=URL('matter_edit', args=form.vars.id), cid='mt_' + str(form.vars.id))),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('matter_delete', args=form.vars.id))))
+    return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
 def matter_delete():
@@ -62,23 +51,16 @@ def matter_delete():
     return ''
 
 @auth.requires_membership('admin')
-def segment_new():
-    db.segment.matter.default = db.matter(request.args[0])
-    form = crud.create(db.segment, next=URL('clients'), message=T('Segment created'))
-    return locals()
-
-@auth.requires_membership('admin')
 def segment_edit():
-    segment = db.segment(request.args[0])
-    form=SQLFORM(db.segment, segment)
+    if len(request.args) > 0:
+        segment = db.segment(request.args[0])
+        form=crud.update(db.segment, segment, deletable=False)
+    else:
+        form=crud.create(db.segment)
     if form.accepts(request.vars):
-        return SPAN(SPAN(A(form.vars.name, _href=URL('segment_edit1', args=segment.id), cid='mt_' + str(segment.id))),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('segment_delete', args=segment.id))))
-    elif form.errors:
-        response.flash = TABLE(*[TR(k, v) for k, v in form.errors.items()])
-        return SPAN(SPAN(A(segment.name, _href=URL('segment_edit1', args=segment.id), cid='mt_' + str(segment.id))),
-                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('segment_delete', args=segment.id))))
-    return locals()
+        return SPAN(SPAN(A(form.vars.name, _href=URL('segment_edit', args=form.vars.id), cid='mt_' + str(form.vars.id))),
+                    SPAN(A('x', _onclick="$(this).parents('li').remove();$.get($(this).attr('href')); return false;", _href=URL('segment_delete', args=form.vars.id))))
+    return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
 def segment_delete():
