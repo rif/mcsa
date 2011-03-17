@@ -9,7 +9,7 @@ def clients():
     clients = db(db.client).select()
     return locals()
 
-def __edit(request, odb, edit_link):
+def __edit(request, odb, edit_link, sel):
     if len(request.args) > 0 and request.vars.new != 1:
         obj = odb(request.args[0])
         form=crud.update(odb, obj, deletable=False)
@@ -17,7 +17,7 @@ def __edit(request, odb, edit_link):
         form = crud.create(odb)
     if form.accepts(request.vars):
         return SPAN(
-            SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid='cl_' + str(form.vars.id))),
+            SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid=sel + str(form.vars.id))),
             ' ', 
             SPAN(form.vars.billable) if form.vars.billable else ' ',
             ' ', _id=form.vars.id)
@@ -38,19 +38,19 @@ def new_template():
 
 @auth.requires_membership('admin')
 def client_edit():
-    return __edit(request, db.client, 'client_edit')
+    return __edit(request, db.client, 'client_edit', 'cl_')
 
 @auth.requires_membership('admin')
 def matter_edit():
     if request.vars.new == 'True':
         db.matter.client.default = db.client(request.args[0])    
-    return __edit(request, db.matter, 'matter_edit')
+    return __edit(request, db.matter, 'matter_edit', 'mt_')
 
 @auth.requires_membership('admin')
 def segment_edit():
     if request.vars.new == 'True':
         db.segment.matter.default = db.matter(request.args[0])    
-    return __edit(request, db.segment, 'segment_edit')
+    return __edit(request, db.segment, 'segment_edit', 'sg_')
 
 def entry_edit():
     entry = None
