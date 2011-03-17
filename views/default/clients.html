@@ -12,8 +12,8 @@
 	<span>{{=client.billable}}</span>
       </span>    
     </span>
-    {{=A(IMG( _src=URL('static/images', 'delete.png'), _alt='+'), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('client_delete', args=client.id))}}
-    {{=A(IMG( _src=URL('static/images', 'expand.png'), _alt='+'), _class='expander', _href='#')}}
+    {{=A(IMG(_src=URL('static/images', 'delete.png'), _alt='+', _height="16px"), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('client_delete', args=client.id))}}
+    {{=A(IMG( _src=URL('static/images', 'expand.png'), _alt='+', _height="16px"), _class='expander', _href='#')}}
     <ul id="mt" style="display:none;">
       {{=A(T('New matter'), _class='new-link', _href=URL('matter_edit', args=client.id, vars=dict(new=True)), cid="new-area")}}
       {{for matter in db(db.matter.client==client).select():}}
@@ -23,8 +23,8 @@
 	    <span>{{=A(matter.name, _href=URL('matter_edit', args=matter.id), cid='mt_' + str(matter.id))}}</span>
 	  </span>    
 	</span>
-	{{=A(IMG( _src=URL('static/images', 'delete.png'), _alt='+'), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('matter_delete', args=matter.id))}}
-	{{=A(IMG( _src=URL('static/images', 'expand.png'), _alt='+'), _class='expander', _href='#')}}
+	{{=A(IMG(_src=URL('static/images', 'delete.png'), _alt='+', _height="16px"), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('matter_delete', args=matter.id))}}
+	{{=A(IMG( _src=URL('static/images', 'expand.png'), _alt='+', _height="16px"), _class='expander', _href='#')}}
 	<ul id="sg" style="display:none;">
 	  {{=A(T('New segment'), _class='new-link', _href=URL('segment_edit', args=matter.id, vars=dict(new=True)), cid="new-area")}}
 	  {{for segment in db(db.segment.matter==matter).select():}}
@@ -34,7 +34,7 @@
 		<span>{{=A(segment.name, _href=URL('segment_edit', args=segment.id), cid='sg_' + str(segment.id))}}</span>
 	      </span>    
 	    </span>
-	    {{=A(IMG( _src=URL('static/images', 'delete.png'), _alt='+'), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('segment_delete', args=segment.id))}}
+	    {{=A(IMG( _src=URL('static/images', 'delete.png'), _alt='+', _height="16px"), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('segment_delete', args=segment.id))}}
 	  </li>
 	  {{pass}}
 	</ul>
