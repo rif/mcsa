@@ -23,31 +23,22 @@ def __edit(request, odb, edit_link):
             ' ', _id=form.vars.id)
     return response.render('default/form.html', locals())
 
-def __delete(odb):
-    obj = db(odb.id==request.args[0]) or redirect(URL('clients'))
-    obj.delete()
-    return ''
-
 @auth.requires_membership('admin')
 def new_template():
+    eid = request.args[1]
     pairs = {
-        'cl': ('client_delete', 'New matter', 'matter_edit'),
-        'mt': ('matter_delete', 'New segment', 'segment_edit'),
-        'sg': ('segment_delete', None, None),
+        'cl': (URL('data', args=('delete','client', eid)), 'New matter', 'matter_edit'),
+        'mt': (URL('data', args=('delete','matter', eid)), 'New segment', 'segment_edit'),
+        'sg': (URL('data', args=('delete','segment', eid)), None, None),
         }
     sel = {'cl': 'mt', 'mt': 'sg', 'sg': 'sg'}
     delete_link, new_string, new_link = pairs[request.args[0]]
     selector = sel[request.args[0]]
-    eid = request.args[1]
     return locals()
 
 @auth.requires_membership('admin')
 def client_edit():
     return __edit(request, db.client, 'client_edit')
-
-@auth.requires_membership('admin')
-def client_delete():
-    return __delete(db.client)
 
 @auth.requires_membership('admin')
 def matter_edit():
@@ -56,18 +47,10 @@ def matter_edit():
     return __edit(request, db.matter, 'matter_edit')
 
 @auth.requires_membership('admin')
-def matter_delete():
-    return __delete(db.matter)
-
-@auth.requires_membership('admin')
 def segment_edit():
     if request.vars.new == 'True':
         db.segment.matter.default = db.matter(request.args[0])    
     return __edit(request, db.segment, 'segment_edit')
-
-@auth.requires_membership('admin')
-def segment_delete():
-    return __delete(db.segment)
 
 def entry_edit():
     entry = None
@@ -98,6 +81,9 @@ def segment_callback():
     for seg in segments:
         option_list.append(OPTION(seg.name, _value=seg.id))
     return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
+
+@auth.requires_membership('admin')
+def data(): return dict(form=crud())
 
 
 def user():
