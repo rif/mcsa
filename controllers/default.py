@@ -29,6 +29,19 @@ def __delete(odb):
     return ''
 
 @auth.requires_membership('admin')
+def new_template():
+    pairs = {
+        'cl': ('client_delete', 'New matter', 'matter_edit'),
+        'mt': ('matter_delete', 'New segment', 'segment_edit'),
+        'sg': ('segment_delete', None, None),
+        }
+    sel = {'cl': 'mt', 'mt': 'sg', 'sg': 'sg'}
+    delete_link, new_string, new_link = pairs[request.args[0]]
+    selector = sel[request.args[0]]
+    eid = request.args[1]
+    return locals()
+
+@auth.requires_membership('admin')
 def client_edit():
     return __edit(request, db.client, 'client_edit')
 
