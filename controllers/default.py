@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+from gluon.contrib import simplejson
 
 def index():
     entries = db(db.time_entry).select()
@@ -52,9 +54,16 @@ def segment_edit():
         db.segment.matter.default = db.matter(request.args[0])    
     return __edit(request, db.segment, 'segment_edit', 'sg_')
 
-def entry_edit():
+def entry_new():
     entry = None
     user = None
+    db.time_entry.date.default = datetime.datetime.fromtimestamp(float(request.args[0]))
+    form = crud.create(db.time_entry, next=URL('index'))
+    return response.render('default/entry_edit.html', locals())
+
+def entry_edit():
+    entry = None
+    user = auth.user_id
     if len(request.args) > 0:
         entry = db.time_entry(request.args[0])
         user = db.auth_user(entry.created_by)
@@ -65,6 +74,14 @@ def entry_edit():
     else:
         form = crud.create(db.time_entry, next=URL('index'))
     return locals()
+
+def entries():
+    start = datetime.datetime.fromtimestamp(float(request.vars.start))
+    end = datetime.datetime.fromtimestamp(float(request.vars.end))
+    ent = []
+    for row in db(db.time_entry.date > start).select():
+        ent.append({'id': row.id,'title': row.description,'start': row.date.strftime("%Y-%m-%d")})
+    return simplejson.dumps(ent)
 
 def matters_callback():
     client = db.client(request.args[0])
