@@ -79,7 +79,7 @@ def entries():
     start = datetime.datetime.fromtimestamp(float(request.vars.start))
     end = datetime.datetime.fromtimestamp(float(request.vars.end))
     ent = []
-    for row in db(db.time_entry.date > start).select():
+    for row in db((db.time_entry.date >= start) & (db.time_entry.date <= end)).select():
         ent.append({'id': row.id,'title': row.description,'start': row.date.strftime("%Y-%m-%d")})
     return simplejson.dumps(ent)
 
