@@ -2,8 +2,10 @@
 import datetime
 from gluon.contrib import simplejson
 
+@auth.requires_login()
 def index():
-    entries = db(db.time_entry).select()
+    if session.fee_earner == None:
+        session.fee_earner = auth.user_id
     return locals()
 
 @auth.requires_membership('admin')
@@ -68,25 +70,28 @@ def entry_drop():
 
 def entry_edit():
     entry = None
-    user = auth.user_id
+    fee_earner = db.auth_user(session.fee_earner or auth.user_id)
     if len(request.args) > 0:
         entry = db.time_entry(request.args[0])
-        user = db.auth_user(entry.created_by)
+        fee_earner = entry.fee_earner or fee_earner
         #the requirements bellow do not work beacause it will not allow to change clients
         #db.time_entry.matter.requires=IS_IN_DB(db(db.matter.client==entry.client),db.matter.id, '%(name)s')
         #db.time_entry.segment.requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment.matter==entry.matter),db.segment.id, '%(name)s'))
-        form=crud.update(db.time_entry, entry, next=URL('index'))
+        form=crud.update(db.time_entry, entry)
     else:
-        form = crud.create(db.time_entry, next=URL('index'))
+        form = crud.create(db.time_entry)
     return locals()
 
 def entries():
     start = datetime.datetime.fromtimestamp(float(request.vars.start))
     end = datetime.datetime.fromtimestamp(float(request.vars.end))
     ent = [{'id': row.id,
-            'title': row.description[:15] +"...",
+            'title': str(row.duration) + ' ' + T('hours'),
             'start': row.date.strftime("%Y-%m-%d"),
-            'url': URL('entry_edit', args=row.id).xml()} for row in db((db.time_entry.date >= start) & (db.time_entry.date <= end)).select()]
+            'url': URL('entry_edit', args=row.id).xml()}
+           for row in db((db.time_entry.date >= start) &
+                         (db.time_entry.date <= end) &
+                         (db.time_entry.fee_earner == (session.fee_earner or auth.user_id))).select()]
     return simplejson.dumps(ent)
 
 def matters_callback():
@@ -104,6 +109,16 @@ def segment_callback():
     for seg in segments:
         option_list.append(OPTION(seg.name, _value=seg.id))
     return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
+
+def fee_earner():
+    form = SQLFORM.factory(
+        Field('fee_earner', default=(session.fee_earner or auth.user_id),
+              requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s')),
+    )
+    if form.accepts(request.vars, session):
+        response.flash = T('Fee earner changed to %s') % db.auth_user(form.vars.fee_earner).first_name
+        session.fee_earner = form.vars.fee_earner
+    return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
 def data(): return dict(form=crud())

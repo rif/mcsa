@@ -510,6 +510,16 @@ a.button:hover span.icon.user { background-position: 0 -869px }
 #time_entry .head {background-color: #3875d7; color: white;}
 #time_entry .shead {background-color: #aed5fe;}
 
+.fc-event-title {
+    padding: 0 1px;
+    color: white;
+}
+
+.fc-event-title:hover {
+    color: lightgray;
+    text-decoration: None;
+}
+
 /*
  * Media queries for responsive design
  */
