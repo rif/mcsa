@@ -1,22 +1,6 @@
 {{left_sidebar_enabled=right_sidebar_enabled=False}}
 {{extend 'layout.html'}}
 
-<style type='text/css'> 
- 
-	body {
-		margin-top: 40px;
-		text-align: center;
-		font-size: 13px;
-		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-		}
- 
-	#calendar {
-		width: 900px;
-		margin: 0 auto;
-		}
- 
-</style> 
-
 <div id="calendar"></div>
 <br/>
 <h1>{{=T('Last entries')}} [{{=A(T('New'),_href=URL('entry_edit'))}}]</h1>
@@ -60,6 +44,9 @@
   right: 'month,agendaWeek,agendaDay'
   },
   events: "{{=URL('entries')}}",
+  eventDrop: function(event, delta) {
+  $.get("{{=URL('entry_drop')/" + event.id + "/" + Math.round(event.start.getTime()/1000.0);
+  },
   selectable: true,
   selectHelper: true,
   select: function(start, end, allDay) {
