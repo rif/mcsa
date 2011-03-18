@@ -61,6 +61,9 @@ def entry_new():
     form = crud.create(db.time_entry, next=URL('index'))
     return response.render('default/entry_edit.html', locals())
 
+def entry_drop():
+    pass
+
 def entry_edit():
     entry = None
     user = auth.user_id
