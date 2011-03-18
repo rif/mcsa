@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime
-from gluon.contrib import simplejson
 
 def index():
     entries = db(db.time_entry).select()
@@ -62,7 +61,9 @@ def entry_new():
     return response.render('default/entry_edit.html', locals())
 
 def entry_drop():
-    pass
+    entry = db.time_entry(request.args[0])
+    entry.update_record(date=datetime.datetime.fromtimestamp(float(request.args[1])))
+    return ''
 
 def entry_edit():
     entry = None
@@ -81,13 +82,11 @@ def entry_edit():
 def entries():
     start = datetime.datetime.fromtimestamp(float(request.vars.start))
     end = datetime.datetime.fromtimestamp(float(request.vars.end))
-    ent = []
-    for row in db((db.time_entry.date >= start) & (db.time_entry.date <= end)).select():
-        ent.append({'id': row.id,
-                    'title': row.description[:15] +"...",
-                    'start': row.date.strftime("%Y-%m-%d"),
-                    'url': URL('entry_edit', args=row.id).xml()})
-    return simplejson.dumps(ent)
+    ent = [{'id': row.id,
+            'title': row.description[:15] +"...",
+            'start': row.date.strftime("%Y-%m-%d"),
+            'url': URL('entry_edit', args=row.id).xml()} for row in db((db.time_entry.date >= start) & (db.time_entry.date <= end)).select()]
+    return ent
 
 def matters_callback():
     client = db.client(request.args[0])
