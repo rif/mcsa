@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from gluon.contrib import simplejson
 
 def index():
     entries = db(db.time_entry).select()
@@ -86,7 +87,7 @@ def entries():
             'title': row.description[:15] +"...",
             'start': row.date.strftime("%Y-%m-%d"),
             'url': URL('entry_edit', args=row.id).xml()} for row in db((db.time_entry.date >= start) & (db.time_entry.date <= end)).select()]
-    return ent
+    return simplejson.dumps(ent)
 
 def matters_callback():
     client = db.client(request.args[0])
