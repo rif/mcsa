@@ -1,35 +1,40 @@
 {{left_sidebar_enabled=right_sidebar_enabled=False}}
 {{extend 'layout.html'}}
 
+<style type="text/css" media="screen">
+/* the overlayed element */
+.apple_overlay {
+	display:none;
+	width:870px;
+        padding:50px;
+	font-size:11px;
+}
+
+/* default close button positioned on upper right corner */
+.apple_overlay .close {
+	background-image:url(../img/overlay/close.png);
+	position:absolute; right:5px; top:5px;
+	cursor:pointer;
+	height:35px;
+	width:35px;
+}
+/* black version of the overlay. simply uses a different background image */
+div.apple_overlay.black {
+	background-image:url(http://static.flowplayer.org/tools/img/overlay/transparent.png);				  color:#fff;
+}
+</style>
+
+{{=LOAD('default','fee_earner.load',ajax=True)}}
+
 <div id="calendar"></div>
-<br/>
-<h1>{{=T('Last entries')}} [{{=A(T('New'),_href=URL('entry_edit'))}}]</h1>
-<table>
-  <thead>
-    <tr>
-      <th>{{=T('Description')}}</th>
-      <th>{{=T('Client')}}</th>
-      <th>{{=T('Matter')}}</th>
-      <th>{{=T('Segment')}}</th>
-      <th>{{=T('Date')}}</th>
-      <th>{{=T('Duration')}}</th>
-      <th>{{=T('Rate')}}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{for entry in entries:}}
-    <tr>
-      <td>{{=A(entry.description[:15] +"...", _href=URL('entry_edit', args=entry.id))}}</td>
-      <td>{{=entry.client.name}}</td>
-      <td>{{=entry.matter.name}}</td>
-      <td>{{if entry.segment:}}{{=entry.segment.name}}{{pass}}</td>
-      <td>{{=entry.date}}</td>
-      <td>{{=entry.duration}}</td>
-      <td>{{=entry.rate}}</td>
-    </tr>
-    {{pass}}
-  </tbody>
-</table>
+
+<!-- overlayed element -->
+<div class="apple_overlay black" id="overlay">
+
+	<!-- the external content is loaded inside this tag -->
+	<div class="contentWrap"></div>
+
+</div>
 
 {{block left_sidebar}}New Left Sidebar Content{{end}}
 {{block right_sidebar}}New Right Sidebar Content{{end}}
@@ -50,6 +55,24 @@
   selectable: true,
   selectHelper: true,
   select: function(start, end, allDay) {
+  /*$("#overlay").overlay({
+  mask: 'gray',
+  effect: 'apple',
+  
+  onBeforeLoad: function() {
+  var wrap = this.getOverlay().find(".contentWrap");
+  wrap.load("{{=URL('entry_new')}}/" + Math.round(start.getTime()/1000.0), function(){
+  $(".contentWrap form").submit( function(e){ console.log('test');});
+  });
+  },
+  
+  // disable this for modal dialog-type of overlays
+  closeOnClick: false,
+  
+  // load it immediately after the construction
+  load: true
+  });*/
+
   window.location="{{=URL('entry_new')}}/" + Math.round(start.getTime()/1000.0);
   calendar.fullCalendar('unselect');
   },
