@@ -43,7 +43,7 @@
   center: 'title',
   right: 'month,agendaWeek,agendaDay'
   },
-  events: "{{=URL('entries.json')}}",
+  events: "{{=URL('entries')}}",
   eventDrop: function(event, delta) {
   $.get("{{=URL('entry_drop')}}/" + event.id + "/" + Math.round(event.start.getTime()/1000.0));
   },
