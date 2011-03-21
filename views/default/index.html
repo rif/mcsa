@@ -1,30 +1,8 @@
 {{left_sidebar_enabled=right_sidebar_enabled=False}}
 {{extend 'layout.html'}}
 
-<style type="text/css" media="screen">
-/* the overlayed element */
-.apple_overlay {
-	display:none;
-	width:870px;
-        padding:50px;
-	font-size:11px;
-}
 
-/* default close button positioned on upper right corner */
-.apple_overlay .close {
-	background-image:url(../img/overlay/close.png);
-	position:absolute; right:5px; top:5px;
-	cursor:pointer;
-	height:35px;
-	width:35px;
-}
-/* black version of the overlay. simply uses a different background image */
-div.apple_overlay.black {
-	background-image:url(http://static.flowplayer.org/tools/img/overlay/transparent.png);				  color:#fff;
-}
-</style>
-
-{{=LOAD('default','fee_earner.load',ajax=True)}}
+{{=form}}
 
 <div id="calendar"></div>
 

@@ -6,6 +6,13 @@ from gluon.contrib import simplejson
 def index():
     if session.fee_earner == None:
         session.fee_earner = auth.user_id
+    form = SQLFORM.factory(
+        Field('fee_earner', default=(request.vars.fee_earner or session.fee_earner or auth.user_id),
+              requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s')),
+    )
+    if form.accepts(request.vars, session):
+        response.flash = T('Fee earner changed to %s') % db.auth_user(form.vars.fee_earner).first_name
+        session.fee_earner = form.vars.fee_earner
     return locals()
 
 @auth.requires_membership('admin')
@@ -110,15 +117,6 @@ def segment_callback():
         option_list.append(OPTION(seg.name, _value=seg.id))
     return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
 
-def fee_earner():
-    form = SQLFORM.factory(
-        Field('fee_earner', default=(session.fee_earner or auth.user_id),
-              requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s')),
-    )
-    if form.accepts(request.vars, session):
-        response.flash = T('Fee earner changed to %s') % db.auth_user(form.vars.fee_earner).first_name
-        session.fee_earner = form.vars.fee_earner
-    return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
 def data(): return dict(form=crud())
