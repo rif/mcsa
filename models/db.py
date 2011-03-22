@@ -36,8 +36,8 @@ service = Service(globals())                   # for json, xml, jsonrpc, xmlrpc,
 plugins = PluginManager()
 
 mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
-mail.settings.sender = 'you@gmail.com'         # your email
-mail.settings.login = 'username:password'      # your credentials or None
+mail.settings.sender = 'ustest@gmail.com'         # your email
+mail.settings.login = 'ustest:greta.1'      # your credentials or None
 
 auth.settings.hmac_key = 'sha512:1000c256-92f1-42b8-9808-ed48e41ccf3b'   # before define_tables()
 auth.define_tables()                           # creates all needed tables
@@ -96,7 +96,7 @@ db.define_table('time_entry',
                 Field('client', db.client),
                 Field('matter', db.matter),
                 Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db,db.segment.id, '%(name)s'))),
-                Field('fee_earner', db.auth_user, default=(session.fee_earner or auth.user_id)),
+                Field('fee_earner', db.auth_user, default=(session.fee_earner or auth.user_id), requires=IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s')),
                 Field('code_classification', requires=IS_IN_SET(['Other', 'Meeting', 'Discussion', 'Telephone Call', 'Review/Analyse', 'Draft/Revise', 'Legal Research', 'Travel'], zero=None), default='Other'),
                 Field('description', 'text', required=True),
                 Field('special_notes', 'text'),

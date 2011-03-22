@@ -39,7 +39,7 @@
   
   onBeforeLoad: function() {
   var wrap = this.getOverlay().find(".contentWrap");
-  wrap.load("{{=URL('entry_new')}}/" + Math.round(start.getTime()/1000.0), function(){
+  wrap.load("{{=URL('entry_new')}}/?start=" + Math.round(start.getTime()/1000.0), function(){
   $(".contentWrap form").submit( function(e){ console.log('test');});
   });
   },
@@ -51,7 +51,7 @@
   load: true
   });*/
 
-  window.location="{{=URL('entry_new')}}/" + Math.round(start.getTime()/1000.0);
+  window.location="{{=URL('entry_new')}}/?start=" + Math.round(start.getTime()/1000.0) + "&end=" + Math.round(end.getTime()/1000.0); 
   calendar.fullCalendar('unselect');
   },
   editable: true,
