@@ -90,9 +90,9 @@ def entry_edit():
         #the requirements bellow do not work beacause it will not allow to change clients
         #db.time_entry.matter.requires=IS_IN_DB(db(db.matter.client==entry.client),db.matter.id, '%(name)s')
         #db.time_entry.segment.requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment.matter==entry.matter),db.segment.id, '%(name)s'))
-        form=crud.update(db.time_entry, entry)
+        form=crud.update(db.time_entry, entry, next=URL('index'))
     else:
-        form = crud.create(db.time_entry)
+        form = crud.create(db.time_entry, next=URL('index'))
     return locals()
 
 def entries():
