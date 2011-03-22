@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from datetime import datetime
 from gluon.contrib import simplejson
 
 @auth.requires_login()
@@ -8,7 +8,7 @@ def index():
         session.fee_earner = auth.user_id
     form = SQLFORM.factory(
         Field('fee_earner', default=(request.vars.fee_earner or session.fee_earner or auth.user_id),
-              requires=IS_IN_DB(db, db.auth_user.id, '%(first_name)s %(last_name)s')),
+              requires=IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s')),
     )
     if form.accepts(request.vars, session):
         response.flash = T('Fee earner changed to %s') % db.auth_user(form.vars.fee_earner).first_name
@@ -66,13 +66,19 @@ def segment_edit():
 def entry_new():
     entry = None
     user = None
-    db.time_entry.date.default = datetime.datetime.fromtimestamp(float(request.args[0]))
+    start = datetime.fromtimestamp(float(request.vars.start))
+    end = datetime.fromtimestamp(float(request.vars.end))
+    db.time_entry.date.default = start
+    delta = end - start
+    minutes = delta.days * 24 * 60 + delta.seconds / 60
+    duration = minutes / 6 * 0.1
+    db.time_entry.duration.default = duration
     form = crud.create(db.time_entry, next=URL('index'))
     return response.render('default/entry_edit.html', locals())
 
 def entry_drop():
     entry = db.time_entry(request.args[0])
-    entry.update_record(date=datetime.datetime.fromtimestamp(float(request.args[1])))
+    entry.update_record(date=datetime.fromtimestamp(float(request.args[1])))
     return ''
 
 def entry_edit():
@@ -90,8 +96,8 @@ def entry_edit():
     return locals()
 
 def entries():
-    start = datetime.datetime.fromtimestamp(float(request.vars.start))
-    end = datetime.datetime.fromtimestamp(float(request.vars.end))
+    start = datetime.fromtimestamp(float(request.vars.start))
+    end = datetime.fromtimestamp(float(request.vars.end))
     ent = [{'id': row.id,
             'title': str(row.duration) + ' ' + T('hours'),
             'start': row.date.strftime("%Y-%m-%d"),
