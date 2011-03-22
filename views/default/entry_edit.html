@@ -46,41 +46,50 @@
 {{=form.custom.end}}
 
 <script type="text/javascript">
-  function enable_disable(parent, child, target, url, callback) {
-  if(parent.val() == "") {
-  child.val("");
-  child.attr("disabled","disabled");
-  } else {
-  child.attr("disabled","");
-  target.load(url + parent.val(), callback);
-  }
-  }  
+    function enable_disable(parent, child, target, url, callback) {
+	if(parent.val() == "") {
+	    child.val("");
+	    child.attr("disabled","disabled");
+	} else {
+	    child.attr("disabled","");
+	    target.load(url + parent.val(), callback);
+	}
+    }  
 
-  $(function(){
-  client = $("#time_entry_client");
-  matter = $("#time_entry_matter");
-
-  if(client.val() == "") {
-  matter.attr("disabled","disabled");
-  } 
-
-  if(matter.val() == "") {
-  $("#time_entry_segment").attr("disabled","disabled");
-  }
-  
-  client.change(function(){
-  enable_disable(client, $("#time_entry_matter"), $("#matter_span"), "{{=URL('matters_callback')}}/", function(){
-  matter = $("#time_entry_matter");
-  matter.change(function(){
-  enable_disable(matter, $("#time_entry_segment"), $("#segment_span"), "{{=URL('segment_callback')}}/");
-  });
-  matter.change();
-  });
-  });
-  
-  matter.change(function(){
-  enable_disable(matter, $("#time_entry_segment"), $("#segment_span"), "{{=URL('segment_callback')}}/");
-  });
-  });
+$(function(){
+    client = $("#time_entry_client");
+    
+    if(client.val() == "") {
+	 $("#time_entry_matter").attr("disabled","disabled");
+    } else {
+	old_matter = $('option:selected',  $("#time_entry_matter")).val();
+	$("#matter_span").load("{{=URL('matters_callback')}}/" + client.val(), function(){
+	    $("option[value=" + old_matter +"]", $("#time_entry_matter")).attr('selected', 'selected');
+	});
+    }
+    
+    if( $("#time_entry_matter").val() == "") {
+	$("#time_entry_segment").attr("disabled","disabled");
+    } else {
+	old_segment = $('option:selected',  $("#time_entry_segment")).val();
+	$("#segment_span").load("{{=URL('segment_callback')}}/" + $("#time_entry_matter").val(), function(){
+	    $("option[value=" + old_segment +"]", $("#time_entry_segment")).attr('selected', 'selected');
+	});
+    }
+    
+    client.change(function(){
+	enable_disable(client, $("#time_entry_matter"), $("#matter_span"), "{{=URL('matters_callback')}}/", function(){
+	    matter = $("#time_entry_matter");
+	    matter.change(function(){
+		enable_disable(matter, $("#time_entry_segment"), $("#segment_span"), "{{=URL('segment_callback')}}/");
+	    });
+	    matter.change();
+	});
+    });
+    
+     $("#time_entry_matter").change(function(){
+	enable_disable(matter, $("#time_entry_segment"), $("#segment_span"), "{{=URL('segment_callback')}}/");
+    });
+});
 </script>
 
