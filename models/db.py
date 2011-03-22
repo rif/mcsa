@@ -60,6 +60,23 @@ auth.messages.reset_password = 'Click on the link http://'+request.env.http_host
 
 crud.settings.auth = None                      # =auth to enforce authorization on crud
 
+class Float_validator:
+    def __init__(self, err=T('Float with one decimal in range 0.1 to 24')):
+        self.e = err
+
+    def __call__(self, value):
+        try:
+            value = float(value)
+        except ValueError:
+            return (value, self.e)
+        if (float('%.1f' % value) == value) and (0.1<= value <=24):
+            return (value, None)
+        return (value, self.e)
+
+    def formatter(self, value):
+        return float('%.1f' % float(value))
+
+
 def cost(row):
     rate = 0.0
     delta = row.end - row.start
@@ -102,7 +119,7 @@ db.define_table('time_entry',
                 Field('special_notes', 'text'),
                 Field('related_disbursements', 'list:string', requires=IS_IN_SET(['Mobile', 'Telephone', 'Travel', 'Meals', 'Other'], multiple=True)),
                 Field('date', 'date'),
-                Field('duration', 'double', requires=IS_FLOAT_IN_RANGE(0.1,24)),
+                Field('duration', 'double', requires=Float_validator()),
                 #Field('cost',compute=cost),
                 Field('rate', 'double'),
                 Field('billable', 'boolean', default=True),
