@@ -21,7 +21,7 @@ def clients():
     return locals()
 
 def __edit(request, odb, edit_link, sel):
-    if len(request.args) > 0 and request.vars.new != 1:
+    if len(request.args) > 0 and request.vars.new != 'True':
         obj = odb(request.args[0])
         form=crud.update(odb, obj, deletable=False)
     else:
