@@ -4,9 +4,9 @@
 <table id="time_entry">
   <tbody>
     <tr class="head">
-      <td colspan="3">Fee Earner</td>
-      <td>Date</td>
-      <td>Duration</td>
+      <td colspan="3">{{=T('Fee Earner')}}</td>
+      <td>{{=T('Date')}}</td>
+      <td>{{=T('Duration')}}</td>
     </tr>
     <tr>
       <td colspan="3">{{=form.custom.widget.fee_earner}}</td>
@@ -14,34 +14,36 @@
       <td>{{=form.custom.widget.duration}}</td>
     </tr>
     <tr class="shead">
-      <td>Client</td>
-      <td>Matter</td>
-      <td>Segment</td>
-      <td colspan="2">Code classification</td>
+      <td colspan="2">{{=T('Client')}}</td>
+      <td colspan="2">{{=T('Matter')}}</td>
+      <td>{{=T('Segment')}}</td>
     </tr>
     <tr>
-      <td>{{=form.custom.widget.client}}</td>
-      <td><span id="matter_span">{{=form.custom.widget.matter}}</span></td>
+      <td colspan="2">{{=form.custom.widget.client}}</td>
+      <td colspan="2"><span id="matter_span">{{=form.custom.widget.matter}}</span></td>
       <td><span id="segment_span">{{=form.custom.widget.segment}}</span></td>
-      <td colspan="2">{{=form.custom.widget.code_classification}}</td>
       <td></td>
     </tr>
     <tr class="shead">
-      <td colspan="5">Description</td>
+      <td colspan="5">Code classification / Description</td>
     </tr>
     <tr>
-      <td colspan="5">{{=form.custom.widget.description}}</td>
+      <td colspan="5">{{=form.custom.widget.code_classification}}<br/>{{=form.custom.widget.description}}</td>
     </tr>
     <tr class="shead">
-      <td colspan="3">Special Notes</td>
-      <td colspan="2">Related Disbursement</td>
+      <td colspan="4">Special Notes</td>
+      <td colspan="1">Related Disbursement</td>
     </tr>
     <tr>
-      <td colspan="3">{{=form.custom.widget.special_notes}}</td>
-      <td colspan="2">{{=form.custom.widget.related_disbursements}}</td>
+      <td colspan="4">{{=form.custom.widget.special_notes}}</td>
+      <td colspan="1">{{=form.custom.widget.related_disbursements}}</td>
     </tr>
   </tbody>
 </table>
+<div style="float:right;">
+  <label for="delete_this_record">{{=T('Delete this time entry')}}</label>
+  {{=form.custom.deletable}}
+</div>
 {{=form.custom.submit}}
 {{=form.custom.end}}
 
