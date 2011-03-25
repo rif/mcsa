@@ -520,6 +520,11 @@ a.button:hover span.icon.user { background-position: 0 -869px }
     text-decoration: None;
 }
 
+#time_entry select {
+    width: 23em;
+    margin: 2px 0px;
+}
+
 /*
  * Media queries for responsive design
  */

@@ -124,6 +124,10 @@ def segment_callback():
     return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
 
 
+def reports():
+    form, entries = crud.search(db.time_entry, fields=['id', 'client', 'matter', 'segment', 'fee_earner', 'date'])
+    return locals()
+
 @auth.requires_membership('admin')
 def data(): return dict(form=crud())
 

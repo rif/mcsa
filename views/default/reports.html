@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+
+{{=form}}
+
+<ul>
+{{for entry in entries:}}
+<li>{{=db.time_entry(entry.id)}}</li>
+{{pass}}
+</ul>
+
+{{=plugin_wiki.widget('pie_chart', data=[1,2,20] ,names=['x','y','z'], align='center')}}<br/>
+{{=plugin_wiki.widget('bar_chart', data=[1,2,20], names=['x','y','z'], align='center')}}
