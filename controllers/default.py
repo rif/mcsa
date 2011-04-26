@@ -129,7 +129,7 @@ def reports():
     else: page=0
     items_per_page=20
     limitby=(page*items_per_page,(page+1)*items_per_page+1)
-    entries = db(db.time_entry).select(limitby=limitby)
+    entries = db(db.time_entry).select(orderby=db.time_entry.date, limitby=limitby)
     today = date.today()
     first_of_month = today.replace(day=1)
     form = SQLFORM.factory(
@@ -145,9 +145,12 @@ def reports():
         start_query =  (db.time_entry.date >= form.vars.start) if form.vars.start else db.time_entry.id>0
         end_query = (db.time_entry.date <= form.vars.end) if form.vars.end else db.time_entry.id>0
         entries = db(earner_query & client_query & matter_query & start_query & end_query).select(orderby=db.time_entry.date, limitby=limitby)
+        
     elif form.errors:
         response.flash = 'form has errors'
     return locals()
+
+
 
 @auth.requires_membership('admin')
 def data(): return dict(form=crud())
