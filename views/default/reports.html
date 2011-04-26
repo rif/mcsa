@@ -2,6 +2,24 @@
 
 {{=form}}
 
+<h2 title="{{=str(entries_set.query)}}">{{=entries_set.count()}} {{=T('time entries')}}</h2>
+<h3>{{=T('Current selection')}}</h3>
+<b>
+{{=T('Fee eraner')}}: {{if form.vars.fee_earner:}}{{=db.auth_user(form.vars.fee_earner).first_name}}{{else:}}ALL{{pass}}<br/>
+{{=T('Client')}}: {{if form.vars.client:}}{{=db.client(form.vars.client).name}}{{else:}}ALL{{pass}}<br/>
+{{=T('Matter')}}: {{if form.vars.matter:}}{{=db.matterr(form.vars.matter).name}}{{else:}}ALL{{pass}}<br/>
+{{=T('Start')}}: {{=form.vars.start or "NOT SPECIFIED"}}<br/>
+{{=T('End')}}: {{=form.vars.end or "NOT SPECIFIED"}}<br/>
+</b>
+<a href="{{=URL('default', 'reports.csv')}}">{{=T('Download as CSV')}}</a>
+<a href="{{=URL('default', 'reports.pdf')}}">{{=T('Download as PDF')}}</a>
+
+<br/>
+{{=earners}} <div class="right">{{=plugin_wiki.widget('pie_chart', data=earner_durations ,names=earner_names)}}</div>
+{{=clients}} <div class="right">{{=plugin_wiki.widget('pie_chart', data=client_durations ,names=client_names)}}</div>
+{{=matters}} <div class="right">{{=plugin_wiki.widget('pie_chart', data=matter_durations ,names=matter_names)}}</div>
+<br/>
+
 <table>
 <thead>
 <tr>
@@ -14,22 +32,15 @@
 </tr>
 </thead>
 <tbody>
-  {{for i,entry in enumerate(entries):}}
-  {{if i==items_per_page: break}}
+  {{for entry in entries:}}
   <tr>
-    <td>{{=entry.date}}
-    <td>{{=db.auth_user(entry.fee_earner).first_name}}</td>
-    <td>{{=db.client(entry.client).name}}</td>
-    <td>{{=db.matter(entry.matter).name}}</td>
-    <td>{{=entry.duration}}</td>
-    <td>{{=entry.description}} </td>
+    <td>{{=entry.time_entry.date}}
+    <td>{{=entry.auth_user.first_name}}</td>
+    <td>{{=entry.client.name}}</td>
+    <td>{{=entry.matter.name}}</td>
+    <td>{{=entry.time_entry.duration}}</td>
+    <td>{{=entry.time_entry.description}} </td>
   </tr>
 {{pass}}
 </tbody>
 </table>
-{{if page:}}
-<a href="{{=URL(args=[page-1])}}">previous</a>
-{{pass}}
-{{if len(entries)>items_per_page:}}
-<a href="{{=URL(args=[page+1])}}">next</a>
-{{pass}}

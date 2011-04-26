@@ -129,3 +129,10 @@ db.define_table('time_entry',
                 auth.signature,
                 format='%(description)s'
                 )                
+
+total_duration = db.time_entry.duration.sum()
+earner_entries = db.time_entry.fee_earner == db.auth_user.id
+client_entries = db.time_entry.client == db.client.id
+matter_entries = db.time_entry.matter == db.matter.id
+segment_entries = db.time_entry.segment == db.segment.id
+
