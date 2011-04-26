@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, date
 from gluon.contrib import simplejson
 
 @auth.requires_login()
@@ -125,7 +125,28 @@ def segment_callback():
 
 
 def reports():
-    form, entries = crud.search(db.time_entry, fields=['id', 'client', 'matter', 'segment', 'fee_earner', 'date'])
+    if len(request.args): page=int(request.args[0])
+    else: page=0
+    items_per_page=20
+    limitby=(page*items_per_page,(page+1)*items_per_page+1)
+    entries = db(db.time_entry).select(limitby=limitby)
+    today = date.today()
+    first_of_month = today.replace(day=1)
+    form = SQLFORM.factory(
+        Field('fee_earner', db.auth_user, requires=IS_EMPTY_OR(IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s'))),
+        Field('client', db.client, requires=IS_EMPTY_OR(IS_IN_DB(db(db.client), db.client.id,  '%(name)s'))),
+        Field('matter', db.matter, requires=IS_EMPTY_OR(IS_IN_DB(db(db.matter), db.matter.id, '%(name)s'))),
+        Field('start', 'date', default=first_of_month),
+        Field('end', 'date', default=today))
+    if form.accepts(request.vars, session):
+        earner_query = (db.time_entry.fee_earner == form.vars.fee_earner) if form.vars.fee_earner else db.time_entry.id>0
+        client_query = (db.time_entry.client == form.vars.client) if form.vars.client else db.time_entry.id>0
+        matter_query = (db.time_entry.fee_matter == form.vars.matter) if form.vars.matter else db.time_entry.id>0
+        start_query =  (db.time_entry.date >= form.vars.start) if form.vars.start else db.time_entry.id>0
+        end_query = (db.time_entry.date <= form.vars.end) if form.vars.end else db.time_entry.id>0
+        entries = db(earner_query & client_query & matter_query & start_query & end_query).select(orderby=db.time_entry.date, limitby=limitby)
+    elif form.errors:
+        response.flash = 'form has errors'
     return locals()
 
 @auth.requires_membership('admin')
