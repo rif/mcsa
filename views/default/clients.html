@@ -45,37 +45,40 @@
   {{pass}}
 </ul>
 
-<script type="text/javascript">  
-  function expandLink(element) {
-  element.click(function(e){
-  $(this).nextAll("ul:first").slideToggle();
-  e.preventDefault();
-  });
-  }
+<script type="text/javascript">
+	function expandLink(element) {
+		element.click(function(e) {
+			$(this).nextAll("ul:first").slideToggle();
+			e.preventDefault();
+		});
+	}
 
-  function newLink(element){
-  element.click(function(e){
-  $(this).parent().append('{{=LI(SPAN(_id="new-area"))}}');
-  });
-  }
+	function newLink(element) {
+		element.click(function(e) {
+			$(this).parent().append('{{=LI(SPAN(_id="new-area"))}}');
+		});
+	}
 
-  $(function(){
-  expandLink($(".expander"));
-  newLink($(".new-link"));
-  
-  $(this).ajaxComplete(function(event,request,settings) {
-  newArea = $("#new-area");  
-  if (newArea.length && settings.type == 'POST' && request.responseText.indexOf('span') != -1) { //id it's a succesful post
-  head = newArea.parents("ul:first").attr("id");
-  tail = $("#new-area>span").attr("id");
-  $.get("{{=URL('new_template')}}/" + head + "/" + tail, function(data){ //add remove and expand links
-  newArea.append(data);
-  expandLink($(".expander", newArea));
-  newLink($(".new-link", newArea));
-  $("#new-area>span").removeAttr("id");
-  newArea.attr("id", head + "_" + tail);
-  });
-  }
-  });
-  });
+	$(function() {
+		expandLink($(".expander"));
+		newLink($(".new-link"));
+
+		$(this).ajaxComplete(
+				function(event, request, settings) {
+					newArea = $("#new-area");
+					if (newArea.length && settings.type == 'POST'
+							&& request.responseText.indexOf('span') != -1) { //id it's a succesful post
+						head = newArea.parents("ul:first").attr("id");
+						tail = $("#new-area>span").attr("id");
+						$.get("{{=URL('new_template')}}/" + head + "/" + tail,
+								function(data) { //add remove and expand links
+									newArea.append(data);
+									expandLink($(".expander", newArea));
+									newLink($(".new-link", newArea));
+									$("#new-area>span").removeAttr("id");
+									newArea.attr("id", head + "_" + tail);
+								});
+					}
+				});
+	});
 </script>

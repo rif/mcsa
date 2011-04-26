@@ -2,11 +2,41 @@
 
 {{=form}}
 
-<ul>
-{{for entry in entries:}}
-<li>{{=db.time_entry(entry.id)}}</li>
+<table>
+<thead>
+<tr>
+  <th>{{=T('Date')}}</th>
+  <th>{{=T('Fee earner')}}</th>
+  <th>{{=T('Client')}}</th>
+  <th>{{=T('Matter')}}</th>
+  <th>{{=T('Segment')}}</th>
+  <th>{{=T('Duration')}}</th>
+  <th>{{=T('Description')}}</th>
+</tr>
+</thead>
+<tbody>
+  {{for i,entry in enumerate(entries):}}
+  {{if i==items_per_page: break}}
+  <tr>
+    <td>{{=entry.date}}
+    <td>{{=db.auth_user(entry.fee_earner).first_name}}</td>
+    <td>{{=db.client(entry.client).name}}</td>
+    <td>{{=db.matter(entry.matter).name}}</td>
+    <td>{{if entry.segment:}}{{=db.segment(entry.segment).name}}{{pass}}</td>
+    <td>{{=entry.duration}}</td>
+    <td>{{=entry.description}} </td>
+  </tr>
 {{pass}}
-</ul>
+</tbody>
+</table>
+{{if page:}}
+<a href="{{=URL(args=[page-1])}}">previous</a>
+{{pass}}
+{{if len(entries)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+
+<br/>
 
 {{=plugin_wiki.widget('pie_chart', data=[1,2,20] ,names=['x','y','z'], align='center')}}<br/>
 {{=plugin_wiki.widget('bar_chart', data=[1,2,20], names=['x','y','z'], align='center')}}
