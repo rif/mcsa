@@ -7,7 +7,7 @@
 <b>
 {{=T('Fee eraner')}}: {{if form.vars.fee_earner:}}{{=db.auth_user(form.vars.fee_earner).first_name}}{{else:}}ALL{{pass}}<br/>
 {{=T('Client')}}: {{if form.vars.client:}}{{=db.client(form.vars.client).name}}{{else:}}ALL{{pass}}<br/>
-{{=T('Matter')}}: {{if form.vars.matter:}}{{=db.matterr(form.vars.matter).name}}{{else:}}ALL{{pass}}<br/>
+{{=T('Matter')}}: {{if form.vars.matter:}}{{=db.matter(form.vars.matter).name}}{{else:}}ALL{{pass}}<br/>
 {{=T('Start')}}: {{=form.vars.start or "NOT SPECIFIED"}}<br/>
 {{=T('End')}}: {{=form.vars.end or "NOT SPECIFIED"}}<br/>
 </b>
