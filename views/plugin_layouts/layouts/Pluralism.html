@@ -24,7 +24,7 @@ ul.web2py-menu-vertical li { margin:0; padding:0; border:0; width: 150px; backgr
 ul.web2py-menu-vertical li a { margin:0; padding: 1px 3px 1px 3px; border:0; width: 144px; color: white; font-size:12px;}
 div.flash { position: fixed; float: right; padding: 10px; top: 10px; right: 30px; opacity: 0.75; margin: 10px 10px 10px 10px; text-align: center; clear: both; color: #fff; font-size: 11pt; text-align: center; vertical-align: middle; cursor: pointer; background: black; border: 2px solid #fff; -moz-border-radius: 5px; -webkit-border-radius: 5px; z-index: 2; }
 div.error { background-color: red; color: white; padding: 3px; }
-.auth_navbar { text-align:right; z-index:20; position: absolute; top: 2px; right:30px; border:0; padding:0;color: white; }
+.auth_navbar { text-align:right; z-index:20; position: absolute; top: 2px; right:30px; border:0; padding:0 }
   </style>
  </head>
  <body>
@@ -53,32 +53,147 @@ div.error { background-color: red; color: white; padding: 3px; }
       {{include}}
      </div>
      <!-- end #content -->
-    
+     <div id="sidebar">
+      <ul>
+       <li id="search">
+        <h3>
+         Search
+        </h3>
+        <form id="searchform" method="get" action="">
+         <div>
+          <input type="text" name="s" id="s" size="15" />
+          <br />
+          <input name="submit" type="submit" value="Go" />
+         </div>
+        </form>
+       </li>
+       <li>
+        <h3>
+         Veroeros etiam
+        </h3>
+        <p>
+         <strong>
+          Morbi sit amet
+         </strong>
+         mauris Nam vitae nibh eu sapien dictum pharetra. Vestibulum elementum neque vel lacus. Proin auctor dolor loremmassa. Phasellus sit.
+         <a href="#">
+          More&hellip;
+         </a>
+        </p>
+       </li>
+       <li>
+        <h3>
+         Blandit Volutpat
+        </h3>
+        <ul>
+         <li>
+          <a href="#">
+           Morbi sit amet sed magna
+          </a>
+         </li>
+         <li>
+          <a href="#">
+           Lacus dapibus interdum
+          </a>
+         </li>
+         <li>
+          <a href="#">
+           Donec pede nisl dolore sed
+          </a>
+         </li>
+         <li>
+          <a href="#">
+           Lacus dapibus et interdum
+          </a>
+         </li>
+         <li>
+          <a href="#">
+           Morbi sit amet magna  etiam
+          </a>
+         </li>
+         <li>
+          <a href="#">
+           Maecenas sed sem lorem
+          </a>
+         </li>
+         <li>
+          <a href="#">
+           Lacus dapibus interdum
+          </a>
+         </li>
+         <li>
+          <a href="#">
+           Donec pede nisl dolore
+          </a>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </div>
+     <!-- end #sidebar -->
      <div style="clear: both;">
       &nbsp;
      </div>
      <div id="widebar">
       <div id="colA">
        <h3>
-        {{=T('How to use it')}}
+        Volutpat Consequat
        </h3>
        <dl class="list1">
         <dt>
-         <a href={{=URL('plugin_wiki', 'page/help')}}>{{=T('Help')}}</a>
+         12.17.2007
         </dt>
+        <dd>
+         <a href="#">
+          Praesent nonummy sed lorem
+         </a>
+        </dd>
+        <dt>
+         12.13.2007
+        </dt>
+        <dd>
+         <a href="#">
+          Mauris sagittis neque nec nisi sed
+         </a>
+        </dd>
+        <dt>
+         12.05.2007
+        </dt>
+        <dd>
+         <a href="#">
+          Vel turpis integer leo venenatis
+         </a>
+        </dd>
+        <dt>
+         12.02.2007
+        </dt>
+        <dd>
+         <a href="#">
+          Et pharetra quis sed viverra ante
+         </a>
+        </dd>
+        <dt>
+         11.30.2007
+        </dt>
+        <dd>
+         <a href="#">
+          Integer leo lorem sed lorem
+         </a>
+        </dd>
        </dl>
       </div>
       <div id="colB">
        <h3>
-        {{=T('Contact')}}
+        Pharetra Sed Tempus
        </h3>
-       <dl class="list1">
-        <dt>
-         <a href={{=URL('plugin_wiki', 'page/contact')}}>{{=T('Contact')}}</a>
-        </dt>
-       </dl>
+       <p>
+        Morbi sit amet mauris Nam vitae nibh eu sapien dictum pharetra. Vestibulum elementum neque vel lacus. Lorem ipsum dolor sit dolore phasellus pede lorem proin auctor dolor loremmassa phasellus sit.
+        <a href="#">
+         More&hellip;
+        </a>
+       </p>
       </div>
-      <!--div id="colC">
+      <div id="colC">
        <h3>
         Donec Lorem Interdum
        </h3>
@@ -114,7 +229,7 @@ div.error { background-color: red; color: white; padding: 3px; }
          </a>
         </li>
        </ul>
-      </div-->
+      </div>
       <div style="clear: both;">
        &nbsp;
       </div>
@@ -126,7 +241,7 @@ div.error { background-color: red; color: white; padding: 3px; }
    <!-- end #wrapper2 -->
    <div id="footer">
     <p>
-     &copy; 2011 <a href="http://www.filemaker-solutions.ro">Vox Filemaker Solutions</a>. Design by
+     (c) 2007 Website Name. Design by
      <a href="http://www.nodethirtythree.com/">
       NodeThirtyThree
      </a>
