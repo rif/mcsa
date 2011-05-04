@@ -1,9 +1,11 @@
-{{left_sidebar_enabled=right_sidebar_enabled=False}}
 {{extend 'layout.html'}}
 
 
-{{=form}}
-
+{{=form.custom.begin}}
+{{=T('Fee earner')}}: {{=form.custom.widget.fee_earner}}
+{{=form.custom.submit}}
+{{=form.custom.end}}
+<br/>
 <div id="calendar"></div>
 
 <!-- overlayed element -->
@@ -13,9 +15,6 @@
 	<div class="contentWrap"></div>
 
 </div>
-
-{{block left_sidebar}}New Left Sidebar Content{{end}}
-{{block right_sidebar}}New Right Sidebar Content{{end}}
 
 <script type="text/javascript">
   $(function(){
