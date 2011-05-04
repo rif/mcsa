@@ -37,7 +37,7 @@ def __edit(request, odb, edit_link, sel):
 @auth.requires_membership('admin')
 def new_template():
     eid = request.args[1]
-    pairs = {
+    pairs = { 
         'cl': (URL('data', args=('delete','client', eid)), 'New matter', 'matter_edit'),
         'mt': (URL('data', args=('delete','matter', eid)), 'New segment', 'segment_edit'),
         'sg': (URL('data', args=('delete','segment', eid)), None, None),
@@ -139,7 +139,7 @@ def reports():
         Field('matter', db.matter, requires=IS_EMPTY_OR(IS_IN_DB(db(db.matter), db.matter.id, '%(name)s', zero=T('ALL')))),
         Field('start', 'date', default=first_of_month),
         Field('end', 'date', default=today))
-    if form.accepts(request.vars, session):
+    if form.accepts(request.vars, session, keepvalues=True):
         if form.vars.fee_earner: query &= db.time_entry.fee_earner == form.vars.fee_earner 
             
         if form.vars.client: query &= db.time_entry.client == form.vars.client
