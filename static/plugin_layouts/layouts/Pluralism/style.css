@@ -26,11 +26,6 @@ input, textarea {
 	color: #6B6B6B;
 }
 
-#time_entry_description, #time_entry_special_notes {
-    width: 95%;
-}
-
-
 h1, h2, h3, h4 {
 	margin: 0;
 }
@@ -354,4 +349,28 @@ img.right {
 
 #footer a {
 	color: #666666;
+}
+
+/* my entryes */
+
+
+#time_entry_description, #time_entry_special_notes {
+    width: 95%;
+}
+
+.rep {
+    margin-top: 20px;
+    clear:both;
+    position: relative;
+}
+
+.rep .left {
+    width: 60%;
+    float: left;
+}
+
+.rep .right {
+    float: left;
+    width: 40%;
+    left: 60%;
 }

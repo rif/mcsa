@@ -15,9 +15,71 @@
 <a href="{{=URL('default', 'reports.pdf')}}">{{=T('Download as PDF')}}</a>
 
 <br/>
-{{=earners}} <div class="right">{{=plugin_wiki.widget('pie_chart', data=earner_durations ,names=earner_names)}}</div>
-{{=clients}} <div class="right">{{=plugin_wiki.widget('pie_chart', data=client_durations ,names=client_names)}}</div>
-{{=matters}} <div class="right">{{=plugin_wiki.widget('pie_chart', data=matter_durations ,names=matter_names)}}</div>
+<div class="rep">
+<div class="left">
+  <table>
+    <thead>
+      <tr>
+	<th>User</th>
+	<th>{{=T('Time spent')}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{for elem in earners:}}
+      <tr>
+	<td width="300px">{{=elem.auth_user.first_name}}</td>
+	<td>{{=elem['SUM(time_entry.duration)']}}</td>
+      </tr>
+      {{pass}}
+    </tbody>
+  </table>
+  
+</div>
+<div class="right">{{=plugin_wiki.widget('pie_chart', data=earner_durations ,names=earner_names)}}</div>
+</div>
+<div class="rep">
+<div class="left">
+<table>
+    <thead>
+      <tr>
+	<th>Client</th>
+	<th>{{=T('Time spent')}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{for elem in clients:}}
+      <tr>
+	<td width="300px">{{=elem.client.name}}</td>
+	<td>{{=elem['SUM(time_entry.duration)']}}</td>
+      </tr>
+      {{pass}}
+    </tbody>
+  </table>
+</div>
+<div class="right">{{=plugin_wiki.widget('pie_chart', data=client_durations ,names=client_names)}}</div>
+</div>
+
+<div class="rep">
+<div class="left">
+<table>
+    <thead>
+      <tr>
+	<th>Matter</th>
+	<th>{{=T('Time spent')}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{for elem in matters:}}
+      <tr>
+	<td width="300px">{{=elem.matter.name}}</td>
+	<td>{{=elem['SUM(time_entry.duration)']}}</td>
+      </tr>
+      {{pass}}
+    </tbody>
+</table>
+</div>
+<div class="right">{{=plugin_wiki.widget('pie_chart', data=matter_durations ,names=matter_names)}}</div>
+</div>
 <br/>
 
 <table>
