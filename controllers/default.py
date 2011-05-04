@@ -145,7 +145,7 @@ def reports():
         if form.vars.fee_earner: query &= db.time_entry.fee_earner == form.vars.fee_earner 
             
         if form.vars.client: query &= db.time_entry.client == form.vars.client
-        if form.vars.matter: query &= db.time_entry.fee_matter == form.vars.matter
+        if form.vars.matter: query &= db.time_entry.matter == form.vars.matter
         if form.vars.start: query &=  db.time_entry.date >= form.vars.start
         if form.vars.end: query &= db.time_entry.date <= form.vars.end
         entries_set = db(query)
