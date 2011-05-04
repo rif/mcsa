@@ -63,6 +63,7 @@ def segment_edit():
         db.segment.matter.default = db.matter(request.args[0])    
     return __edit(request, db.segment, 'segment_edit', 'sg_')
 
+@auth.requires_login()
 def entry_new():
     entry = None
     user = None
@@ -76,6 +77,7 @@ def entry_new():
     form = crud.create(db.time_entry, next=URL('index'))
     return response.render('default/entry_edit.html', locals())
 
+@auth.requires_login()
 def entry_drop():
     entry = db.time_entry(request.args[0])
     entry.update_record(date=datetime.fromtimestamp(float(request.args[1])))
@@ -101,7 +103,7 @@ def entries():
     ent = [{'id': row.id,
             'title': str(row.duration) + ' ' + T('hours'),
             'start': row.date.strftime("%Y-%m-%d"),
-            'url': URL('entry_edit', args=row.id).xml()}
+            'url': URL('entry_edit', args=row.id)}
            for row in db((db.time_entry.date >= start) &
                          (db.time_entry.date <= end) &
                          (db.time_entry.fee_earner == (session.fee_earner or auth.user_id))).select()]
