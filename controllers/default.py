@@ -156,16 +156,16 @@ def reports():
     elif form.errors:
         response.flash = 'form has errors'
     entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.duration, orderby=db.time_entry.date, limitby=limitby)
-    earners = entries_set.select(db.auth_user.first_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
-    earner_names = [row.auth_user.first_name for row in earners]
+    earners = entries_set.select(db.auth_user.id, db.auth_user.first_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
+    earner_names = [str(row.auth_user.id) for row in earners]
     earner_durations = [int(row[total_duration]) for row in earners]
 
-    clients = entries_set.select(db.client.name, total_duration, orderby=~total_duration, groupby=db.client.name)
-    client_names = [row.client.name for row in clients]
+    clients = entries_set.select(db.client.id, db.client.name, total_duration, orderby=~total_duration, groupby=db.client.name)
+    client_names = [str(row.client.id) for row in clients]
     client_durations = [int(row[total_duration]) for row in clients]
 
-    matters = entries_set.select(db.matter.name, total_duration, orderby=~total_duration, groupby=db.matter.name)
-    matter_names = [row.matter.name for row in matters]
+    matters = entries_set.select(db.matter.id, db.matter.name, total_duration, orderby=~total_duration, groupby=db.matter.name)
+    matter_names = [str(row.matter.id) for row in matters]
     matter_durations = [int(row[total_duration]) for row in matters]
     if request.extension=="pdf":
         from gluon.contrib.pyfpdf import FPDF, HTMLMixin
