@@ -1,16 +1,23 @@
 {{extend 'layout.html'}}
 
-{{=form}}
+<div class="rep">
+  <div class="left">
+    {{=form}}
+  </div>
+  <div class="right">
+    <h3>{{=T('Current selection')}}</h3>
+    <b>
+      {{=T('Fee eraner')}}: {{if form.vars.fee_earner:}}{{=db.auth_user(form.vars.fee_earner).first_name}}{{else:}}ALL{{pass}}<br/>
+      {{=T('Client')}}: {{if form.vars.client:}}{{=db.client(form.vars.client).name}}{{else:}}ALL{{pass}}<br/>
+      {{=T('Matter')}}: {{if form.vars.matter:}}{{=db.matterr(form.vars.matter).name}}{{else:}}ALL{{pass}}<br/>
+      {{=T('Start')}}: {{=form.vars.start or "NOT SPECIFIED"}}<br/>
+      {{=T('End')}}: {{=form.vars.end or "NOT SPECIFIED"}}<br/>
+    </b>
+  </div>
+</div>
 
-<h2 title="{{=str(entries_set.query)}}">{{=entries_set.count()}} {{=T('time entries')}}</h2>
-<h3>{{=T('Current selection')}}</h3>
-<b>
-{{=T('Fee eraner')}}: {{if form.vars.fee_earner:}}{{=db.auth_user(form.vars.fee_earner).first_name}}{{else:}}ALL{{pass}}<br/>
-{{=T('Client')}}: {{if form.vars.client:}}{{=db.client(form.vars.client).name}}{{else:}}ALL{{pass}}<br/>
-{{=T('Matter')}}: {{if form.vars.matter:}}{{=db.matterr(form.vars.matter).name}}{{else:}}ALL{{pass}}<br/>
-{{=T('Start')}}: {{=form.vars.start or "NOT SPECIFIED"}}<br/>
-{{=T('End')}}: {{=form.vars.end or "NOT SPECIFIED"}}<br/>
-</b>
+<h2>{{=entries_set.count()}} {{=T('time entries')}}</h2>
+
 <a href="{{=URL('default', 'reports.csv')}}">{{=T('Download as CSV')}}</a>
 <a href="{{=URL('default', 'reports.pdf')}}">{{=T('Download as PDF')}}</a>
 
@@ -80,7 +87,7 @@
 </div>
 <div class="right">{{=plugin_wiki.widget('pie_chart', data=matter_durations ,names=matter_names)}}</div>
 </div>
-<br/>
+<br/><br/>
 
 <table>
 <thead>
@@ -94,7 +101,8 @@
 </tr>
 </thead>
 <tbody>
-  {{for entry in entries:}}
+  {{for i,entry in enumerate(entries):}}
+  {{if i==items_per_page: break}}
   <tr>
     <td>{{=entry.time_entry.date}}
     <td>{{=entry.auth_user.first_name}}</td>
@@ -106,3 +114,11 @@
 {{pass}}
 </tbody>
 </table>
+{{if page:}}
+<a href="{{=URL(args=[page-1])}}">previous</a>
+{{pass}}
+
+{{if len(entries)>items_per_page:}}
+<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+
