@@ -127,10 +127,13 @@ def segment_callback():
 
 @auth.requires_login()
 def reports():
+    response.title = T('Time entries report')
     if len(request.args): page=int(request.args[0])
     else: page=0
-    #items_per_page=20
-    #limitby=(page*items_per_page,(page+1)*items_per_page+1)
+    items_per_page=20
+    limitby=(page*items_per_page,(page+1)*items_per_page+1)
+    if request.extension in ('csv', 'pdf'):
+        limitby = 0
     query = earner_entries & client_entries & matter_entries
     entries_set = db(query = earner_entries & client_entries & matter_entries)
     today = date.today()
@@ -152,19 +155,41 @@ def reports():
         
     elif form.errors:
         response.flash = 'form has errors'
-    entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.duration, orderby=db.time_entry.date)
-    earners = entries_set.select(db.auth_user.first_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
-    earner_names = [row.auth_user.first_name for row in earners]
+    entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.duration, orderby=db.time_entry.date, limitby=limitby)
+    earners = entries_set.select(db.auth_user.id, db.auth_user.first_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
+    earner_names = [str(row.auth_user.id) for row in earners]
     earner_durations = [int(row[total_duration]) for row in earners]
 
-    clients = entries_set.select(db.client.name, total_duration, orderby=~total_duration, groupby=db.client.name)
-    client_names = [row.client.name for row in clients]
+    clients = entries_set.select(db.client.id, db.client.name, total_duration, orderby=~total_duration, groupby=db.client.name)
+    client_names = [str(row.client.id) for row in clients]
     client_durations = [int(row[total_duration]) for row in clients]
 
-    matters = entries_set.select(db.matter.name, total_duration, orderby=~total_duration, groupby=db.matter.name)
-    matter_names = [row.matter.name for row in matters]
+    matters = entries_set.select(db.matter.id, db.matter.name, total_duration, orderby=~total_duration, groupby=db.matter.name)
+    matter_names = [str(row.matter.id) for row in matters]
     matter_durations = [int(row[total_duration]) for row in matters]
+    if request.extension=="pdf":
+        from gluon.contrib.pyfpdf import FPDF, HTMLMixin
 
+        # define our FPDF class (move to modules if it is reused  frequently)
+        class MyFPDF(FPDF, HTMLMixin):
+            def header(self):
+                self.set_font('Arial','B',15)
+                self.cell(0,10, response.title ,1,0,'C')
+                self.ln(20)
+                
+            def footer(self):
+                self.set_y(-15)
+                self.set_font('Arial','I',8)
+                txt = 'Page %s of %s' % (self.page_no(), self.alias_nb_pages())
+                self.cell(0,10,txt,0,0,'C')
+                    
+        pdf=MyFPDF('L', 'mm', 'A4')
+        # first page:
+        pdf.add_page()
+        pdf.set_font('Arial','',8)
+        pdf.write_html(response.render("default/reports.pdf", locals()))
+        response.headers['Content-Type']='application/pdf'
+        return pdf.output(dest='S')
     return locals()
 
 
