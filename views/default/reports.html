@@ -27,13 +27,15 @@
   <table>
     <thead>
       <tr>
-	<th>User</th>
+	<th>{{=T('Id')}}</th>
+	<th>{{=T('User')}}</th>
 	<th>{{=T('Time spent')}}</th>
       </tr>
     </thead>
     <tbody>
       {{for elem in earners:}}
       <tr>
+	<td>{{=elem.auth_user.id}}</td>
 	<td width="300px">{{=elem.auth_user.first_name}}</td>
 	<td>{{=elem['SUM(time_entry.duration)']}}</td>
       </tr>
@@ -49,13 +51,15 @@
 <table>
     <thead>
       <tr>
-	<th>Client</th>
+	<th>{{=T('Id')}}</th>
+	<th>{{=T('Client')}}</th>
 	<th>{{=T('Time spent')}}</th>
       </tr>
     </thead>
     <tbody>
       {{for elem in clients:}}
       <tr>
+	<td>{{=elem.client.id}}</td>
 	<td width="300px">{{=elem.client.name}}</td>
 	<td>{{=elem['SUM(time_entry.duration)']}}</td>
       </tr>
@@ -71,13 +75,15 @@
 <table>
     <thead>
       <tr>
-	<th>Matter</th>
+	<th>{{=T('Id')}}</th>
+	<th>{{=T('Matter')}}</th>
 	<th>{{=T('Time spent')}}</th>
       </tr>
     </thead>
     <tbody>
       {{for elem in matters:}}
       <tr>
+	<td>{{=elem.matter.id}}</td>
 	<td width="300px">{{=elem.matter.name}}</td>
 	<td>{{=elem['SUM(time_entry.duration)']}}</td>
       </tr>
