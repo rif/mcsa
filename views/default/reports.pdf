@@ -1,0 +1,24 @@
+<table width="100%" align="centre" border="1">
+<thead>
+<tr>
+  <th width="10%">{{=T('Date')}}</th>
+  <th width="10%">{{=T('Fee earner')}}</th>
+  <th width="23%">{{=T('Client')}}</th>
+  <th width="10%">{{=T('Matter')}}</th>
+  <th width="7%">{{=T('Duration')}}</th>
+  <th width="40%">{{=T('Description')}}</th>
+</tr>
+</thead>
+<tbody>
+  {{for entry in entries:}}
+  <tr>
+    <td width="10%">{{=entry.time_entry.date}}
+    <td width="10%">{{=entry.auth_user.first_name + " " + entry.auth_user.last_name}}</td>
+    <td width="23%">{{=entry.client.name}}</td>
+    <td width="10%">{{=entry.matter.name}}</td>
+    <td width="7%">{{=entry.time_entry.duration}}</td>
+    <td width="40%">{{=entry.time_entry.description}}</td>
+  </tr>
+{{pass}}
+</tbody>
+</table>
