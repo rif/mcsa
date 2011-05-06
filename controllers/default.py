@@ -187,7 +187,7 @@ def reports():
         # first page:
         pdf.add_page()
         pdf.set_font('Arial','',8)
-        pdf.write_html(response.render("default/reports.pdf", locals()))
+        pdf.write_html(response.render("default/pdf_reports.html", locals()))
         response.headers['Content-Type']='application/pdf'
         return pdf.output(dest='S')
     return locals()
