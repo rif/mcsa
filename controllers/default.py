@@ -100,6 +100,8 @@ def entry_edit():
 def entries():
     start = datetime.fromtimestamp(float(request.vars.start))
     end = datetime.fromtimestamp(float(request.vars.end))
+    session.current_year = start.year
+    session.current_month = start.month
     ent = [{'id': row.id,
             'title': str(row.duration) + ' ' + T('hours'),
             'start': row.date.strftime("%Y-%m-%d"),

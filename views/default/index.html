@@ -8,52 +8,30 @@
 <br/>
 <div id="calendar"></div>
 
-<!-- overlayed element -->
-<div class="apple_overlay black" id="overlay">
-
-	<!-- the external content is loaded inside this tag -->
-	<div class="contentWrap"></div>
-
-</div>
-
 <script type="text/javascript">
-  $(function(){
-  var calendar = $("#calendar").fullCalendar({
-  theme: true,
-  header: {
-  left: 'prev,next today',
-  center: 'title',
-  right: 'month,agendaWeek,agendaDay'
-  },
-  events: "{{=URL('entries')}}",
-  eventDrop: function(event, delta) {
-  $.get("{{=URL('entry_drop')}}/" + event.id + "/" + Math.round(event.start.getTime()/1000.0));
-  },
-  selectable: true,
-  selectHelper: true,
-  select: function(start, end, allDay) {
-  /*$("#overlay").overlay({
-  mask: 'gray',
-  effect: 'apple',
-  
-  onBeforeLoad: function() {
-  var wrap = this.getOverlay().find(".contentWrap");
-  wrap.load("{{=URL('entry_new')}}/?start=" + Math.round(start.getTime()/1000.0), function(){
-  $(".contentWrap form").submit( function(e){ console.log('test');});
-  });
-  },
-  
-  // disable this for modal dialog-type of overlays
-  closeOnClick: false,
-  
-  // load it immediately after the construction
-  load: true
-  });*/
-
-  window.location="{{=URL('entry_new')}}/?start=" + Math.round(start.getTime()/1000.0) + "&end=" + Math.round(end.getTime()/1000.0); 
-  calendar.fullCalendar('unselect');
-  },
-  editable: true,
-  });
-  });
+    $(function(){
+	var calendar = $("#calendar").fullCalendar({
+	    {{if session.current_month:}}
+	    year: {{=session.current_year}},
+	    month: {{=session.current_month}},
+	    {{pass}}
+	    theme: true,
+	    header: {
+		left: 'prev,next today',
+		center: 'title',
+		right: 'month,agendaWeek,agendaDay'
+	    },
+	    events: "{{=URL('entries')}}",
+	    eventDrop: function(event, delta) {
+		$.get("{{=URL('entry_drop')}}/" + event.id + "/" + Math.round(event.start.getTime()/1000.0));
+	    },
+	    selectable: true,
+	    selectHelper: true,
+	    select: function(start, end, allDay) {		
+		window.location="{{=URL('entry_new')}}/?start=" + Math.round(start.getTime()/1000.0) + "&end=" + Math.round(end.getTime()/1000.0); 
+		calendar.fullCalendar('unselect');
+	    },
+	    editable: true,
+	});
+    });
 </script>

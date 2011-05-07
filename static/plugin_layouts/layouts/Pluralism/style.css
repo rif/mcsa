@@ -353,11 +353,6 @@ img.right {
 
 /* my entryes */
 
-
-#time_entry_description, #time_entry_special_notes {
-    width: 95%;
-}
-
 .rep {
     margin-top: 20px;
     clear:both;
@@ -373,4 +368,20 @@ img.right {
     float: left;
     width: 40%;
     left: 60%;
+}
+
+#time_entry input {width:10em;}
+#time_entry select {width:100%;margin-right:2px; margin-top:2px;}
+#time_entry textarea {width:95%;}
+#time_entry .head {background-color: #3875d7; color: white;}
+#time_entry .shead {background-color: #aed5fe;}
+
+.fc-event-title {
+    padding: 0 1px;
+    color: white;
+}
+
+.fc-event-title:hover {
+    color: lightgray;
+    text-decoration: None;
 }
