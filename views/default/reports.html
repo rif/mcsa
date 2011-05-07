@@ -18,8 +18,8 @@
 
 <h2>{{=entries_set.count()}} {{=T('time entries')}}</h2>
 
-<a href="{{=URL('default', 'reports.csv')}}">{{=T('Download as CSV')}}</a>
-<a href="{{=URL('default', 'reports.pdf')}}">{{=T('Download as PDF')}}</a>
+<a id="csv-link" href="{{=URL('default', 'reports.csv')}}">{{=T('Download as CSV')}}</a>
+<a id="pdf-link" href="{{=URL('default', 'reports.pdf')}}">{{=T('Download as PDF')}}</a>
 
 <br/>
 <div class="rep">
@@ -128,3 +128,14 @@
 <a href="{{=URL(args=[page+1])}}">next</a>
 {{pass}}
 
+<script type="text/javascript">
+  $(function(){
+      $("#csv-link, #pdf-link").click(function(e){
+	  var form = $("form");
+	  form.attr("action", $(this).attr("href"));
+	  form.submit();
+	  form.attr("action", "");
+	  e.preventDefault();
+      });
+  });
+</script>
