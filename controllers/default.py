@@ -113,7 +113,7 @@ def entries():
 
 def matters_callback():
     client = db.client(request.args[0])
-    matters = db(db.matter.client==client).select()
+    matters = db(active_matters & (db.matter.client==client)).select()
     option_list = [OPTION('')]
     for mat in matters:
         option_list.append(OPTION(mat.name, _value=mat.id))
@@ -121,7 +121,7 @@ def matters_callback():
 
 def segment_callback():
     matter = db.matter(request.args[0])
-    segments = db(db.segment.matter==matter).select()
+    segments = db(active_segments & (db.segment.matter==matter)).select()
     option_list = [OPTION('')]
     for seg in segments:
         option_list.append(OPTION(seg.name, _value=seg.id))
@@ -129,7 +129,7 @@ def segment_callback():
 
 @auth.requires_login()
 def reports():
-    response.title = T('Time entries report')
+    response.title = request.application + ' ' + T('time entries report')
     if len(request.args): page=int(request.args[0])
     else: page=0
     items_per_page=20
@@ -185,7 +185,7 @@ def reports():
                 txt = 'Page %s of %s' % (self.page_no(), self.alias_nb_pages())
                 self.cell(0,10,txt,0,0,'C')
                     
-        pdf=MyFPDF('L', 'mm', 'A4')
+        pdf=MyFPDF('P', 'mm', 'A4')
         # first page:
         pdf.add_page()
         pdf.set_font('Arial','',8)

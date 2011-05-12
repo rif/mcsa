@@ -9,7 +9,6 @@
     <span id={{='cl_' + str(client.id)}}>
       <span>
 	<span>{{=A(client.name, _href=URL('client_edit', args=client.id), cid='cl_' + str(client.id))}}</span>
-	<span>{{=client.billable}}</span>
       </span>    
     </span>
     {{=A(IMG(_src=URL('static/images', 'delete.png'), _alt='+', _height="16px"), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('data', args=('delete','client', client.id)))}}
@@ -46,39 +45,39 @@
 </ul>
 
 <script type="text/javascript">
-	function expandLink(element) {
-		element.click(function(e) {
-			$(this).nextAll("ul:first").slideToggle();
-			e.preventDefault();
-		});
-	}
-
-	function newLink(element) {
-		element.click(function(e) {
-			$(this).parent().append('{{=LI(SPAN(_id="new-area"))}}');
-		});
-	}
-
-	$(function() {
-		expandLink($(".expander"));
-		newLink($(".new-link"));
-
-		$(this).ajaxComplete(
-				function(event, request, settings) {
-					newArea = $("#new-area");
-					if (newArea.length && settings.type == 'POST'
-							&& request.responseText.indexOf('span') != -1) { //id it's a succesful post
-						head = newArea.parents("ul:first").attr("id");
-						tail = $("#new-area>span").attr("id");
-						$.get("{{=URL('new_template')}}/" + head + "/" + tail,
-								function(data) { //add remove and expand links
-									newArea.append(data);
-									expandLink($(".expander", newArea));
-									newLink($(".new-link", newArea));
-									$("#new-area>span").removeAttr("id");
-									newArea.attr("id", head + "_" + tail);
-								});
-					}
-				});
+    function expandLink(element) {
+	element.click(function(e) {
+	    $(this).nextAll("ul:first").slideToggle();
+	    e.preventDefault();
 	});
+    }
+
+function newLink(element) {
+    element.click(function(e) {
+	$(this).parent().append('{{=LI(SPAN(_id="new-area"))}}');
+    });
+}
+
+$(function() {
+    expandLink($(".expander"));
+    newLink($(".new-link"));
+    
+    $(this).ajaxComplete(
+	function(event, request, settings) {
+	    newArea = $("#new-area");
+	    if (newArea.length && settings.type == 'POST'
+		&& request.responseText.indexOf('span') != -1) { //id it's a succesful post
+		head = newArea.parents("ul:first").attr("id");
+		tail = $("#new-area>span").attr("id");
+		$.get("{{=URL('new_template')}}/" + head + "/" + tail,
+		      function(data) { //add remove and expand links
+			  newArea.append(data);
+			  expandLink($(".expander", newArea));
+			  newLink($(".new-link", newArea));
+			  $("#new-area>span").removeAttr("id");
+			  newArea.attr("id", head + "_" + tail);
+		      });
+	    }
+	});
+});
 </script>
