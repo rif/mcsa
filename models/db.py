@@ -93,26 +93,28 @@ def cost(row):
 
 db.define_table('client',
                 Field('name', required=True, unique=True),
-                Field('billable', 'boolean', default=True),
+                Field('active', 'boolean', default=True),
                 format='%(name)s'
                 )
 
 db.define_table('matter',
                 Field('client', db.client, readable=False, writable=False),
                 Field('name', required=True),
+                Field('active', 'boolean', default=True),
                 format='%(name)s'
                 )
 
 db.define_table('segment',
                 Field('matter', db.matter, readable=False, writable=False),
                 Field('name', required=True),
+                Field('active', 'boolean', default=True),
                 format='%(name)s'
                 )
                 
 db.define_table('time_entry',
-                Field('client', db.client, length=150),
-                Field('matter', db.matter),
-                Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db,db.segment.id, '%(name)s'))),
+                Field('client', db.client, length=150, requires=IS_IN_DB(db(db.client.active==True), db.client.id, '%(name)s')),
+                Field('matter', db.matter, requires=IS_IN_DB(db(db.matter.active==True), db.matter.id, '%(name)s')),
+                Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment.active==True),db.segment.id, '%(name)s'))),
                 Field('fee_earner', db.auth_user, default=(session.fee_earner or auth.user_id), requires=IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s')),
                 Field('code_classification',
                       requires=IS_IN_SET([T('Other'), T('Meeting'), T('Discussion'), T('Telephone Call'), T('Review/Analyse'), T('Draft/Revise'), T('Legal Research'), T('Travel')], zero=None), default='Other'),
@@ -130,6 +132,9 @@ db.define_table('time_entry',
                 format='%(description)s'
                 )                
 
+active_clients = db.client.active == True
+active_matters = db.matter.active == True
+active_segments = db.segment.active == True
 total_duration = db.time_entry.duration.sum()
 earner_entries = db.time_entry.fee_earner == db.auth_user.id
 client_entries = db.time_entry.client == db.client.id
