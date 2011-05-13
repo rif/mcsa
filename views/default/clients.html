@@ -45,6 +45,10 @@
 	  var href = $(this).attr("href");
 	  $("#placeholder").load(href, function(){
 	      $("form").attr("action", href);
+/*	      $("form").submit(function(){
+		  $.post(href, $(this).serializeArray());
+		  return false;
+	      });*/
 	  });
 	  e.preventDefault();
       });
