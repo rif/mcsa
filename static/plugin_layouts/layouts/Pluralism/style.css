@@ -385,3 +385,11 @@ img.right {
     color: lightgray;
     text-decoration: None;
 }
+
+#clients {
+    float: left;
+    width: 60%;
+}
+
+#placeholder {
+}

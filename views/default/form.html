@@ -1,10 +1,12 @@
 {{=form}}
 
-<a class="cancel" href="#">Cancel</a><br/>
+<a class="cancel-edit" href="#">Cancel</a><br/>
 
 <script type="text/javascript">
-  $(".cancel").click(function(e)){
-  e.get(
-  e.preventDefault();
-  }
+    $(function(){
+	$(".cancel-edit").click(function(e){
+	    $(this).parent().text("");
+	    e.preventDefault();
+	});
+    });
 </script>

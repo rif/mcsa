@@ -135,6 +135,7 @@ db.define_table('time_entry',
 active_clients = db.client.active == True
 active_matters = db.matter.active == True
 active_segments = db.segment.active == True
+a0,a1 = request.args(0), request.args(1)
 total_duration = db.time_entry.duration.sum()
 earner_entries = db.time_entry.fee_earner == db.auth_user.id
 client_entries = db.time_entry.client == db.client.id
