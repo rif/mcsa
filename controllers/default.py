@@ -34,6 +34,13 @@ def __edit(request, odb, edit_link, sel):
             ' ', _id=form.vars.id)
     return response.render('default/form.html', locals())
 
+def __cancel(request, odb, edit_link, sel):
+    return SPAN(
+            SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid=sel + str(form.vars.id))),
+            ' ', 
+            SPAN(form.vars.billable) if form.vars.billable else ' ',
+            ' ', _id=form.vars.id)
+
 @auth.requires_membership('admin')
 def new_template():
     eid = request.args[1]
@@ -50,6 +57,11 @@ def new_template():
 @auth.requires_membership('admin')
 def client_edit():
     return __edit(request, db.client, 'client_edit', 'cl_')
+
+@auth.requires_membership('admin')
+def client_cancel():
+    return __cancel(request, db.client, 'client_edit', 'cl_')
+
 
 @auth.requires_membership('admin')
 def matter_edit():
