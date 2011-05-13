@@ -20,60 +20,34 @@ def clients():
     clients = db(db.client).select()
     return locals()
 
-def __edit(request, odb, edit_link, sel):
-    if len(request.args) > 0 and request.vars.new != 'True':
-        obj = odb(request.args[0])
-        form=crud.update(odb, obj, deletable=False)
-    else:
-        form = crud.create(odb)
-    if form.accepts(request.vars):
-        return SPAN(
-            SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid=sel + str(form.vars.id))),
-            ' ', 
-            SPAN(form.vars.billable) if form.vars.billable else ' ',
-            ' ', _id=form.vars.id)
-    return response.render('default/form.html', locals())
-
-def __cancel(request, odb, edit_link, sel):
-    return SPAN(
-            SPAN(A(form.vars.name, _href=URL(edit_link, args=form.vars.id), cid=sel + str(form.vars.id))),
-            ' ', 
-            SPAN(form.vars.billable) if form.vars.billable else ' ',
-            ' ', _id=form.vars.id)
-
-@auth.requires_membership('admin')
-def new_template():
-    eid = request.args[1]
-    pairs = { 
-        'cl': (URL('data', args=('delete','client', eid)), 'New matter', 'matter_edit'),
-        'mt': (URL('data', args=('delete','matter', eid)), 'New segment', 'segment_edit'),
-        'sg': (URL('data', args=('delete','segment', eid)), None, None),
-        }
-    sel = {'cl': 'mt', 'mt': 'sg', 'sg': 'sg'}
-    delete_link, new_string, new_link = pairs[request.args[0]]
-    selector = sel[request.args[0]]
-    return locals()
-
 @auth.requires_membership('admin')
 def client_edit():
-    return __edit(request, db.client, 'client_edit', 'cl_')
-
-@auth.requires_membership('admin')
-def client_cancel():
-    return __cancel(request, db.client, 'client_edit', 'cl_')
-
+    form = crud.update(db.client, a0, next=URL("clients"))
+    return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
 def matter_edit():
-    if request.vars.new == 'True':
-        db.matter.client.default = db.client(request.args[0])    
-    return __edit(request, db.matter, 'matter_edit', 'mt_')
+    form = crud.update(db.matter, a0, next=URL("clients"))
+    return response.render('default/form.html', locals())
+
+@auth.requires_membership('admin')
+def matter_new():
+    db.matter.client.default = a0
+    form = crud.create(db.matter, next=URL("clients"))
+    return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
 def segment_edit():
-    if request.vars.new == 'True':
-        db.segment.matter.default = db.matter(request.args[0])    
-    return __edit(request, db.segment, 'segment_edit', 'sg_')
+    form = crud.update(db.segment, a0, next=URL("clients"))
+    return response.render('default/form.html', locals())
+
+
+@auth.requires_membership('admin')
+def segment_new():
+    db.segment.matter.default = a0
+    form = crud.create(db.segment, next=URL("clients"))
+    return response.render('default/form.html', locals())
+
 
 @auth.requires_login()
 def entry_new():
@@ -141,7 +115,6 @@ def segment_callback():
 
 @auth.requires_login()
 def reports():
-    response.title = request.application + ' ' + T('time entries report')
     if len(request.args): page=int(request.args[0])
     else: page=0
     items_per_page=20
@@ -188,7 +161,7 @@ def reports():
         class MyFPDF(FPDF, HTMLMixin):
             def header(self):
                 self.set_font('Arial','B',15)
-                self.cell(0,10, response.title ,1,0,'C')
+                self.cell(0,10, request.application + ' ' + T('time entries report') ,1,0,'C')
                 self.ln(20)
                 
             def footer(self):

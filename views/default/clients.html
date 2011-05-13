@@ -2,82 +2,56 @@
 
 <h1>Clients</h1>
 
-<ul id="cl">
-  {{=A(T('New client'), _class='new-link', _href=URL('client_edit'), cid="new-area")}}
-  {{for client in clients:}}
-  <li>
-    <span id={{='cl_' + str(client.id)}}>
-      <span>
-	<span>{{=A(client.name, _href=URL('client_edit', args=client.id), cid='cl_' + str(client.id))}}</span>
-      </span>    
-    </span>
-    {{=A(IMG(_src=URL('static/images', 'delete.png'), _alt='+', _height="16px"), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('data', args=('delete','client', client.id)))}}
-    {{=A(IMG( _src=URL('static/images', 'expand.png'), _alt='+', _height="16px"), _class='expander', _href='#')}}
-    <ul id="mt" style="display:none;">
-      {{=A(T('New matter'), _class='new-link', _href=URL('matter_edit', args=client.id, vars=dict(new=True)), cid="new-area")}}
-      {{for matter in db(db.matter.client==client).select():}}
-      <li>
-	<span id={{='mt_' + str(matter.id)}}>
-	  <span>
-	    <span>{{=A(matter.name, _href=URL('matter_edit', args=matter.id), cid='mt_' + str(matter.id))}}</span>
-	  </span>    
-	</span>
-	{{=A(IMG(_src=URL('static/images', 'delete.png'), _alt='+', _height="16px"), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('data', args=('delete','matter', matter.id)))}}
-	{{=A(IMG( _src=URL('static/images', 'expand.png'), _alt='+', _height="16px"), _class='expander', _href='#')}}
-	<ul id="sg" style="display:none;">
-	  {{=A(T('New segment'), _class='new-link', _href=URL('segment_edit', args=matter.id, vars=dict(new=True)), cid="new-area")}}
-	  {{for segment in db(db.segment.matter==matter).select():}}
-	  <li>
-	    <span id={{='sg_' + str(segment.id)}}>
-	      <span>
-		<span>{{=A(segment.name, _href=URL('segment_edit', args=segment.id), cid='sg_' + str(segment.id))}}</span>
-	      </span>    
-	    </span>
-	    {{=A(IMG( _src=URL('static/images', 'delete.png'), _alt='+', _height="16px"), _onclick="if(confirm('Are you shure you want to delete this element?')) {$(this).parents('li:first').remove();$.get($(this).attr('href'));} return false;", _href=URL('data', args=('delete','segment', segment.id)))}}
-	  </li>
-	  {{pass}}
-	</ul>
-      </li>    
-      {{pass}}
-    </ul>
-  </li>  
-  {{pass}}
-</ul>
-
+<div id="clients">
+  <ul>
+    <a class="edit-link" href="{{=URL('client_edit')}}">{{=T('New client')}}</a>
+    {{for client in clients:}}
+    <li>
+      <a class="show-link" href="{{=URL('matters', args=client.id)}}">{{=client.name}}</a>
+      <a class="hidden edit-link" href="{{=URL('client_edit', args=client.id)}}">Edit</a>
+      <ul class="hidden">
+	<a class="edit-link" href="{{=URL('matter_new', args=client.id)}}">{{=T('New matter')}}</a>
+	{{for matter in db(db.matter.client==client.id).select():}}
+	<li>
+	  <a class="show-link" href="{{=URL('segments', args=matter.id)}}">{{=matter.name}}</a>
+	  <a class="hidden edit-link" href="{{=URL('matter_edit', args=matter.id)}}">Edit</a>
+	  <ul class="hidden">
+	    <a class="edit-link" href="{{=URL('segment_new', args=matter.id)}}">{{=T('New segment')}}</a>
+	    {{if db(db.segment.matter==matter.id).count():}}
+	    {{for segment in db(db.segment.matter==matter.id).select():}}
+	    <li>
+	      {{=segment.name}}
+	      <a class="hidden edit-link" href="{{=URL('segment_edit', args=segment.id)}}">Edit</a>
+	    </li>
+	    {{pass}}
+	    {{pass}}
+	  </ul>
+	</li>
+	{{pass}}
+      </ul>
+    </li>
+    {{pass}}
+  </ul>
+</div>
+<div id="placeholder">
+</div>
 <script type="text/javascript">
-    function expandLink(element) {
-	element.click(function(e) {
-	    $(this).nextAll("ul:first").slideToggle();
-	    e.preventDefault();
-	});
-    }
-
-function newLink(element) {
-    element.click(function(e) {
-	$(this).parent().append('{{=LI(SPAN(_id="new-area"))}}');
-    });
-}
-
-$(function() {
-    expandLink($(".expander"));
-    newLink($(".new-link"));
-    
-    $(this).ajaxComplete(
-	function(event, request, settings) {
-	    newArea = $("#new-area");
-	    if (newArea.length && settings.type == 'POST'
-		&& request.responseText.indexOf('span') != -1) { //id it's a succesful post
-		head = newArea.parents("ul:first").attr("id");
-		tail = $("#new-area>span").attr("id");
-		$.get("{{=URL('new_template')}}/" + head + "/" + tail,
-		      function(data) { //add remove and expand links
-			  newArea.append(data);
-			  expandLink($(".expander", newArea));
-			  newLink($(".new-link", newArea));
-			  $("#new-area>span").removeAttr("id");
-			  newArea.attr("id", head + "_" + tail);
-		      });
-	    }
-	});
-});
+  $(function(){
+      $(".show-link").click(function(e){
+	  $(this).nextAll("ul.hidden").slideToggle();
+	  e.preventDefault();
+      });
+      $(".edit-link").click(function(e){
+	  var href = $(this).attr("href");
+	  $("#placeholder").load(href, function(){
+	      $("form").attr("action", href);
+	  });
+	  e.preventDefault();
+      });
+      $("#clients li").mouseover(function(){
+	  $(this).children("a.hidden").fadeIn();
+      }).mouseleave(function(){
+	  $(this).children("a.hidden").fadeOut();
+      });
+  });
 </script>
