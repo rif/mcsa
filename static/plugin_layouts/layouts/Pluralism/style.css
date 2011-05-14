@@ -391,5 +391,6 @@ img.right {
     width: 60%;
 }
 
-#placeholder {
+.undercover {
+    display:none;
 }

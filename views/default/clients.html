@@ -4,24 +4,24 @@
 
 <div id="clients">
   <ul>
-    <a class="edit-link" href="{{=URL('client_edit')}}">{{=T('New client')}}</a>
+    <a class="edit-link" href="{{=URL('client_new')}}">{{=T('New client')}}</a>
     {{for client in clients:}}
     <li>
       <a class="show-link" href="{{=URL('matters', args=client.id)}}">{{=client.name}}</a>
-      <a class="hidden edit-link" href="{{=URL('client_edit', args=client.id)}}">Edit</a>
-      <ul class="hidden">
+      <a class="undercover edit-link" href="{{=URL('client_edit', args=client.id)}}">Edit</a>
+      <ul class="undercover">
 	<a class="edit-link" href="{{=URL('matter_new', args=client.id)}}">{{=T('New matter')}}</a>
 	{{for matter in db(db.matter.client==client.id).select():}}
 	<li>
 	  <a class="show-link" href="{{=URL('segments', args=matter.id)}}">{{=matter.name}}</a>
-	  <a class="hidden edit-link" href="{{=URL('matter_edit', args=matter.id)}}">Edit</a>
-	  <ul class="hidden">
+	  <a class="undercover edit-link" href="{{=URL('matter_edit', args=matter.id)}}">Edit</a>
+	  <ul class="undercover">
 	    <a class="edit-link" href="{{=URL('segment_new', args=matter.id)}}">{{=T('New segment')}}</a>
 	    {{if db(db.segment.matter==matter.id).count():}}
 	    {{for segment in db(db.segment.matter==matter.id).select():}}
 	    <li>
-	      {{=segment.name}}
-	      <a class="hidden edit-link" href="{{=URL('segment_edit', args=segment.id)}}">Edit</a>
+	      <a>{{=segment.name}}</a>
+	      <a class="undercover edit-link" href="{{=URL('segment_edit', args=segment.id)}}">Edit</a>
 	    </li>
 	    {{pass}}
 	    {{pass}}
@@ -36,26 +36,43 @@
 <div id="placeholder">
 </div>
 <script type="text/javascript">
-  $(function(){
-      $(".show-link").click(function(e){
-	  $(this).nextAll("ul.hidden").slideToggle();
-	  e.preventDefault();
-      });
-      $(".edit-link").click(function(e){
-	  var href = $(this).attr("href");
-	  $("#placeholder").load(href, function(){
-	      $("form").attr("action", href);
-/*	      $("form").submit(function(){
-		  $.post(href, $(this).serializeArray());
+    function setup(){
+	$(".show-link").unbind();
+	$(".edit-link").unbind();
+	$("#clients li").unbind();
+	$(".show-link").click(function(e){
+	    $(this).nextAll("ul.undercover").slideToggle();
+	    e.preventDefault();
+	});
+	$(".edit-link").click(function(e){
+	    var link = $(this);
+	    var href = link.attr("href");
+	    $(".editing").removeClass("editing");
+	    $(this).prev("a").addClass("editing");
+	    $("#placeholder").load(href, function(){
+		//$("form").attr("action", href);
+		$("form").submit(function(){
+		    $.post(href, $(this).serializeArray(), function(data){
+			if($(".editing").length != 0) {
+			    $(".editing").replaceWith(data);
+			} else {
+			    link.parent().append(data); 
+			}
+			$("#placeholder").text("");
+			setup();
+		    });
 		  return false;
-	      });*/
-	  });
-	  e.preventDefault();
-      });
-      $("#clients li").mouseover(function(){
-	  $(this).children("a.hidden").fadeIn();
-      }).mouseleave(function(){
-	  $(this).children("a.hidden").fadeOut();
-      });
-  });
+		});
+	    });
+	    e.preventDefault();
+	});
+	$("#clients li").mouseover(function(){
+	    $(this).children("a.undercover").fadeIn();
+	}).mouseleave(function(){
+	    $(this).children("a.undercover").fadeOut();
+	});
+    }
+$(function(){
+    setup();
+});
 </script>
