@@ -88,6 +88,20 @@ def segment_new():
 
     return response.render('default/form.html', locals())
 
+@auth.requires_membership('admin')
+def client_delete():
+    db(db.client.id==a0).delete()
+    return ""
+
+@auth.requires_membership('admin')
+def matter_delete():
+    db(db.matter.id==a0).delete()
+    return ""
+
+@auth.requires_membership('admin')
+def segment_delete():
+    db(db.segment.id==a0).delete()
+    return ""
 
 @auth.requires_login()
 def entry_new():
