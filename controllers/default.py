@@ -22,30 +22,70 @@ def clients():
 
 @auth.requires_membership('admin')
 def client_edit():
-    form = crud.update(db.client, a0, next=URL("clients"))
+    form = crud.update(db.client, a0, deletable=False)
+    if form.accepts(request.vars, session):
+        return A(form.vars.name, _class="show-link", _href=URL('matters', args=form.vars.id))
     return response.render('default/form.html', locals())
+
+def client_new():
+    form = crud.create(db.client)
+    if form.accepts(request.vars, session):
+        return """
+<li>
+  <a href="/mcsa/default/matters/%(id)s" class="show-link">%(name)s</a>
+  <a href="/mcsa/default/client_edit/%(id)s" class="undercover edit-link">%(edit)s</a>
+  <ul class="undercover">
+     <a href="/mcsa/default/matter_new/%(id)s" class="edit-link">%(new)s</a>	
+  </ul>
+</li>
+""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit'), "new":T('New matter')}
+    return response.render('default/form.html', locals())
+
 
 @auth.requires_membership('admin')
 def matter_edit():
-    form = crud.update(db.matter, a0, next=URL("clients"))
+    form = crud.update(db.matter, a0, deletable=False)
+    if form.accepts(request.vars, session):
+        return A(form.vars.name)
     return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
 def matter_new():
     db.matter.client.default = a0
-    form = crud.create(db.matter, next=URL("clients"))
+    form = crud.create(db.matter)
+    if form.accepts(request.vars, session):
+        return """
+<li>
+  <a href="/mcsa/default/segments/%(id)s" class="show-link">%(name)s</a>
+  <a href="/mcsa/default/matter_edit/%(id)s" class="undercover edit-link">%(edit)s</a>
+  <ul class="undercover">
+     <a href="/mcsa/default/segment_new/%(id)s" class="edit-link">%(new)s</a>	
+  </ul>
+</li>
+""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit'), "new":T('New segment')}
     return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
 def segment_edit():
-    form = crud.update(db.segment, a0, next=URL("clients"))
+    form = crud.update(db.segment, a0, deletable=False)
+    if form.accepts(request.vars, session):
+        return A(form.vars.name, _class="show-link", _href=URL('matters', args=form.vars.id))
     return response.render('default/form.html', locals())
 
 
 @auth.requires_membership('admin')
 def segment_new():
     db.segment.matter.default = a0
-    form = crud.create(db.segment, next=URL("clients"))
+    form = crud.create(db.segment)
+    if form.accepts(request.vars, session):
+        return """
+<li>
+  <a>%(name)s</a>
+  <a href="/mcsa/default/segment_edit/%(id)s" class="undercover edit-link">%(edit)s</a>
+</li>
+""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit')}
+
+
     return response.render('default/form.html', locals())
 
 
