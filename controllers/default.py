@@ -34,11 +34,12 @@ def client_new():
 <li>
   <a href="/mcsa/default/matters/%(id)s" class="show-link">%(name)s</a>
   <a href="/mcsa/default/client_edit/%(id)s" class="undercover edit-link">%(edit)s</a>
+  <a href="/mcsa/default/client_delete/%(id)s" class="undercover delete-link"">%(del)s</a>
   <ul class="undercover">
      <a href="/mcsa/default/matter_new/%(id)s" class="edit-link">%(new)s</a>	
   </ul>
 </li>
-""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit'), "new":T('New matter')}
+""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit'), "new":T('New matter'), "del":T('Delete')}
     return response.render('default/form.html', locals())
 
 
@@ -58,11 +59,12 @@ def matter_new():
 <li>
   <a href="/mcsa/default/segments/%(id)s" class="show-link">%(name)s</a>
   <a href="/mcsa/default/matter_edit/%(id)s" class="undercover edit-link">%(edit)s</a>
+  <a href="/mcsa/default/matter_delete/%(id)s" class="undercover delete-link"">%(del)s</a>
   <ul class="undercover">
      <a href="/mcsa/default/segment_new/%(id)s" class="edit-link">%(new)s</a>	
   </ul>
 </li>
-""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit'), "new":T('New segment')}
+""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit'), "new":T('New segment'), "del":T('Delete')}
     return response.render('default/form.html', locals())
 
 @auth.requires_membership('admin')
@@ -82,8 +84,9 @@ def segment_new():
 <li>
   <a>%(name)s</a>
   <a href="/mcsa/default/segment_edit/%(id)s" class="undercover edit-link">%(edit)s</a>
+  <a href="/mcsa/default/segment_delete/%(id)s" class="undercover delete-link"">%(del)s</a>
 </li>
-""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit')}
+""" % {"name":form.vars.name, "id":form.vars.id, "edit":T('Edit'), "del":T('Delete')}
 
 
     return response.render('default/form.html', locals())
