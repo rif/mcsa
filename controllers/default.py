@@ -198,7 +198,7 @@ def reports():
             subquery = db.time_entry.related_disbursements.contains(form.vars.related_disbursements[0])
             for disbursement in form.vars.related_disbursements[1:]:
                 subquery |= db.time_entry.related_disbursements.contains(disbursement)
-        query &= subquery
+            query &= subquery
         if form.vars.start: query &=  db.time_entry.date >= form.vars.start
         if form.vars.end: query &= db.time_entry.date <= form.vars.end
     elif form.errors:
