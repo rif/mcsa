@@ -5,14 +5,14 @@
 #########################################################################
 
 response.title = request.application
-response.subtitle = T('customize me!')
+response.subtitle = T('Time tracker  application')
 
 #http://dev.w3.org/html5/markup/meta.name.html
-response.meta.author = 'you'
-response.meta.description = 'Free and open source full-stack enterprise framework for agile development of fast, scalable, secure and portable database-driven web-based applications. Written and programmable in Python'
-response.meta.keywords = 'web2py, python, framework'
+response.meta.author = 'Vox Filemaker Solutions'
+response.meta.description = 'Time tracker application speccialy adapted to lawyers'
+response.meta.keywords = 'time, tracker, timetracker, reports, clients, matters, segments, lawyers'
 response.meta.generator = 'Web2py Enterprise Framework'
-response.meta.copyright = 'Copyright 2007-2010'
+response.meta.copyright = 'Copyright 2011'
 
 
 ##########################################

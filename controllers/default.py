@@ -179,26 +179,31 @@ def reports():
     if request.extension in ('csv', 'pdf'):
         limitby = 0
     query = earner_entries & client_entries & matter_entries
-    entries_set = db(query = earner_entries & client_entries & matter_entries)
     today = date.today()
     first_of_month = today.replace(day=1)
     form = SQLFORM.factory(
         Field('fee_earner', db.auth_user, requires=IS_EMPTY_OR(IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s', zero=T('ALL')))),
         Field('client', db.client, requires=IS_EMPTY_OR(IS_IN_DB(db(db.client), db.client.id,  '%(name)s', zero=T('ALL')))),
         Field('matter', db.matter, requires=IS_EMPTY_OR(IS_IN_DB(db(db.matter), db.matter.id, '%(name)s', zero=T('ALL')))),
-        Field('start', 'date', default=first_of_month),
-        Field('end', 'date', default=today))
+        Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment), db.segment.id, '%(name)s', zero=T('ALL')))),
+        Field('related_disbursements', 'list:string', requires=IS_IN_SET([T('Mobile'), T('Telephone'), T('Travel'), T('Meals'), T('Other')], multiple=True)),
+        Field('start', 'date'),#, default=first_of_month),
+        Field('end', 'date'))#, default=today))
     if form.accepts(request.vars, session, keepvalues=True):
         if form.vars.fee_earner: query &= db.time_entry.fee_earner == form.vars.fee_earner 
-            
         if form.vars.client: query &= db.time_entry.client == form.vars.client
         if form.vars.matter: query &= db.time_entry.matter == form.vars.matter
+        if form.vars.segment: query &= db.time_entry.segment == form.vars.segment
+        if form.vars.related_disbursements:
+            subquery = db.time_entry.related_disbursements.contains(form.vars.related_disbursements[0])
+            for disbursement in form.vars.related_disbursements[1:]:
+                subquery |= db.time_entry.related_disbursements.contains(disbursement)
+        query &= subquery
         if form.vars.start: query &=  db.time_entry.date >= form.vars.start
         if form.vars.end: query &= db.time_entry.date <= form.vars.end
-        entries_set = db(query)
-        
     elif form.errors:
         response.flash = 'form has errors'
+    entries_set = db(query)
     entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.duration, orderby=db.time_entry.date, limitby=limitby)
     earners = entries_set.select(db.auth_user.id, db.auth_user.first_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
     earner_names = [str(row.auth_user.id) for row in earners]
@@ -211,6 +216,7 @@ def reports():
     matters = entries_set.select(db.matter.id, db.matter.name, total_duration, orderby=~total_duration, groupby=db.matter.name)
     matter_names = [str(row.matter.id) for row in matters]
     matter_durations = [int(row[total_duration]) for row in matters]
+   
     if request.extension=="pdf":
         from gluon.contrib.pyfpdf import FPDF, HTMLMixin
 
