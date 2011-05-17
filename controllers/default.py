@@ -122,15 +122,15 @@ def entry_new():
 
 @auth.requires_login()
 def entry_drop():
-    entry = db.time_entry(request.args[0])
-    entry.update_record(date=datetime.fromtimestamp(float(request.args[1])))
+    entry = db.time_entry(a0)
+    entry.update_record(date=datetime.fromtimestamp(float(a1)))
     return ''
 
 def entry_edit():
     entry = None
     fee_earner = db.auth_user(session.fee_earner or auth.user_id)
     if len(request.args) > 0:
-        entry = db.time_entry(request.args[0])
+        entry = db.time_entry(a0)
         fee_earner = entry.fee_earner or fee_earner
         #the requirements bellow do not work beacause it will not allow to change clients
         #db.time_entry.matter.requires=IS_IN_DB(db(db.matter.client==entry.client),db.matter.id, '%(name)s')
@@ -144,7 +144,7 @@ def entries():
     start = datetime.fromtimestamp(float(request.vars.start))
     end = datetime.fromtimestamp(float(request.vars.end))
     session.current_year = start.year
-    session.current_month = start.month
+    session.current_month = start.month - 1
     teset = db((db.time_entry.date >= start) & (db.time_entry.date <= end) & (db.time_entry.fee_earner == (session.fee_earner or auth.user_id)))
     sumus = db.time_entry.duration.sum()
     sum_select = teset.select(db.time_entry.date, sumus, groupby=db.time_entry.date)
@@ -167,10 +167,10 @@ def entries():
     return simplejson.dumps(ent)
 
 def change_view():
-    session.view = request.args(0)
+    session.view = a0
 
 def matters_callback():
-    client = db.client(request.args[0])
+    client = db.client(a0)
     matters = db(active_matters & (db.matter.client==client)).select()
     option_list = [OPTION('')]
     for mat in matters:
@@ -178,16 +178,20 @@ def matters_callback():
     return SELECT(*option_list, _id='time_entry_matter', _class='reference', _name='matter')
 
 def segment_callback():
-    matter = db.matter(request.args[0])
+    matter = db.matter(a0)
     segments = db(active_segments & (db.segment.matter==matter)).select()
     option_list = [OPTION('')]
     for seg in segments:
         option_list.append(OPTION(seg.name, _value=seg.id))
     return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
 
+def mass_edit():
+    query=db(request.vars['q']).select()
+    return locals()
+
 @auth.requires_login()
 def reports():
-    if len(request.args): page=int(request.args[0])
+    if len(request.args): page=int(a0)
     else: page=0
     items_per_page=20
     limitby=(page*items_per_page,(page+1)*items_per_page+1)
