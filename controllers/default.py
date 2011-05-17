@@ -145,14 +145,25 @@ def entries():
     end = datetime.fromtimestamp(float(request.vars.end))
     session.current_year = start.year
     session.current_month = start.month
-    ent = [{'id': row.id,
+    rows = db((db.time_entry.date >= start) & (db.time_entry.date <= end) & (db.time_entry.fee_earner == (session.fee_earner or auth.user_id)))
+    sumus = db.time_entry.duration.sum()
+    sum_select = rows.select(db.time_entry.date, sumus, groupby=db.time_entry.date)
+    ent = []
+    date_index = None
+    for row in rows.select(orderby=db.time_entry.date):
+        ent.append({'id': row.id,
             'title': str(row.duration) + ' ' + T('hours'),
             'description': row.description,
             'start': row.date.strftime("%Y-%m-%d"),
-            'url': URL('entry_edit', args=row.id)}
-           for row in db((db.time_entry.date >= start) &
-                         (db.time_entry.date <= end) &
-                         (db.time_entry.fee_earner == (session.fee_earner or auth.user_id))).select()]
+            'url': URL('entry_edit', args=row.id)})
+        if date_index != row.date:
+            date_index = row.date
+            ent.append({'id':0,
+                        'title': T('Total:%(total).1f hours') % {'total':sum_select.find(lambda r: r.time_entry.date==row.date).first()[sumus]},
+                        'start': row.date.strftime("%Y-%m-%d") + " 23:59",
+                        'description': str(T('Total')),
+                        'backgroundColor': '#6699CC'})
+        
     return simplejson.dumps(ent)
 
 def matters_callback():
