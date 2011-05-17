@@ -15,6 +15,9 @@
 	    year: {{=session.current_year}},
 	    month: {{=session.current_month}},
 	    {{pass}}
+	    {{ if session.view:}}
+	    defaultView: '{{=session.view}}',
+	    {{pass}}
 	    theme: true,
 	    header: {
 		left: 'prev,next today',
@@ -37,6 +40,9 @@
 		    content: event.description,
 		    style: { name: 'light', tip: true, border: {width: 2, radius: 8, color: '#6699CC'} }
 		});
+	    },
+	    viewDisplay: function(view) {
+		$.get("{{=URL('change_view')}}/" + view.name);
 	    }
 	});
     });
