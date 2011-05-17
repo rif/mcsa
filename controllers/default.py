@@ -147,6 +147,7 @@ def entries():
     session.current_month = start.month
     ent = [{'id': row.id,
             'title': str(row.duration) + ' ' + T('hours'),
+            'description': row.description,
             'start': row.date.strftime("%Y-%m-%d"),
             'url': URL('entry_edit', args=row.id)}
            for row in db((db.time_entry.date >= start) &

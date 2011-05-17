@@ -32,6 +32,12 @@
 		calendar.fullCalendar('unselect');
 	    },
 	    editable: true,
+	    eventRender: function(event, element) {
+		element.qtip({
+		    content: event.description,
+		    style: { name: 'light', tip: true, border: {width: 2, radius: 8, color: '#6699CC'} }
+		});
+	    }
 	});
     });
 </script>
