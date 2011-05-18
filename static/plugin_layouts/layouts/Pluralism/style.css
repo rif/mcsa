@@ -359,20 +359,20 @@ img.right {
     position: relative;
 }
 
-.rep .left {
+.rep .leftis {
     width: 60%;
     float: left;
 }
 
-.rep .right {
+.rep .rightish {
     float: left;
     width: 40%;
     left: 60%;
 }
 
-#time_entry input {width:10em;}
+#time_entry input {width:94%;}
 #time_entry select {width:100%;margin-right:2px; margin-top:2px;}
-#time_entry textarea {width:95%;}
+#time_entry textarea {width:97%;}
 #time_entry .head {background-color: #3875d7; color: white;}
 #time_entry .shead {background-color: #aed5fe;}
 
@@ -389,6 +389,18 @@ img.right {
 #clients {
     float: left;
     width: 60%;
+}
+
+#clients { 
+    padding:0; 
+    margin:0; 
+} 
+#clients li { 
+    list-style-type:none; 
+} 
+
+#clients a, #clients a:visited {
+  text-decoration:none;
 }
 
 .undercover {

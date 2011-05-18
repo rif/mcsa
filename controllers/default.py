@@ -161,7 +161,7 @@ def entries():
             ent.append({'id':0,
                         'title': T('Total:%(total).1f hours') % {'total':sum_select.find(lambda r: r.time_entry.date==row.date).first()[sumus]},
                         'start': row.date.strftime("%Y-%m-%d") + " 23:59",
-                        'description': str(T('Total')),
+                        'description': T('Total for ') +  row.date.strftime("%Y-%m-%d"),
                         'backgroundColor': '#6699CC'})
         
     return simplejson.dumps(ent)
@@ -186,8 +186,35 @@ def segment_callback():
     return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
 
 def mass_edit():
-    query=db(request.vars['q']).select()
-    return locals()
+    query = earner_entries & client_entries & matter_entries
+    if request.vars.fee_earner:
+        query &= db.time_entry.fee_earner == request.vars.fee_earner 
+        db.time_entry.fee_earner.default = request.vars.fee_earner 
+    if request.vars.client:
+        query &= db.time_entry.client == request.vars.client
+        db.time_entry.client.default = request.vars.client
+    if request.vars.matter:
+        query &= db.time_entry.matter == request.vars.matter
+        db.time_entry.matter.default = request.vars.matter
+    if request.vars.segment:
+        query &= db.time_entry.segment == request.vars.segment
+        db.time_entry.segment.default = request.vars.segment
+    if request.vars.related_disbursements:
+        subquery = db.time_entry.related_disbursements.contains(request.vars.related_disbursements[0])
+        for disbursement in request.vars.related_disbursements[1:]:
+            subquery |= db.time_entry.related_disbursements.contains(disbursement)
+        query &= subquery
+    if request.vars.start:
+        query &=  db.time_entry.date >= request.vars.start
+    entries_set = db(query)
+    form = SQLFORM(db.time_entry)
+    if form.accepts(request.vars, session):
+       response.flash = 'form accepted'
+    elif form.errors:
+       response.flash = 'form has errors'
+    else:
+       response.flash = 'please fill out the form'
+    return response.render('default/entry_edit.html',locals())
 
 @auth.requires_login()
 def reports():

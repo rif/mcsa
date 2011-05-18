@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
 
 <div class="rep">
-  <div class="left">
+  <div class="leftish">
     {{=form}}
   </div>
 </div>
@@ -9,12 +9,14 @@
 <h2>{{=entries_set.count()}} {{=T('time entries')}}</h2>
 
 <div class="rep">
-  <a id="csv-link" href="{{=URL('default', 'reports.csv')}}">{{=T('Download as CSV')}}</a>
-  <a id="pdf-link" href="{{=URL('default', 'reports.pdf')}}">{{=T('Download as PDF')}}</a>
+  <a id="csv-link" class="left pill button" href="{{=URL('default', 'reports.csv')}}">{{=T('Download as CSV')}}</a>
+  <a id="pdf-link" class="right pill button" href="{{=URL('default', 'reports.pdf')}}">{{=T('Download as PDF')}}</a>
 </div>
 <br/>
+{{=BEAUTIFY(form.vars)}}
+<a href="{{=URL('mass_edit', vars=form.vars)}}">{{=T('Mass edit entries')}}</a>
 <div class="rep">
-  <div class="left">
+  <div class="leftish">
     <table>
       <thead>
 	<tr>
@@ -35,11 +37,11 @@
     </table>
     
   </div>
-  <div class="right">{{=plugin_wiki.widget('pie_chart', data=earner_durations ,names=earner_names)}}</div>
+  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=earner_durations ,names=earner_names)}}</div>
 </div>
 
 <div class="rep">
-  <div class="left">
+  <div class="leftish">
     <table>
       <thead>
 	<tr>
@@ -59,11 +61,11 @@
       </tbody>
     </table>
   </div>
-  <div class="right">{{=plugin_wiki.widget('pie_chart', data=client_durations ,names=client_names)}}</div>
+  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=client_durations ,names=client_names)}}</div>
 </div>
 
 <div class="rep">
-  <div class="left">
+  <div class="leftish">
     <table>
       <thead>
 	<tr>
@@ -83,7 +85,7 @@
       </tbody>
     </table>
   </div>
-  <div class="right">{{=plugin_wiki.widget('pie_chart', data=matter_durations ,names=matter_names)}}</div>
+  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=matter_durations ,names=matter_names)}}</div>
 </div>
 <br/><br/>
 
