@@ -22,6 +22,7 @@ response.meta.copyright = 'Copyright 2011'
 
 response.menu = [
     (T('Home'), False, URL('default','index'), []),
-    (T('Clients'), False, URL('default', 'clients'), []),
     (T('Reports'), False, URL('default', 'reports'), [])
     ]
+
+if auth.has_membership('admin'): response.menu.insert(1, (T('Clients'), False, URL('default', 'clients'), []))
