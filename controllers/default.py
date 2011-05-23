@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from gluon.contrib import simplejson
 
 @auth.requires_login()
@@ -143,8 +143,10 @@ def entry_edit():
 def entries():
     start = datetime.fromtimestamp(float(request.vars.start))
     end = datetime.fromtimestamp(float(request.vars.end))
-    session.current_year = start.year
-    session.current_month = start.month - 1
+    if abs((start - end).days) > 7:
+        session.current_date = (start+timedelta(15)).isoformat()
+    else:
+        session.current_date = start.isoformat()
     teset = db((db.time_entry.date >= start) & (db.time_entry.date <= end) & (db.time_entry.fee_earner == (session.fee_earner or auth.user_id)))
     sumus = db.time_entry.duration.sum()
     sum_select = teset.select(db.time_entry.date, sumus, groupby=db.time_entry.date)
