@@ -1,6 +1,5 @@
 {{extend 'layout.html'}}
 
-
 {{=form.custom.begin}}
 {{=T('Fee earner')}}: {{=form.custom.widget.fee_earner}}
 {{=form.custom.submit}}
@@ -10,10 +9,14 @@
 
 <script type="text/javascript">
     $(function(){
+	{{if session.current_date:}}
+	var d = $.fullCalendar.parseDate("{{=session.current_date}}"); 
+	{{pass}}
 	var calendar = $("#calendar").fullCalendar({
-	    {{if session.current_month:}}
-	    year: {{=session.current_year}},
-	    month: {{=session.current_month}},
+	    {{if session.current_date:}}
+	    year:  d.getFullYear(),
+	    month: d.getMonth(),
+	    date: d.getDate(),
 	    {{pass}}
 	    {{ if session.view:}}
 	    defaultView: '{{=session.view}}',
@@ -45,5 +48,6 @@
 		$.get("{{=URL('change_view')}}/" + view.name);
 	    }
 	});
+
     });
 </script>
