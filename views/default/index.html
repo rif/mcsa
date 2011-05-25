@@ -1,6 +1,6 @@
 {{extend 'layout.html'}}
 
-{{if len(current_user_perm.auth_list):}}
+{{if current_user_perm and len(current_user_perm.auth_list):}}
 {{=form.custom.begin}}
 {{=T('Fee earner')}}: {{=form.custom.widget.fee_earner}}
 {{=form.custom.submit}}
