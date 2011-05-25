@@ -6,13 +6,14 @@ from gluon.contrib import simplejson
 def index():
     if session.fee_earner == None:
         session.fee_earner = auth.user_id
-    form = SQLFORM.factory(
-        Field('fee_earner', default=(request.vars.fee_earner or session.fee_earner or auth.user_id),
-              requires=IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s')),
-    )
-    if form.accepts(request.vars, session):
-        response.flash = T('Fee earner changed to %s') % db.auth_user(form.vars.fee_earner).first_name
-        session.fee_earner = form.vars.fee_earner
+    if len(current_user_perm.auth_list):
+        form = SQLFORM.factory(
+            Field('fee_earner', default=(request.vars.fee_earner or session.fee_earner or auth.user_id),
+                  requires=IS_IN_DB(db(db.auth_user.id.belongs(current_user_perm.auth_list)), db.auth_user.id, '%(first_name)s %(last_name)s')),
+            )
+        if form.accepts(request.vars, session):
+            response.flash = T('Fee earner changed to %s') % db.auth_user(form.vars.fee_earner).first_name
+            session.fee_earner = form.vars.fee_earner
     return locals()
 
 @auth.requires_membership('admin')
@@ -259,25 +260,20 @@ def reports():
         return pdf.output(dest='S')
     return locals()
 
+@auth.requires_membership('admin')
+def users():
+    form = crud.update(db.auth_user, a0, next=URL('users'))
+    users = db(db.auth_user.id>1).select()
+    return locals()
 
 @auth.requires_membership('admin')
-def data(): return dict(form=crud())
-
+def perm():
+    p = db.perm(db.perm.user == a0)
+    db.perm.user.default = a0
+    form = crud.update(db.perm, p)
+    return dict(form=form)
 
 def user():
-    """
-    exposes:
-    http://..../[app]/default/user/login
-    http://..../[app]/default/user/logout
-    http://..../[app]/default/user/register
-    http://..../[app]/default/user/profile
-    http://..../[app]/default/user/retrieve_password
-    http://..../[app]/default/user/change_password
-    use @auth.requires_login()
-        @auth.requires_membership('group name')
-        @auth.requires_permission('read','table name',record_id)
-    to decorate functions that need access control
-    """
     return dict(form=auth())
 
 
@@ -287,14 +283,3 @@ def download():
     http://..../[app]/default/download/[filename]
     """
     return response.download(request,db)
-
-
-def call():
-    """
-    exposes services. for example:
-    http://..../[app]/default/call/jsonrpc
-    decorate with @services.jsonrpc the functions to expose
-    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
-    """
-    session.forget()
-    return service()

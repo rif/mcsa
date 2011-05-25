@@ -58,6 +58,8 @@ auth.messages.reset_password = 'Click on the link http://'+request.env.http_host
 ## other login methods are in gluon/contrib/login_methods
 #########################################################################
 
+auth.settings.actions_disabled=['register']
+
 crud.settings.auth = None                      # =auth to enforce authorization on crud
 
 class Float_validator:
@@ -91,6 +93,13 @@ def cost(row):
         return duration * rate
     return 0
 
+db.define_table('perm',
+                Field('user', db.auth_user, unique=True),
+                Field('auth_list', 'list:reference auth_user', comment=T('Allway put the user itself in the authority list list'), label=T('Authority list'))
+                )
+
+current_user_perm = db.perm(db.perm.user == auth.user_id)
+
 db.define_table('client',
                 Field('name', required=True, unique=True),
                 Field('active', 'boolean', default=True),
@@ -110,12 +119,12 @@ db.define_table('segment',
                 Field('active', 'boolean', default=True),
                 format='%(name)s'
                 )
-                
 db.define_table('time_entry',
                 Field('client', db.client, length=150, requires=IS_IN_DB(db(db.client.active==True), db.client.id, '%(name)s')),
                 Field('matter', db.matter, requires=IS_IN_DB(db(db.matter.active==True), db.matter.id, '%(name)s')),
                 Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment.active==True),db.segment.id, '%(name)s'))),
-                Field('fee_earner', db.auth_user, default=(session.fee_earner or auth.user_id), requires=IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s')),
+                Field('fee_earner', db.auth_user, default=(session.fee_earner or auth.user_id),
+                      requires=IS_IN_DB(db(db.auth_user.id.belongs(current_user_perm.auth_list) if current_user_perm else db.auth_user.id == auth.user_id), db.auth_user.id, '%(first_name)s %(last_name)s')),
                 Field('code_classification',
                       requires=IS_IN_SET([T('Other'), T('Meeting'), T('Discussion'), T('Telephone Call'), T('Review/Analyse'), T('Draft/Revise'), T('Legal Research'), T('Travel')], zero=None), default='Other'),
                 Field('description', 'text', required=True),

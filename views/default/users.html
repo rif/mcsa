@@ -1,0 +1,13 @@
+{{extend 'layout.html'}}
+<br/>
+{{=form}}
+<br/>
+<ul>
+  {{for u in users:}}
+  <li>
+    {{="%s %s" % (u.first_name, u.last_name)}}
+    <a href="{{=URL('users', args=u.id)}}">{{=T('Edit')}}</a>
+    <a href="{{=URL('perm', args=u.id)}}">{{=T('Permissions')}}</a>
+  </li>
+  {{pass}}
+</ul>

@@ -25,4 +25,6 @@ response.menu = [
     (T('Reports'), False, URL('default', 'reports'), [])
     ]
 
-if auth.has_membership('admin'): response.menu.insert(1, (T('Clients'), False, URL('default', 'clients'), []))
+if auth.has_membership('admin'):
+    response.menu +=[(T('Clients'), False, URL('default', 'clients'), []),
+                     (T('Users'), False, URL('default', 'users'), [])]
