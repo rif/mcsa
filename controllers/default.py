@@ -6,7 +6,7 @@ from gluon.contrib import simplejson
 def index():
     if session.fee_earner == None:
         session.fee_earner = auth.user_id
-    if len(current_user_perm.auth_list):
+    if current_user_perm and len(current_user_perm.auth_list):
         form = SQLFORM.factory(
             Field('fee_earner', default=(request.vars.fee_earner or session.fee_earner or auth.user_id),
                   requires=IS_IN_DB(db(db.auth_user.id.belongs(current_user_perm.auth_list)), db.auth_user.id, '%(first_name)s %(last_name)s')),
