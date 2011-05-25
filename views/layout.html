@@ -36,9 +36,10 @@ div.error { background-color: red; color: white; padding: 3px; }
    <div id="wrapper2">
     <div id="header">
      <div id="logo">
-      <h1>
-       {{=response.title or request.application}} Chronos
-      </h1>
+       <img src="{{=URL('static', 'images/logo.png')}}" class="" alt="" />
+       <h1>
+	 {{=response.title or request.application}} Chronos
+       </h1>
      </div>
      <div id="menu">
       {{=MENU(response.menu,_class='web2py-menu')}}
@@ -65,7 +66,7 @@ div.error { background-color: red; color: white; padding: 3px; }
        </h3>
        <dl class="list1">
         <dt>
-         <a href={{=URL('plugin_wiki', 'page/help')}}>{{=T('Help')}}</a>
+         <a href={{=URL('static', 'help.pdf')}}>{{=T('Help')}}</a>
         </dt>
        </dl>
       </div>
@@ -127,13 +128,10 @@ div.error { background-color: red; color: white; padding: 3px; }
    <!-- end #wrapper2 -->
    <div id="footer">
     <p>
+      <img src="{{=URL('static', 'images/vox.png')}}" class="" alt="Vox" height="30px"/>
      &copy; 2011 <a href="http://www.filemaker-solutions.ro">Vox Filemaker Solutions</a>. Design by
      <a href="http://www.nodethirtythree.com/">
       NodeThirtyThree
-     </a>
-     +
-     <a href="http://www.freecsstemplates.org/">
-      Free CSS Templates
      </a>
     </p>
    </div>

@@ -150,9 +150,14 @@ img.right {
 	float: left;
 }
 
+#logo img {
+    padding: 10px 0 0 78px;
+    height: 70px;
+}
+
 #logo h1 {
 	margin: 0;
-	padding: 90px 0 0 78px;
+	padding: 5px 0 0 78px;
 	text-transform: lowercase;
 	letter-spacing: -3px;
 	font-size: 40px;
