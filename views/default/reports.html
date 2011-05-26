@@ -127,6 +127,7 @@
 	  form.attr("action", $(this).attr("href"));
 	  form.submit();
 	  form.attr("action", "");
+	  /*$.post($(this).attr("href"), $("form").serialize());*/
 	  e.preventDefault();
       });
   });

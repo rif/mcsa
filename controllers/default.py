@@ -257,6 +257,7 @@ def reports():
         pdf.set_font('Arial','',8)
         pdf.write_html(response.render("default/pdf_reports.html", locals()))
         response.headers['Content-Type']='application/pdf'
+        response.headers['Content-Disposition']='attachment'
         return pdf.output(dest='S')
     return locals()
 
