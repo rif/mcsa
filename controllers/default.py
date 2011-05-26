@@ -194,7 +194,7 @@ def reports():
     else: page=0
     items_per_page=20
     limitby=(page*items_per_page,(page+1)*items_per_page+1)
-    if request.extension in ('csv', 'pdf'):
+    if request.vars.csv or  request.vars.pdf:
         limitby = 0
     query = earner_entries & client_entries & matter_entries
     today = date.today()
@@ -206,8 +206,11 @@ def reports():
         Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment), db.segment.id, '%(name)s', zero=T('ALL')))),
         Field('related_disbursements', 'list:string', requires=IS_IN_SET([T('Mobile'), T('Telephone'), T('Travel'), T('Meals'), T('Other')], multiple=True)),
         Field('start', 'date'),#, default=first_of_month),
-        Field('end', 'date'))#, default=today))
-    if form.accepts(request.vars, session, keepvalues=True):
+        Field('end', 'date'),#, default=today)
+        Field('csv', 'boolean', label=T('Download as CSV')),
+        Field('pdf', 'boolean', label=T('Download as PDF')),
+        )
+    if form.accepts(request.vars, session):
         if form.vars.fee_earner: query &= db.time_entry.fee_earner == form.vars.fee_earner 
         if form.vars.client: query &= db.time_entry.client == form.vars.client
         if form.vars.matter: query &= db.time_entry.matter == form.vars.matter
@@ -235,7 +238,10 @@ def reports():
     matter_names = [str(row.matter.id) for row in matters]
     matter_durations = [int(row[total_duration]) for row in matters]
    
-    if request.extension=="pdf":
+    if form.vars.csv:
+        return redirect(URL('reports.csv'))
+
+    if form.vars.pdf:
         from gluon.contrib.pyfpdf import FPDF, HTMLMixin
 
         # define our FPDF class (move to modules if it is reused  frequently)
