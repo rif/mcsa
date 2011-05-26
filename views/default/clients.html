@@ -42,7 +42,7 @@
 <script type="text/javascript">
     function prepareFrom(link, href) {
 	$("form").submit(function(){
-	    $.post(href, $(this).serializeArray(), function(data){
+	    $.post(href, $(this).serialize(), function(data){
 		if(data.indexOf("error") == -1){
 		    if($(".editing").length != 0) { // we have elements in editing state
 			$(".editing").replaceWith(data);
