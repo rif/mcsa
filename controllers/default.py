@@ -225,10 +225,6 @@ def reports():
     powerTable.uitheme = 'redmond'
     powerTable.headers = 'labels'
     powerTable.dtfeatures['sScrollY'] = '600px'
-    powerTable.dtfeatures['sScrollX'] = '100%'
-    powerTable.extra = dict(
-        tooltip={'type':'default'},
-        )
     table = powerTable.create()
     earners = entries_set.select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
     earner_names = [str(row.auth_user.id) for row in earners]
