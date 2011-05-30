@@ -190,12 +190,6 @@ def segment_callback():
 
 @auth.requires_login()
 def reports():
-    if len(request.args): page=int(a0)
-    else: page=0
-    items_per_page=20
-    limitby=(page*items_per_page,(page+1)*items_per_page+1)
-    if request.vars.csv or  request.vars.pdf:
-        limitby = 0
     query = earner_entries & client_entries & matter_entries
     today = date.today()
     first_of_month = today.replace(day=1)
@@ -210,7 +204,7 @@ def reports():
         Field('csv', 'boolean', label=T('Download as CSV')),
         Field('pdf', 'boolean', label=T('Download as PDF')),
         )
-    if form.accepts(request.vars, session):
+    if form.accepts(request.vars, session,keepvalues=True):
         if form.vars.fee_earner: query &= db.time_entry.fee_earner == form.vars.fee_earner 
         if form.vars.client: query &= db.time_entry.client == form.vars.client
         if form.vars.matter: query &= db.time_entry.matter == form.vars.matter
@@ -225,8 +219,18 @@ def reports():
     elif form.errors:
         response.flash = 'form has errors'
     entries_set = db(query)
-    entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.duration, orderby=db.time_entry.date, limitby=limitby)
-    earners = entries_set.select(db.auth_user.id, db.auth_user.first_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
+    entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.duration, orderby=db.time_entry.date)
+    powerTable = plugins.powerTable
+    powerTable.datasource = entries
+    powerTable.uitheme = 'redmond'
+    powerTable.headers = 'labels'
+    powerTable.dtfeatures['sScrollY'] = '600px'
+    powerTable.dtfeatures['sScrollX'] = '100%'
+    powerTable.extra = dict(
+        tooltip={'type':'default'},
+        )
+    table = powerTable.create()
+    earners = entries_set.select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
     earner_names = [str(row.auth_user.id) for row in earners]
     earner_durations = [int(row[total_duration]) for row in earners]
 
