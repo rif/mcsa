@@ -101,21 +101,21 @@ db.define_table('perm',
 current_user_perm = db.perm(db.perm.user == auth.user_id)
 
 db.define_table('client',
-                Field('name', required=True, unique=True),
+                Field('name', required=True, unique=True, label=T('Client Name')),
                 Field('active', 'boolean', default=True),
                 format='%(name)s'
                 )
 
 db.define_table('matter',
                 Field('client', db.client, readable=False, writable=False),
-                Field('name', required=True),
+                Field('name', required=True, label=T('Matter Name')),
                 Field('active', 'boolean', default=True),
                 format='%(name)s'
                 )
 
 db.define_table('segment',
                 Field('matter', db.matter, readable=False, writable=False),
-                Field('name', required=True),
+                Field('name', required=True, label=T('Segment Name')),
                 Field('active', 'boolean', default=True),
                 format='%(name)s'
                 )
@@ -127,8 +127,8 @@ db.define_table('time_entry',
                       requires=IS_IN_DB(db(db.auth_user.id.belongs(current_user_perm.auth_list) if current_user_perm else db.auth_user.id == auth.user_id), db.auth_user.id, '%(first_name)s %(last_name)s')),
                 Field('code_classification',
                       requires=IS_IN_SET([T('Other'), T('Meeting'), T('Discussion'), T('Telephone Call'), T('Review/Analyse'), T('Draft/Revise'), T('Legal Research'), T('Travel')], zero=None), default='Other'),
-                Field('description', 'text', required=True),
-                Field('special_notes', 'text'),
+                Field('description', 'text', required=True, represent=lambda d:MARKMIN(d)),
+                Field('special_notes', 'text', represent=lambda sn:MARKMIN(sn)),
                 Field('related_disbursements', 'list:string',
                       requires=IS_IN_SET([T('Mobile'), T('Telephone'), T('Travel'), T('Meals'), T('Other')], multiple=True)),
                 Field('date', 'date'),
@@ -151,3 +151,7 @@ client_entries = db.time_entry.client == db.client.id
 matter_entries = db.time_entry.matter == db.matter.id
 segment_entries = db.time_entry.segment == db.segment.id
 
+class NameVirtualFields(object):
+        def full_name(self):
+            return self.auth_user.first_name + ' ' + self.auth_user.last_name
+db.auth_user.virtualfields.append(NameVirtualFields())

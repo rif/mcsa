@@ -25,7 +25,7 @@
 	{{for elem in earners:}}
 	<tr>
 	  <td>{{=elem.auth_user.id}}</td>
-	  <td width="300px">{{=elem.auth_user.first_name}}</td>
+	  <td width="300px">{{=elem.auth_user.first_name + ' ' + elem.auth_user.last_name}}</td>
 	  <td>{{=elem['SUM(time_entry.duration)']}}</td>
 	</tr>
 	{{pass}}
@@ -33,7 +33,7 @@
     </table>
     
   </div>
-  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=earner_durations ,names=earner_names)}}</div>
+  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=earner_durations, names=earner_names)}}</div>
 </div>
 
 <div class="rep">
@@ -57,7 +57,7 @@
       </tbody>
     </table>
   </div>
-  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=client_durations ,names=client_names)}}</div>
+  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=client_durations, names=client_names)}}</div>
 </div>
 
 <div class="rep">
@@ -81,40 +81,8 @@
       </tbody>
     </table>
   </div>
-  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=matter_durations ,names=matter_names)}}</div>
+  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=matter_durations, names=matter_names)}}</div>
 </div>
 <br/><br/>
 
-<table>
-<thead>
-<tr>
-  <th>{{=T('Date')}}</th>
-  <th>{{=T('Fee earner')}}</th>
-  <th>{{=T('Client')}}</th>
-  <th>{{=T('Matter')}}</th>
-  <th>{{=T('Duration')}}</th>
-  <th>{{=T('Description')}}</th>
-</tr>
-</thead>
-<tbody>
-  {{for i,entry in enumerate(entries):}}
-  {{if i==items_per_page: break}}
-  <tr>
-    <td>{{=entry.time_entry.date}}
-    <td>{{=entry.auth_user.first_name}}</td>
-    <td>{{=entry.client.name}}</td>
-    <td>{{=entry.matter.name}}</td>
-    <td>{{=entry.time_entry.duration}}</td>
-    <td>{{=entry.time_entry.description}} </td>
-  </tr>
-{{pass}}
-</tbody>
-</table>
-{{if page:}}
-<a href="{{=URL(args=[page-1])}}">previous</a>
-{{pass}}
-
-{{if len(entries)>items_per_page:}}
-<a href="{{=URL(args=[page+1])}}">next</a>
-{{pass}}
-
+{{=table}}
