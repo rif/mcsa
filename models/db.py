@@ -103,21 +103,24 @@ current_user_perm = db.perm(db.perm.user == auth.user_id)
 db.define_table('client',
                 Field('name', required=True, unique=True, label=T('Client Name')),
                 Field('active', 'boolean', default=True),
-                format='%(name)s'
+                format='%(name)s',
+                migrate=False
                 )
 
 db.define_table('matter',
                 Field('client', db.client, readable=False, writable=False),
                 Field('name', required=True, label=T('Matter Name')),
                 Field('active', 'boolean', default=True),
-                format='%(name)s'
+                format='%(name)s',
+                migrate=False
                 )
 
 db.define_table('segment',
                 Field('matter', db.matter, readable=False, writable=False),
                 Field('name', required=True, label=T('Segment Name')),
                 Field('active', 'boolean', default=True),
-                format='%(name)s'
+                format='%(name)s',
+                migrate=False
                 )
 db.define_table('time_entry',
                 Field('client', db.client, length=150, requires=IS_IN_DB(db(db.client.active==True), db.client.id, '%(name)s')),
@@ -138,7 +141,8 @@ db.define_table('time_entry',
                 Field('billable', 'boolean', default=True),
                 Field('billed', 'boolean', default=False),
                 auth.signature,
-                format='%(description)s'
+                format='%(description)s',
+                migrate=False
                 )                
 
 active_clients = db.client.active == True
