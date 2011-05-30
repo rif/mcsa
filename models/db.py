@@ -151,7 +151,3 @@ client_entries = db.time_entry.client == db.client.id
 matter_entries = db.time_entry.matter == db.matter.id
 segment_entries = db.time_entry.segment == db.segment.id
 
-class NameVirtualFields(object):
-        def full_name(self):
-            return self.auth_user.first_name + ' ' + self.auth_user.last_name
-db.auth_user.virtualfields.append(NameVirtualFields())
