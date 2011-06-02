@@ -211,7 +211,7 @@ def reports():
         Field('csv', 'boolean', label=T('Download as CSV')),
         Field('pdf', 'boolean', label=T('Download as PDF')),
         )
-    if form.accepts(request.vars, session,keepvalues=True):
+    if form.accepts(request.vars, session):
         if form.vars.fee_earner: query &= db.time_entry.fee_earner == form.vars.fee_earner 
         if form.vars.client: query &= db.time_entry.client == form.vars.client
         if form.vars.matter: query &= db.time_entry.matter == form.vars.matter
@@ -244,9 +244,10 @@ def reports():
     matters = entries_set.select(db.matter.id, db.matter.name, total_duration, orderby=~total_duration, groupby=db.matter.name)
     matter_names = [str(row.matter.id) for row in matters]
     matter_durations = [int(row[total_duration]) for row in matters]
-   
     if form.vars.csv:
-        return redirect(URL('reports.csv'))
+        response.headers['Content-Type']='application/excel'
+        response.headers['Content-Disposition']='attachment'
+        return response.render('generic.csv',locals())
 
     if form.vars.pdf:
         from gluon.contrib.pyfpdf import FPDF, HTMLMixin
