@@ -141,6 +141,7 @@ def entry_edit():
         form = crud.create(db.time_entry, next=URL('index'))
     return locals()
 
+@auth.requires_login()
 def entries():
     start = datetime.fromtimestamp(float(request.vars.start))
     end = datetime.fromtimestamp(float(request.vars.end))
@@ -172,6 +173,7 @@ def entries():
 def change_view():
     session.view = a0
 
+@auth.requires_login()
 def matters_callback():
     client = db.client(a0)
     matters = db(active_matters & (db.matter.client==client)).select()
@@ -180,6 +182,7 @@ def matters_callback():
         option_list.append(OPTION(mat.name, _value=mat.id))
     return SELECT(*option_list, _id='time_entry_matter', _class='reference', _name='matter')
 
+@auth.requires_login()
 def segment_callback():
     matter = db.matter(a0)
     segments = db(active_segments & (db.segment.matter==matter)).select()
@@ -282,11 +285,3 @@ def perm():
 
 def user():
     return dict(form=auth())
-
-
-def download():
-    """
-    allows downloading of uploaded files
-    http://..../[app]/default/download/[filename]
-    """
-    return response.download(request,db)
