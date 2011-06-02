@@ -107,6 +107,10 @@ def segment_delete():
     db(db.segment.id==a0).delete()
     return ""
 
+def _strip(form):
+    form.vars.description = form.vars.description.strip()
+    form.vars.special_notes = form.vars.special_notes.strip()
+
 @auth.requires_login()
 def entry_new():
     entry = None
@@ -118,7 +122,7 @@ def entry_new():
     minutes = delta.days * 24 * 60 + delta.seconds / 60
     duration = minutes / 6 * 0.1
     db.time_entry.duration.default = duration
-    form = crud.create(db.time_entry, next=URL('index'))
+    form = crud.create(db.time_entry, next=URL('index'), onvalidation=_strip)
     return response.render('default/entry_edit.html', locals())
 
 @auth.requires_login()
@@ -130,15 +134,15 @@ def entry_drop():
 def entry_edit():
     entry = None
     fee_earner = db.auth_user(session.fee_earner or auth.user_id)
-    if len(request.args) > 0:
+    if a0 > 0:
         entry = db.time_entry(a0)
         fee_earner = entry.fee_earner or fee_earner
         #the requirements bellow do not work beacause it will not allow to change clients
         #db.time_entry.matter.requires=IS_IN_DB(db(db.matter.client==entry.client),db.matter.id, '%(name)s')
         #db.time_entry.segment.requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment.matter==entry.matter),db.segment.id, '%(name)s'))
-        form=crud.update(db.time_entry, entry, next=URL('index'))
+        form=crud.update(db.time_entry, entry, next=URL('index'), onvalidation=_strip)
     else:
-        form = crud.create(db.time_entry, next=URL('index'))
+        form = crud.create(db.time_entry, next=URL('index'), onvalidation=_strip)
     return locals()
 
 @auth.requires_login()
