@@ -226,7 +226,7 @@ def reports():
     elif form.errors:
         response.flash = 'form has errors'
     entries_set = db(query)
-    entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.duration, orderby=db.time_entry.date)
+    entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.special_notes, db.time_entry.duration, orderby=db.time_entry.date)
     powerTable = plugins.powerTable
     powerTable.datasource = entries
     powerTable.uitheme = 'redmond'
