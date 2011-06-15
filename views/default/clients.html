@@ -2,6 +2,8 @@
 
 <h1>Clients</h1>
 
+<input id="search-field" class="clearme" type="text" value="{{=T('Search')}}"/>
+
 <div id="clients">
   <ul>
     <a class="edit-link" href="{{=URL('client_new')}}">{{=T('New client')}}</a>
@@ -93,5 +95,24 @@
     }
 $(function(){
     setup();
+    $("#search-field").keyup(function(){
+	var search_text = $(this).val();
+	$("#clients>ul>li").each(function(){
+	    if( $("a.show-link:first", $(this)).text().toLowerCase().indexOf(search_text) == -1){
+		$(this).fadeOut();
+	    } else {
+		$(this).fadeIn();
+	    }
+	});
+    });
+     $(".clearme").focus(function(){
+    if(this.value == this.defaultValue){
+        this.value = "";
+    }
+    }).blur(function(){
+    if(!this.value.length) {
+        this.value = this.defaultValue;
+    }
+    });
 });
 </script>
