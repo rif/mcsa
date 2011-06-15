@@ -226,7 +226,8 @@ class PluginWikiWidgets(object):
     ###############################################
     @staticmethod    
     def jqgrid(table,fieldname=None,fieldvalue=None,col_widths='',
-               colnames=None,_id=None,fields='',col_width=80,width=700,height=300):
+               colnames=None,_id=None,fields='',
+               col_width=80,width=700,height=300,id=None):
         """
         ## Embed a jqGrid plugin
         - ``table`` is the table name
@@ -239,7 +240,7 @@ class PluginWikiWidgets(object):
         - ``width`` is the width of the jqGrid
         """
         from gluon.serializers import json
-        _id = 'jqgrid_%s' % table
+        _id = id or 'jqgrid_%s' % table
         if not fields:
             fields = [x.strip() for x in db[table].fields if db[table][x.strip()].readable]
         elif isinstance(fields,str):
@@ -247,7 +248,10 @@ class PluginWikiWidgets(object):
         else:
             fields = fields
         if col_widths:
-            col_widths = [x.strip() for x in col_widths.split(',')]
+            if isinstance(col_widths,(list,tuple)):
+                col_widths = [str(x) for x in col_widths]
+            else:
+                col_widths = [x.strip() for x in col_widths.split(',')]
 	    if width=='auto':
 		width=sum([int(x) for x in col_widths])
 	elif not col_widths:
@@ -256,16 +260,19 @@ class PluginWikiWidgets(object):
             colnames = [x.strip() for x in colnames.split(',')]
         else:
             colnames = [(db[table][x].label or x) for x in fields]
-        colmodel = [{'name':x,'index':x, 'width':col_widths[i], 'sortable':True} \
+        colmodel = [{'name':x,'index':x, 'width':col_widths[i], 'sortable':True}\
                         for i,x in enumerate(fields)]
         callback = URL('plugin_wiki','jqgrid',
                        vars=dict(tablename=table,
                                  columns=','.join(fields),
                                  fieldname=fieldname or '',
                                  fieldvalue=fieldvalue,
-                                 ))
+                                 ),
+                       hmac_key=auth.settings.hmac_key,
+                       salt=auth.user_id
+                       )
         script="""
-jQuery(document).ready(function(){jQuery("#%(id)s").jqGrid({ url:'%(callback)s', datatype: "json", colNames: %(colnames)s,colModel:%(colmodel)s, rowNum:10, rowList:[20,50,100], pager: '#%(id)s_pager', viewrecords: true,height:%(height)s});jQuery("#%(id)s").jqGrid('navGrid','#%(id)s_pager',{search:true,add:false,edit:false,del:false});jQuery("#%(id)s").setGridWidth(%(width)s,false);});
+jQuery(document).ready(function(){jQuery("#%(id)s").jqGrid({ url:'%(callback)s', datatype: "json", colNames: %(colnames)s,colModel:%(colmodel)s, rowNum:10, rowList:[20,50,100], pager: '#%(id)s_pager', viewrecords: true,height:%(height)s});jQuery("#%(id)s").jqGrid('navGrid','#%(id)s_pager',{search:true,add:false,edit:false,del:false});jQuery("#%(id)s").setGridWidth(%(width)s,false);jQuery('select.ui-pg-selbox,input.ui-pg-input').css('width','50px');});
 """ % dict(callback=callback,colnames=json(colnames),
            colmodel=json(colmodel),id=_id,height=height,width=width)
         return TAG[''](TABLE(_id=_id),

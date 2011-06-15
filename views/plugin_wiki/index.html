@@ -15,7 +15,7 @@
     <td><i>{{=page.title}}</i></td>
     <td>{{=page.created_on}}</td>
     <td>{{=page.is_public and 'public' or 'private'}} {{=page.role}}</td>
-    <td>{{=page.active and 'active' or 'inactive'}}</td>
+    <td>{{=page.is_active and 'active' or 'inactive'}}</td>
     <td>[{{=A('edit',_href=URL(r=request,f='page_edit',args=page.slug))}}]</td>
   </tr>
   {{pass}}
