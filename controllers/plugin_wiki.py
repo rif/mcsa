@@ -11,7 +11,7 @@ def index():
     if plugin_wiki_editor:
         pages = db(w.id>0).select(orderby=w.slug)
     else:
-        pages = db(w.active==True)(w.is_public==True).select(orderby=w.slug)
+        pages = db(w.is_active==True)(w.is_public==True).select(orderby=w.slug)
     if plugin_wiki_editor:
         form=SQLFORM.factory(Field('slug',requires=db.plugin_wiki_page.slug.requires),
                              Field('from_template',requires=IS_EMPTY_OR(IS_IN_DB(db,db.plugin_wiki_page.slug))))
@@ -28,9 +28,9 @@ def page():
     slug = request.args(0) or 'index'
     w = db.plugin_wiki_page
     page = w(slug=slug)
-    if not auth.user and (not page or not page.is_public or not page.active):
+    if not auth.user and (not page or not page.is_public or not page.is_active):
         redirect(URL(r=request,c='default',f='user',args='login'))
-    elif not plugin_wiki_editor and (not page or not page.is_public or not page.active):
+    elif not plugin_wiki_editor and (not page or not page.is_public or not page.is_active):
         raise HTTP(404)
     elif page and page.role and not auth.has_membership(page.role):    
         raise HTTP(404)
@@ -48,7 +48,7 @@ def page_archive():
     id = request.args(0)
     h = db.plugin_wiki_page_archive
     page = h(id)
-    if not page or (not plugin_wiki_editor and (not page.is_public or not page.active)):
+    if not page or (not plugin_wiki_editor and (not page.is_public or not page.is_active)):
         raise HTTP(404)
     elif page and page.role and not auth.has_membership(page.role):
         raise HTTP(404)
@@ -136,7 +136,7 @@ def comment():
         (table.record_id==record_id).select()
     return dict(form = form,comments=comments)
 
-@auth.requires_login()
+#@auth.requires_login()
 def jqgrid():
     """
     jqgrid callback retrieves records
@@ -144,6 +144,10 @@ def jqgrid():
     """
     from gluon.serializers import json
     import cgi
+    hash_vars = 'tablename|columns|fieldname|fieldvalue|user'.split('|')
+    if not URL.verify(request,hmac_key=auth.settings.hmac_key,
+                      hash_vars=hash_vars,salt=auth.user_id):
+        raise HTTP(404)    
     tablename = request.vars.tablename or error()
     columns = (request.vars.columns or error()).split(',')
     rows=int(request.vars.rows or 25)
@@ -169,9 +173,13 @@ def jqgrid():
                 [request.vars.searchOper or 'eq']
     table=db[tablename]
     if request.vars.fieldname:
-        dbset = table._db(table[request.vars.fieldname]==request.vars.fieldvalue)
+        names = request.vars.fieldname.split('|')
+        values = request.vars.fieldvalue.split('|')
+        query = reduce(lambda a,b:a&b,
+                       [table[names[i]]==values[i] for i in range(len(names))])
     else:
-        dbset = table._db(table.id>0)
+        query = table.id>0
+    dbset = table._db(query)
     if searchField: dbset=dbset(searchOper(table[searchField],searchString))
     orderby = table[sidx]
     if sord=='desc': orderby=~orderby
@@ -278,7 +286,7 @@ def widget_builder():
 def star_rate():
     N=5 #max no of stars (if you use split stars you'll get a rating out of 10)
     pm = db.plugin_wiki_rating
-    pa = db.plugin_wiki_aux
+    pa = db.plugin_wiki_rating_aux
     tablename = request.args(0)
     record_id = request.args(1)
     rating = abs(float(request.vars.rating or 0)) 

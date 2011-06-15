@@ -11,7 +11,7 @@
 {{=form.custom.begin}}
 <b>Page:</b> {{=form.custom.widget.slug}}
 <b>Title:</b> {{=form.custom.widget.title}}<br/>
-<b>Active:</b> {{=form.custom.widget.active}}
+<b>Active:</b> {{=form.custom.widget.is_active}}
 <b>Public:</b> {{=form.custom.widget.is_public}}
 [{{=plugin_wiki.attachments('page',page.id)}}]
 {{if plugin_wiki_level>1:}}[{{=plugin_wiki.widget_builder()}}]{{pass}}<br/>

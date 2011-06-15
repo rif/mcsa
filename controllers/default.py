@@ -18,7 +18,7 @@ def index():
 
 @auth.requires_membership('admin')
 def clients():
-    clients = db(db.client).select()
+    clients = db(db.client).select(orderby=db.client.name)
     return locals()
 
 @auth.requires_membership('admin')
