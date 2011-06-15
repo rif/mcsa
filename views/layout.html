@@ -13,7 +13,7 @@ Released   : 20071218
 <html xmlns="http://www.w3.org/1999/xhtml">
  <head>
   <title>
-   {{=response.title or request.application}}Chronos
+   {{=response.title or request.application}}Avocado
   </title>
   {{response.files.append(URL(request.application,'static','plugin_layouts/layouts/Pluralism/style.css'))}}
   {{response.files.append(URL('static','plugin_layouts/superfish.js'))}}
@@ -37,9 +37,7 @@ div.error { background-color: red; color: white; padding: 3px; }
     <div id="header">
      <div id="logo">
        <img src="{{=URL('static', 'images/logo.png')}}" class="" alt="" />
-       <h1>
-	 {{=response.title or request.application}} Chronos
-       </h1>
+       <h1>{{=response.title or request.application}} Avocado</h1>
      </div>
      <div id="menu">
       {{=MENU(response.menu,_class='web2py-menu')}}
