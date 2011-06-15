@@ -525,6 +525,10 @@ a.button:hover span.icon.user { background-position: 0 -869px }
     margin: 2px 0px;
 }
 
+#search-field {
+    flush: right;
+}
+
 /*
  * Media queries for responsive design
  */
