@@ -1,88 +1,114 @@
 {{extend 'layout.html'}}
 
 <div class="rep">
-  <div class="leftish">
-    {{=form}}
-  </div>
+	<div class="leftish">
+		{{=form}}
+	</div>
 </div>
 
 <h2>{{=entries_set.count()}} {{=T('time entries')}}</h2>
-<div class="rep"></div>
+<div class="rep">
+</div>
 <br />
 <hr />
 <br/>
 <div class="rep">
-  <div class="leftish">
-    <table>
-      <thead>
-	<tr>
-	  <th>{{=T('Id')}}</th>
-	  <th>{{=T('User')}}</th>
-	  <th>{{=T('Time spent')}}</th>
-	</tr>
-      </thead>
-      <tbody>
-	{{for elem in earners:}}
-	<tr>
-	  <td>{{=elem.auth_user.id}}</td>
-	  <td width="300px">{{=elem.auth_user.first_name + ' ' + elem.auth_user.last_name}}</td>
-	  <td>{{=elem['SUM(time_entry.duration)']}}</td>
-	</tr>
-	{{pass}}
-      </tbody>
-    </table>
-    
-  </div>
-  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=earner_durations, names=earner_names)}}</div>
+	<div class="leftish">
+		<table>
+			<thead>
+				<tr>
+					<th>{{=T('Id')}}</th>
+					<th>{{=T('User')}}</th>
+					<th>{{=T('Time spent')}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{for elem in earners:}}
+				<tr>
+					<td>{{=elem.auth_user.id}}</td>
+					<td width="300px">{{=elem.auth_user.first_name + ' ' + elem.auth_user.last_name}}</td>
+					<td>{{=elem['SUM(time_entry.duration)']}}</td>
+				</tr>
+				{{pass}}
+			</tbody>
+		</table>
+
+	</div>
+	<div class="rightis">
+		{{=plugin_wiki.widget('pie_chart', data=earner_durations, names=earner_names)}}
+	</div>
 </div>
 
 <div class="rep">
-  <div class="leftish">
-    <table>
-      <thead>
-	<tr>
-	  <th>{{=T('Id')}}</th>
-	  <th>{{=T('Client')}}</th>
-	  <th>{{=T('Time spent')}}</th>
-	</tr>
-      </thead>
-      <tbody>
-	{{for elem in clients:}}
-	<tr>
-	  <td>{{=elem.client.id}}</td>
-	  <td width="300px">{{=elem.client.name}}</td>
-	  <td>{{=elem['SUM(time_entry.duration)']}}</td>
-	</tr>
-	{{pass}}
-      </tbody>
-    </table>
-  </div>
-  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=client_durations, names=client_names)}}</div>
+	<div class="leftish">
+		<table>
+			<thead>
+				<tr>
+					<th>{{=T('Id')}}</th>
+					<th>{{=T('Client')}}</th>
+					<th>{{=T('Time spent')}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{for elem in clients:}}
+				<tr>
+					<td>{{=elem.client.id}}</td>
+					<td width="300px">{{=elem.client.name}}</td>
+					<td>{{=elem['SUM(time_entry.duration)']}}</td>
+				</tr>
+				{{pass}}
+			</tbody>
+		</table>
+	</div>
+	<div class="rightis">
+		{{=plugin_wiki.widget('pie_chart', data=client_durations, names=client_names)}}
+	</div>
 </div>
 
 <div class="rep">
-  <div class="leftish">
-    <table>
-      <thead>
-	<tr>
-	  <th>{{=T('Id')}}</th>
-	  <th>{{=T('Matter')}}</th>
-	  <th>{{=T('Time spent')}}</th>
-	</tr>
-      </thead>
-      <tbody>
-	{{for elem in matters:}}
-	<tr>
-	  <td>{{=elem.matter.id}}</td>
-	  <td width="300px">{{=elem.matter.name}}</td>
-	  <td>{{=elem['SUM(time_entry.duration)']}}</td>
-	</tr>
-	{{pass}}
-      </tbody>
-    </table>
-  </div>
-  <div class="rightis">{{=plugin_wiki.widget('pie_chart', data=matter_durations, names=matter_names)}}</div>
+	<div class="leftish">
+		<table>
+			<thead>
+				<tr>
+					<th>{{=T('Id')}}</th>
+					<th>{{=T('Matter')}}</th>
+					<th>{{=T('Time spent')}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{for elem in matters:}}
+				<tr>
+					<td>{{=elem.matter.id}}</td>
+					<td width="300px">{{=elem.matter.name}}</td>
+					<td>{{=elem['SUM(time_entry.duration)']}}</td>
+				</tr>
+				{{pass}}
+			</tbody>
+		</table>
+	</div>
+	<div class="rightis">
+		{{=plugin_wiki.widget('pie_chart', data=matter_durations, names=matter_names)}}
+	</div>
 </div>
-<br/><br/>
+<br/>
+<br/>
 
 {{=table}}
+
+<script type="text/javascript">
+	$( function() {
+		$("#no_table_client").change( function() {
+			$("#no_table_matter__row td.w2p_fw").load("{{=URL('matters_callback')}}/" + $(this).val(), function() {
+				var matter = $("#no_table_matter__row td.w2p_fw select");
+				matter.change( function() {
+					$("#no_table_segment__row td.w2p_fw").load("{{=URL('segment_callback')}}/" + $(this).val())
+				});
+				matter.change();
+			});
+		});
+		$("#no_table_matter").change( function() {
+			$("#no_table_segment__row td.w2p_fw").load("{{=URL('segment_callback')}}/" + $(this).val())
+		});
+	});
+</script>
+

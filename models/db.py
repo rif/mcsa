@@ -14,7 +14,7 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
     # from google.appengine.api.memcache import Client
     # session.connect(request, response, db = MEMDB(Client()))
 else:                                         # else use a normal relational database
-    db = DAL('sqlite://storage.sqlite', migrate_enabled=False)       # if not, use SQLite or other DB
+    db = DAL('sqlite://storage.sqlite', migrate_enabled=True)       # if not, use SQLite or other DB
 ## if no need for session
 # session.forget()
 
@@ -150,4 +150,3 @@ earner_entries = db.time_entry.fee_earner == db.auth_user.id
 client_entries = db.time_entry.client == db.client.id
 matter_entries = db.time_entry.matter == db.matter.id
 segment_entries = db.time_entry.segment == db.segment.id
-

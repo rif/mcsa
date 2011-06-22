@@ -1,7 +1,7 @@
 {{for entry in entries:}}
 <b>{{=entry.auth_user.first_name + " " + entry.auth_user.last_name}}<br/>
 {{=entry.matter.name}}<br/>
-{{=entry.time_entry.date}} {{=T('duration: ')}} {{=entry.time_entry.duration}} {{=T('hours')}}</b><br/>
-<p>{{=entry.time_entry.description}}<p>
+{{=entry.no_table.date}} {{=T('duration: ')}} {{=entry.no_table.duration}} {{=T('hours')}}</b><br/>
+<p>{{=entry.no_table.description}}<p>
 <hr/>
 {{pass}}
