@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
 
 {{=form.custom.begin}}
-<table id="no_table">
+<table id="time_entry">
   <tbody>
     <tr class="head">
       <td>{{=T('Fee Earner')}}</td>
@@ -66,38 +66,38 @@
     }  
 
 $(function(){
-    client = $("#no_table_client");
+    client = $("#time_entry_client");
     
     if(client.val() == "") {
-	 $("#no_table_matter").attr("disabled","disabled");
+	 $("#time_entry_matter").attr("disabled","disabled");
     } else {
-	old_matter = $('option:selected',  $("#no_table_matter")).val();
+	old_matter = $('option:selected',  $("#time_entry_matter")).val();
 	$("#matter_span").load("{{=URL('matters_callback')}}/" + client.val(), function(){
-	    $("option[value=" + old_matter +"]", $("#no_table_matter")).attr('selected', 'selected');
+	    $("option[value=" + old_matter +"]", $("#time_entry_matter")).attr('selected', 'selected');
 	});
     }
     
-    if( $("#no_table_matter").val() == "") {
-	$("#no_table_segment").attr("disabled","disabled");
+    if( $("#time_entry_matter").val() == "") {
+	$("#time_entry_segment").attr("disabled","disabled");
     } else {
-	old_segment = $('option:selected',  $("#no_table_segment")).val();
-	$("#segment_span").load("{{=URL('segment_callback')}}/" + $("#no_table_matter").val(), function(){
-	    $("option[value=" + old_segment +"]", $("#no_table_segment")).attr('selected', 'selected');
+	old_segment = $('option:selected',  $("#time_entry_segment")).val();
+	$("#segment_span").load("{{=URL('segment_callback')}}/" + $("#time_entry_matter").val(), function(){
+	    $("option[value=" + old_segment +"]", $("#time_entry_segment")).attr('selected', 'selected');
 	});
     }
     
     client.change(function(){
-	enable_disable(client, $("#no_table_matter"), $("#matter_span"), "{{=URL('matters_callback')}}/", function(){
-	    matter = $("#no_table_matter");
+	enable_disable(client, $("#time_entry_matter"), $("#matter_span"), "{{=URL('matters_callback')}}/", function(){
+	    matter = $("#time_entry_matter");
 	    matter.change(function(){
-		enable_disable(matter, $("#no_table_segment"), $("#segment_span"), "{{=URL('segment_callback')}}/");
+		enable_disable(matter, $("#time_entry_segment"), $("#segment_span"), "{{=URL('segment_callback')}}/");
 	    });
 	    matter.change();
 	});
     });
     
-     $("#no_table_matter").change(function(){
-	enable_disable(matter, $("#no_table_segment"), $("#segment_span"), "{{=URL('segment_callback')}}/");
+     $("#time_entry_matter").change(function(){
+	enable_disable(matter, $("#time_entry_segment"), $("#segment_span"), "{{=URL('segment_callback')}}/");
     });
 });
 </script>
