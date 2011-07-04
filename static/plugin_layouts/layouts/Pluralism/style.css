@@ -411,3 +411,7 @@ img.right {
 .undercover {
     display:none;
 }
+
+#languages img {
+    margin-right: 2px;
+}
