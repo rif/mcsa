@@ -10,7 +10,7 @@ def index():
         form = SQLFORM.factory(
             Field('fee_earner', default=(request.vars.fee_earner or session.fee_earner or auth.user_id),
                   requires=IS_IN_DB(db(db.auth_user.id.belongs(current_user_perm.auth_list)), db.auth_user.id, '%(first_name)s %(last_name)s')),
-            )
+            submit_button=T('Submit'))
         if form.accepts(request.vars, session):
             response.flash = T('Fee earner changed to %s') % db.auth_user(form.vars.fee_earner).first_name
             session.fee_earner = form.vars.fee_earner
@@ -210,7 +210,7 @@ def reports():
         Field('end', 'date', label=T('End')),#, default=today)
         Field('csv', 'boolean', label=T('Download as CSV')),
         Field('pdf', 'boolean', label=T('Download as PDF')),
-        )
+        submit_button=T('Submit'))
     if form.accepts(request.vars, session):
         if form.vars.fee_earner: query &= db.time_entry.fee_earner == form.vars.fee_earner 
         if form.vars.client: query &= db.time_entry.client == form.vars.client

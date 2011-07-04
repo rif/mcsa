@@ -36,6 +36,12 @@
 	    {{if session._lang == 'ro-ro' or T.accepted_language.startswith('ro-ro'):}}
 	    firstDay:1,
 	    {{pass}}
+	    buttonText: {
+		today: '{{=T("today")}}',
+		day: '{{=T("day")}}',
+		week:'{{=T("week")}}',
+		month:'{{=T("month")}}'
+              },
 	    events: "{{=URL('entries')}}",
 	    eventDrop: function(event, delta) {
 		$.get("{{=URL('entry_drop')}}/" + event.id + "/" + Math.round(event.start.getTime()/1000.0));
