@@ -42,6 +42,7 @@
 		week:'{{=T("week")}}',
 		month:'{{=T("month")}}'
               },
+	    allDayText: '{{=T("all-day")}}',
 	    events: "{{=URL('entries')}}",
 	    eventDrop: function(event, delta) {
 		$.get("{{=URL('entry_drop')}}/" + event.id + "/" + Math.round(event.start.getTime()/1000.0));
