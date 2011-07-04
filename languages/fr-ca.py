@@ -70,6 +70,7 @@
 'Invalid datasource for DATATABLES plugin': 'Invalid datasource for DATATABLES plugin',
 'Invalid email': 'Courriel invalide',
 'Label 2': 'Label 2',
+'Languages': 'Languages',
 'Last': 'Last',
 'Last name': 'Nom',
 'Layout': 'Mise en page',

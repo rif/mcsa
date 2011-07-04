@@ -75,6 +75,7 @@
 'Invalid Query': 'Consulta Inválida',
 'Invalid datasource for DATATABLES plugin': 'Invalid datasource for DATATABLES plugin',
 'Label 2': 'Label 2',
+'Languages': 'Languages',
 'Last': 'Last',
 'Last Name': 'Last Name',
 'Layout': 'Esboço',

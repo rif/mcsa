@@ -72,6 +72,7 @@
 'Invalid datasource for DATATABLES plugin': 'Invalid datasource for DATATABLES plugin',
 'Invalid email': 'Błędny adres email',
 'Label 2': 'Label 2',
+'Languages': 'Languages',
 'Last': 'Last',
 'Last name': 'Nazwisko',
 'Layout': 'Układ',
