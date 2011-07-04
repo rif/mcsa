@@ -201,13 +201,13 @@ def reports():
     today = date.today()
     first_of_month = today.replace(day=1)
     form = SQLFORM.factory(
-        Field('fee_earner', db.auth_user, requires=IS_EMPTY_OR(IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s', zero=T('ALL')))),
-        Field('client', db.client, requires=IS_EMPTY_OR(IS_IN_DB(db(db.client), db.client.id,  '%(name)s', zero=T('ALL')))),
-        Field('matter', db.matter, requires=IS_EMPTY_OR(IS_IN_DB(db(db.matter), db.matter.id, '%(name)s', zero=T('ALL')))),
-        Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment), db.segment.id, '%(name)s', zero=T('ALL')))),
-        Field('related_disbursements', 'list:string', requires=IS_IN_SET([T('Mobile'), T('Telephone'), T('Travel'), T('Meals'), T('Other')], multiple=True)),
-        Field('start', 'date'),#, default=first_of_month),
-        Field('end', 'date'),#, default=today)
+        Field('fee_earner', db.auth_user, requires=IS_EMPTY_OR(IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s', zero=T('ALL'))), label=T('Fee earner')),
+        Field('client', db.client, requires=IS_EMPTY_OR(IS_IN_DB(db(db.client), db.client.id,  '%(name)s', zero=T('ALL'))), label=T('Client')),
+        Field('matter', db.matter, requires=IS_EMPTY_OR(IS_IN_DB(db(db.matter), db.matter.id, '%(name)s', zero=T('ALL'))), label=T('Matter')),
+        Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment), db.segment.id, '%(name)s', zero=T('ALL'))), label=T('Segment')),
+        Field('related_disbursements', 'list:string', requires=IS_IN_SET([T('Mobile'), T('Telephone'), T('Travel'), T('Meals'), T('Other')], multiple=True), label=T('Related disbursements')),
+        Field('start', 'date', label=T('Start')),#, default=first_of_month),
+        Field('end', 'date', label=T('End')),#, default=today)
         Field('csv', 'boolean', label=T('Download as CSV')),
         Field('pdf', 'boolean', label=T('Download as PDF')),
         )

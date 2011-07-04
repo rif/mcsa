@@ -29,6 +29,13 @@
 		center: 'title',
 		right: 'month,agendaWeek,agendaDay'
 	    },
+	    monthNames: ['{{=T("January")}}', '{{=T("February")}}', '{{=T("March")}}', '{{=T("April")}}', '{{=T("May")}}', '{{=T("June")}}', '{{=T("July")}}', '{{=T("August")}}', '{{=T("September")}}', '{{=T("October")}}', '{{=T("November")}}', '{{=T("December")}}'],
+	    monthNamesShort: ['{{=T("Jan")}}', '{{=T("Feb")}}', '{{=T("Mar")}}', '{{=T("Apr")}}', '{{=T("May")}}', '{{=T("Jun")}}', '{{=T("Jul")}}', '{{=T("Aug")}}', '{{=T("Sep")}}', '{{=T("Oct")}}', '{{=T("Nov")}}', '{{=T("Dec")}}'],
+	    dayNames: ['{{=T("Sunday")}}', '{{=T("Monday")}}', '{{=T("Tuesday")}}', '{{=T("Wednesday")}}', '{{=T("Thursday")}}', '{{=T("Friday")}}', '{{=T("Saturday")}}'],
+	    dayNamesShort: ['{{=T("Sun")}}', '{{=T("Mon")}}', '{{=T("Tue")}}', '{{=T("Wed")}}', '{{=T("Thu")}}', '{{=T("Fri")}}', '{{=T("Sat")}}'],
+	    {{if session._lang == 'ro-ro' or T.accepted_language.startswith('ro-ro'):}}
+	    firstDay:1,
+	    {{pass}}
 	    events: "{{=URL('entries')}}",
 	    eventDrop: function(event, delta) {
 		$.get("{{=URL('entry_drop')}}/" + event.id + "/" + Math.round(event.start.getTime()/1000.0));

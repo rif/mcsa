@@ -66,6 +66,7 @@ auth.messages.reset_password = 'Click on the link http://'+request.env.http_host
 auth.settings.actions_disabled=['register']
 
 crud.settings.auth = None                      # =auth to enforce authorization on crud
+crud.messages.submit_button = T('Submit')
 
 class Float_validator:
     def __init__(self, err=T('Float with one decimal in range 0.1 to 24')):
