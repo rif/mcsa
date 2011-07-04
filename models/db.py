@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
+T.current_language=['en', 'en-us']
+if session._lang:
+    T.force(session._lang)
+else:
+    T.force(T.accepted_language)
 
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too

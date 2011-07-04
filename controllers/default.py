@@ -288,5 +288,9 @@ def perm():
     form = crud.update(db.perm, p)
     return dict(form=form)
 
+def force_language():
+    session._lang = a0
+    return redirect(request.env.http_referer)
+
 def user():
     return dict(form=auth())
