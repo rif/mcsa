@@ -100,7 +100,7 @@ def cost(row):
 
 db.define_table('perm',
                 Field('user', db.auth_user, unique=True),
-                Field('auth_list', 'list:reference auth_user', comment=T('Allway put the user itself in the authority list list'), label=T('Authority list'))
+                Field('auth_list', 'list:reference auth_user', comment=T('Allway put the user itself in the authority list'), label=T('Authority list'))
                 )
 
 current_user_perm = db.perm(db.perm.user == auth.user_id)

@@ -11,6 +11,7 @@
 'Access Control': 'Access Control',
 'Ajax Recipes': 'Ajax Recipes',
 'All': 'All',
+'Allway put the user itself in the authority list': 'Allway put the user itself in the authority list',
 'Allway put the user itself in the authority list list': 'Allway put the user itself in the authority list list',
 'Are you shure you want to delete this element? Deleting it will erase all time entries related to it!': 'Are you shure you want to delete this element? Deleting it will erase all time entries related to it!',
 'Are you sure you want to delete this object?': 'Are you sure you want to delete this object?',
