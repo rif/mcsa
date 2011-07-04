@@ -19,6 +19,7 @@
 'Admin is disabled because unsecure channel': '管理功能(Admin)在不安全連線環境下自動關閉',
 'Administrator Password:': '管理員密碼:',
 'All': 'All',
+'Allway put the user itself in the authority list': 'Allway put the user itself in the authority list',
 'Allway put the user itself in the authority list list': 'Allway put the user itself in the authority list list',
 'Are you shure you want to delete this element? Deleting it will erase all time entries related to it!': 'Are you shure you want to delete this element? Deleting it will erase all time entries related to it!',
 'Are you sure you want to delete file "%s"?': '確定要刪除檔案"%s"?',

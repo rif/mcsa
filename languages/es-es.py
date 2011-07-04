@@ -19,6 +19,7 @@
 'Admin is disabled because unsecure channel': 'Admin deshabilitado, el canal no es seguro',
 'Administrator Password:': 'Contraseña del Administrador:',
 'All': 'All',
+'Allway put the user itself in the authority list': 'Allway put the user itself in the authority list',
 'Allway put the user itself in the authority list list': 'Allway put the user itself in the authority list list',
 'Are you shure you want to delete this element? Deleting it will erase all time entries related to it!': 'Are you shure you want to delete this element? Deleting it will erase all time entries related to it!',
 'Are you sure you want to delete file "%s"?': '¿Está seguro que desea eliminar el archivo "%s"?',
