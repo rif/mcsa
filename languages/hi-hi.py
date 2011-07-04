@@ -65,6 +65,7 @@
 'Invalid Query': 'अमान्य  प्रश्न',
 'Invalid datasource for DATATABLES plugin': 'Invalid datasource for DATATABLES plugin',
 'Label 2': 'Label 2',
+'Languages': 'Languages',
 'Last': 'Last',
 'Layout': 'Layout',
 'Legal Research': 'Legal Research',

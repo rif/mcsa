@@ -66,6 +66,7 @@
 'Invalid email': 'Neplatný email',
 'Invalid password': 'Nesprávne heslo',
 'Label 2': 'Label 2',
+'Languages': 'Languages',
 'Last': 'Last',
 'Last name': 'Priezvisko',
 'Layout': 'Layout',

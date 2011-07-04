@@ -66,6 +66,7 @@
 'Invalid login': 'Неверный логин',
 'Invalid password': 'Неверный пароль',
 'Label 2': 'Label 2',
+'Languages': 'Languages',
 'Last': 'Last',
 'Last name': 'Фамилия',
 'Legal Research': 'Legal Research',
