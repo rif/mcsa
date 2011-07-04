@@ -31,10 +31,6 @@ div.error { background-color: red; color: white; padding: 3px; }
  <body>
   <!-- start header -->
   {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
-  <div id="languages">
-  <a href="{{=URL('force_language', args='en-us')}}"><img src="{{=URL('static', 'images/flags/en.png')}}" alt="English" /></a>
-  <a href="{{=URL('force_language', args='ro-ro')}}"><img src="{{=URL('static', 'images/flags/ro.png')}}" alt="Română" /></a>
-  </div>
 
   <div id="wrapper">
    <div id="wrapper2">
@@ -81,6 +77,18 @@ div.error { background-color: red; color: white; padding: 3px; }
          <a href={{=URL('plugin_wiki', 'page/contact')}}>{{=T('Contact')}}</a>
         </dt>
        </dl>
+      </div>
+      <div id="colC">
+       <h3>
+	 {{=T('Languages')}}
+       </h3>
+       <ul class="list2">
+        <li>
+	  <a href="{{=URL('force_language', args='en-us')}}"><img src="{{=URL('static', 'images/flags/en.png')}}" alt="English" /></a>
+      </li>
+        <li>
+	   <a href="{{=URL('force_language', args='ro-ro')}}"><img src="{{=URL('static', 'images/flags/ro.png')}}" alt="Română" /></a>
+       </ul>
       </div>
       <div style="clear: both;">
        &nbsp;
