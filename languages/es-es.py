@@ -34,6 +34,7 @@
 'Authority list': 'Authority list',
 'Available databases and tables': 'Bases de datos y tablas disponibles',
 'Back': 'Back',
+'Cancel': 'Cancel',
 'Cannot be empty': 'No puede estar vacío',
 'Cannot compile: there are errors in your app.        Debug it, correct errors and try again.': 'No se puede compilar: hay errores en su aplicación. Depure, corrija errores y vuelva a intentarlo.',
 'Cant load server data yet': 'Cant load server data yet',

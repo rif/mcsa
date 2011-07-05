@@ -22,6 +22,7 @@
 'Authority list': 'Authority list',
 'Available databases and tables': 'bases de dados e tabelas disponíveis',
 'Back': 'Back',
+'Cancel': 'Cancel',
 'Cannot be empty': 'não pode ser vazio',
 'Cant load server data yet': 'Cant load server data yet',
 'Cant serialize lists and dicts yet': 'Cant serialize lists and dicts yet',

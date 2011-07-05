@@ -19,6 +19,7 @@
 'Authority list': 'Authority list',
 'Available databases and tables': 'Dostupné databázy a tabuľky',
 'Back': 'Back',
+'Cancel': 'Cancel',
 'Cannot be empty': 'Nemôže byť prázdne',
 'Cant load server data yet': 'Cant load server data yet',
 'Cant serialize lists and dicts yet': 'Cant serialize lists and dicts yet',
