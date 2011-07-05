@@ -19,6 +19,7 @@
 'Authority list': 'Authority list',
 'Available databases and tables': 'Базы данных и таблицы',
 'Back': 'Back',
+'Cancel': 'Cancel',
 'Cannot be empty': 'Пустое значение недопустимо',
 'Cant load server data yet': 'Cant load server data yet',
 'Cant serialize lists and dicts yet': 'Cant serialize lists and dicts yet',

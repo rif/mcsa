@@ -23,6 +23,7 @@
 'Available databases and tables': 'Bancos de dados e tabelas disponíveis',
 'Back': 'Back',
 'Buy this book': 'Buy this book',
+'Cancel': 'Cancel',
 'Cannot be empty': 'Não pode ser vazio',
 'Cant load server data yet': 'Cant load server data yet',
 'Cant serialize lists and dicts yet': 'Cant serialize lists and dicts yet',

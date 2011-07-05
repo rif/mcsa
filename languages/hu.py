@@ -19,6 +19,7 @@
 'Authority list': 'Authority list',
 'Available databases and tables': 'Elérhető adatbázisok és táblák',
 'Back': 'Back',
+'Cancel': 'Cancel',
 'Cannot be empty': 'Nem lehet üres',
 'Cant load server data yet': 'Cant load server data yet',
 'Cant serialize lists and dicts yet': 'Cant serialize lists and dicts yet',

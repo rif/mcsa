@@ -34,6 +34,7 @@
 'Authority list': 'Authority list',
 'Available databases and tables': '可提供的資料庫和資料表',
 'Back': 'Back',
+'Cancel': 'Cancel',
 'Cannot be empty': '不可空白',
 'Cannot compile: there are errors in your app.        Debug it, correct errors and try again.': '無法編譯:應用程式中含有錯誤，請除錯後再試一次.',
 'Cant load server data yet': 'Cant load server data yet',
