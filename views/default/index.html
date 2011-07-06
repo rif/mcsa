@@ -33,7 +33,7 @@
 	    monthNamesShort: ['{{=T("Jan")}}', '{{=T("Feb")}}', '{{=T("Mar")}}', '{{=T("Apr")}}', '{{=T("May")}}', '{{=T("Jun")}}', '{{=T("Jul")}}', '{{=T("Aug")}}', '{{=T("Sep")}}', '{{=T("Oct")}}', '{{=T("Nov")}}', '{{=T("Dec")}}'],
 	    dayNames: ['{{=T("Sunday")}}', '{{=T("Monday")}}', '{{=T("Tuesday")}}', '{{=T("Wednesday")}}', '{{=T("Thursday")}}', '{{=T("Friday")}}', '{{=T("Saturday")}}'],
 	    dayNamesShort: ['{{=T("Sun")}}', '{{=T("Mon")}}', '{{=T("Tue")}}', '{{=T("Wed")}}', '{{=T("Thu")}}', '{{=T("Fri")}}', '{{=T("Sat")}}'],
-	    {{if session._lang == 'ro-ro' or T.accepted_language.startswith('ro-ro'):}}
+	    {{if session._lang == 'ro-ro' or (T.accepted_language and T.accepted_language.startswith('ro-ro')):}}
 	    firstDay:1,
 	    {{pass}}
 	    buttonText: {
