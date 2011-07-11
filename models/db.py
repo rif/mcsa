@@ -40,8 +40,8 @@ crud = Crud(globals(),db)                      # for CRUD helpers using auth
 service = Service(globals())                   # for json, xml, jsonrpc, xmlrpc, amfrpc
 plugins = PluginManager()
 
-mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
-mail.settings.sender = 'ustest@gmail.com'         # your email
+mail.settings.server = 'smtp.gmail.com:587'  # your SMTP server
+mail.settings.sender = 'no-reply@gmail.com'         # your email
 mail.settings.login = 'ustest:greta.1'      # your credentials or None
 
 auth.settings.hmac_key = 'sha512:1000c256-92f1-42b8-9808-ed48e41ccf3b'   # before define_tables()
