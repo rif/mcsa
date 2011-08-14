@@ -19,7 +19,7 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
     # from google.appengine.api.memcache import Client
     # session.connect(request, response, db = MEMDB(Client()))
 else:                                         # else use a normal relational database
-    db = DAL('sqlite://storage.sqlite', migrate_enabled=True)       # if not, use SQLite or other DB
+    db = DAL('sqlite://storage.sqlite', migrate_enabled=False)       # if not, use SQLite or other DB
 ## if no need for session
 # session.forget()
 
@@ -134,7 +134,7 @@ db.define_table('time_entry',
                       requires=IS_IN_DB(db(db.auth_user.id.belongs(current_user_perm.auth_list) if current_user_perm else db.auth_user.id == auth.user_id), db.auth_user.id, '%(first_name)s %(last_name)s')),
                 Field('code_classification',
                       requires=IS_IN_SET([T('Other'), T('Meeting'), T('Discussion'), T('Telephone Call'), T('Review/Analyse'), T('Draft/Revise'), T('Legal Research'), T('Travel')], zero=None), default='Other'),
-                Field('description', 'text', required=True, represent=lambda d:MARKMIN(d.strip('"')), label=T('Description')),
+                Field('description', 'text', length=65536, required=True, represent=lambda d:MARKMIN(d.strip('"')), label=T('Description')),
                 Field('special_notes', 'text', represent=lambda sn:MARKMIN(sn.strip('"')), label=T('Special Notes')),
                 Field('related_disbursements', 'list:string',
                       requires=IS_IN_SET([T('Mobile'), T('Telephone'), T('Travel'), T('Meals'), T('Other')], multiple=True)),
