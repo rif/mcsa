@@ -23,6 +23,8 @@ def deploy():
     for app in ('mcsa', 'ian'):
         with cd('/home/www-data/web2py/applications/' + app):
             run('hg pul -uv')
+        with cd('/home/www-data/web2py/applications/demo'):
+            run('hg pul --rebase -uv')
 
 @task
 @hosts('rif@avocadosoft.ro:22011')
