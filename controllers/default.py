@@ -278,7 +278,7 @@ def reports():
 @auth.requires_membership('admin')
 def users():
     form = crud.update(db.auth_user, a0, next=URL('users'))
-    users = db(db.auth_user).select()
+    users = db(db.auth_user.id>1).select()
     return locals()
 
 @auth.requires_membership('admin')
