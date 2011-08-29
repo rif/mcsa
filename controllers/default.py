@@ -292,5 +292,8 @@ def force_language():
     session._lang = a0
     return redirect(request.env.http_referer)
 
+def contact():
+    return locals()
+
 def user():
     return dict(form=auth())
