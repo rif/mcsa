@@ -10,6 +10,7 @@
 <h2>{{=entries_set.count()}} {{=T('time entries')}}</h2>
 <div class="rep">
 </div>
+{{c=('odd', 'even')}}
 <br />
 <hr />
 <br/>
@@ -23,10 +24,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{for elem in earners:}}
-				<tr>					
+				{{for i, elem in enumerate(earners):}}
+				<tr class="{{=c[i%2]}}">					
 					<td width="300px">{{=elem.auth_user.first_name + ' ' + elem.auth_user.last_name}}</td>
-					<td>{{=elem['SUM(time_entry.duration)']}}</td>
+					<td class="numeric">{{=elem['SUM(time_entry.duration)']}}</td>
 				</tr>
 				{{pass}}
 			</tbody>
@@ -48,10 +49,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{for elem in clients:}}
-				<tr>					
+				{{for i, elem in enumerate(clients):}}
+				<tr class="{{=c[i%2]}}">					
 					<td width="300px">{{=elem.client.name}}</td>
-					<td>{{=elem['SUM(time_entry.duration)']}}</td>
+					<td class="numeric">{{=elem['SUM(time_entry.duration)']}}</td>
 				</tr>
 				{{pass}}
 			</tbody>
@@ -72,10 +73,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{for elem in matters:}}
-				<tr>				
+				
+				{{for i,elem in enumerate(matters):}}
+				<tr class="{{=c[i%2]}}">				
 					<td width="300px">{{=elem.matter.name}}</td>
-					<td>{{=elem['SUM(time_entry.duration)']}}</td>
+					<td class="numeric">{{=elem['SUM(time_entry.duration)']}}</td>
 				</tr>
 				{{pass}}
 			</tbody>

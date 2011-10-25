@@ -269,12 +269,15 @@ def reports():
         pdf=MyFPDF('P', 'mm', 'A4')
         # first page:
         pdf.add_page()
-        pdf.set_font('Arial','',8)
+        pdf.set_font('Arial','',8)        
         pdf.write_html(response.render("default/pdf_reports.html", locals()))
         response.headers['Content-Type']='application/pdf'
         response.headers['Content-Disposition']='attachment'
         return pdf.output(dest='S')
     return locals()
+
+def lt(str):
+    return unicode(str,'utf-8').encode('iso-8859-1')
 
 @auth.requires_membership('admin')
 def users():
