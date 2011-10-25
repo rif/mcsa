@@ -365,14 +365,13 @@ img.right {
 }
 
 .rep .leftish {
-    width: 60%;
+    width: 50%;
     float: left;
 }
 
-.rep .rightish {
+.rep .rightish, #earner-graph, #client-graph, #matter-graph {
     float: left;
-    width: 40%;
-    left: 60%;
+    width: 50%;
 }
 
 #time_entry input {width:94%;}

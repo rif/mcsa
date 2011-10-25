@@ -525,6 +525,10 @@ a.button:hover span.icon.user { background-position: 0 -869px }
     margin: 2px 0px;
 }
 
+#time_entry .ui-multiselect-menu, #time_entry button {
+	width: 100px;
+}
+
 #search-field {
     flush: right;
 }

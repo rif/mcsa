@@ -196,18 +196,18 @@ def segment_callback():
     return SELECT(*option_list, _id='time_entry_segment', _class='reference', _name='segment')
 
 @auth.requires_login()
-def reports():
+def reports():       
     query = earner_entries & client_entries & matter_entries
     today = date.today()
-    first_of_month = today.replace(day=1)
+    first_of_month = today.replace(day=1)    
     form = SQLFORM.factory(
         Field('fee_earner', db.auth_user, requires=IS_EMPTY_OR(IS_IN_DB(db(db.auth_user.id>1), db.auth_user.id, '%(first_name)s %(last_name)s', zero=T('ALL'))), label=T('Fee earner')),
         Field('client', db.client, requires=IS_EMPTY_OR(IS_IN_DB(db(db.client), db.client.id,  '%(name)s', zero=T('ALL'))), label=T('Client')),
         Field('matter', db.matter, requires=IS_EMPTY_OR(IS_IN_DB(db(db.matter), db.matter.id, '%(name)s', zero=T('ALL'))), label=T('Matter')),
         Field('segment', db.segment, requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment), db.segment.id, '%(name)s', zero=T('ALL'))), label=T('Segment')),
         Field('related_disbursements', 'list:string', requires=IS_IN_SET([T('Mobile'), T('Telephone'), T('Travel'), T('Meals'), T('Other')], multiple=True), label=T('Related disbursements')),
-        Field('start', 'date', label=T('Start')),#, default=first_of_month),
-        Field('end', 'date', label=T('End')),#, default=today)
+        Field('start', 'date', label=T('Start'), default=first_of_month),
+        Field('end', 'date', label=T('End'), default=today),
         Field('csv', 'boolean', label=T('Download as CSV')),
         Field('pdf', 'boolean', label=T('Download as PDF')),
         submit_button=T('Submit'))
@@ -221,10 +221,13 @@ def reports():
             for disbursement in form.vars.related_disbursements[1:]:
                 subquery |= db.time_entry.related_disbursements.contains(disbursement)
             query &= subquery
-        if form.vars.start: query &=  db.time_entry.date >= form.vars.start
-        if form.vars.end: query &= db.time_entry.date <= form.vars.end
+        if form.vars.start: query &= db.time_entry.date >= form.vars.start
+        if form.vars.end: query &= db.time_entry.date <= form.vars.end		
     elif form.errors:
         response.flash = 'form has errors'
+    else:
+        query &= db.time_entry.date >= first_of_month
+        query &= db.time_entry.date <= today
     entries_set = db(query)
     entries = entries_set.select(db.auth_user.first_name, db.auth_user.last_name, db.client.name, db.matter.name, db.time_entry.date, db.time_entry.description, db.time_entry.special_notes, db.time_entry.duration, orderby=db.time_entry.date)
     powerTable = plugins.powerTable
@@ -234,16 +237,14 @@ def reports():
     powerTable.dtfeatures['sScrollY'] = '600px'
     table = powerTable.create()
     earners = entries_set.select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, total_duration, orderby=~total_duration, groupby=db.auth_user.first_name)
-    earner_names = [str(row.auth_user.id) for row in earners]
-    earner_durations = [int(row[total_duration]) for row in earners]
+    earner_data = [(row.auth_user.first_name, row[total_duration]) for row in earners]    
 
     clients = entries_set.select(db.client.id, db.client.name, total_duration, orderby=~total_duration, groupby=db.client.name)
-    client_names = [str(row.client.id) for row in clients]
-    client_durations = [int(row[total_duration]) for row in clients]
+    client_data = [(' '.join(row.client.name.split(' ')[:2]), row[total_duration]) for row in clients]    
 
     matters = entries_set.select(db.matter.id, db.matter.name, total_duration, orderby=~total_duration, groupby=db.matter.name)
-    matter_names = [str(row.matter.id) for row in matters]
-    matter_durations = [int(row[total_duration]) for row in matters]
+    matter_data = [(row.matter.name.split(' ')[0],row[total_duration]) for row in matters]
+    
     if form.vars.csv:
         response.headers['Content-Type']='application/excel'
         response.headers['Content-Disposition']='attachment'
