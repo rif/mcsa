@@ -20,7 +20,7 @@ def deploy():
     'Deploy the app to the target environment'
     print(green('deploying...'))
     push()
-    for app in ('mcsa', 'ian'):
+    for app in ('mcsa',):
         with cd('/home/www-data/web2py/applications/' + app):
             run('hg pul -uv')
     with cd('/home/www-data/web2py/applications/demo'):

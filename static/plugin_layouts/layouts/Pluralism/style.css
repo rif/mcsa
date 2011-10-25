@@ -374,6 +374,48 @@ img.right {
     width: 50%;
 }
 
+.rep table th {
+  text-align: center;
+  font-weight: bold;
+}
+.rep table td,
+.rep table th {
+  padding: 2px;
+}
+.rep table td.numeric,
+.rep table th.numeric {
+  text-align: right;
+}
+
+.rep table th {
+  background-color: white;
+}
+.rep table th.even, .rep table th:nth-child(2n) {
+  background-color: #dddddd;
+}
+.rep table tr.odd td {
+  background-color: #98c67a;
+  color: white;
+}
+.rep table tr.odd td.even, .rep table tr.odd td:nth-child(2n) {
+  background-color: #76a458;
+  color: white;
+}
+.rep table tr.even td {
+  background-color: #7a98c6;
+  color: white;
+}
+.rep table tr.even td.even, .rep table tr.even td:nth-child(2n) {
+  background-color: #5876a4;
+  color: white;
+}
+.rep table tfoot th, .rep table tfoot td {
+  background-color: white;
+}
+.rep table tfoot th.even, .rep table tfoot th:nth-child(2n), .rep table tfoot td.even, .rep table tfoot td:nth-child(2n) {
+  background-color: #dddddd;
+}
+
 #time_entry input {width:94%;}
 #time_entry select {width:100%;margin-right:2px; margin-top:2px;}
 #time_entry textarea {width:97%;}
