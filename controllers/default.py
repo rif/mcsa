@@ -240,10 +240,10 @@ def reports():
     earner_data = [(row.auth_user.first_name, row[total_duration]) for row in earners]    
 
     clients = entries_set.select(db.client.id, db.client.name, total_duration, orderby=~total_duration, groupby=db.client.name)
-    client_data = [(' '.join(row.client.name.split(' ')[:2]), row[total_duration]) for row in clients]    
+    client_data = [(''.join(row.client.name.split(' ')[:2]), row[total_duration]) for row in clients]    
 
     matters = entries_set.select(db.matter.id, db.matter.name, total_duration, orderby=~total_duration, groupby=db.matter.name)
-    matter_data = [(row.matter.name.split(' ')[0],row[total_duration]) for row in matters]
+    matter_data = [(''.join(row.matter.name.split(' ')[:2]),row[total_duration]) for row in matters]
     
     if form.vars.csv:
         response.headers['Content-Type']='application/excel'
