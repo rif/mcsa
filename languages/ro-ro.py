@@ -105,6 +105,7 @@
 'Nothing found - sorry': 'Nu am gasit nimic',
 'Nov': 'Noi',
 'November': 'Noiembrie',
+'Object or table name': 'Object or table name',
 'Oct': 'Oct',
 'October': 'Octombrie',
 'Origin': 'Originea',

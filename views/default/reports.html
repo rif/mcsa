@@ -7,7 +7,10 @@
 	</div>
 </div>
 
-<h2>{{=entries_set.count()}} {{=T('time entries')}}</h2>
+<span id="entries-count-text">{{=T('time entries')}}</span>
+<span id="entries-count">{{=entries_set.count()}}</span>
+
+
 <div class="rep">
 </div>
 {{c=('odd', 'even')}}
@@ -106,7 +109,8 @@
 		$("#no_table_matter").change( function() {
 			$("#no_table_segment__row td.w2p_fw").load("{{=URL('segment_callback')}}/" + $(this).val())
 		});
-		
+		$("#no_table_fee_earner, #no_table_client, #no_table_matter, #no_table_segment").css("width", "550px");
+		$("#no_table_fee_earner, #no_table_client, #no_table_matter, #no_table_segment").chosen();		
 		var d1 = [];		
 		{{for i,d in enumerate(earner_data):}}
 			d1[{{=i}}] = { label: "{{=d[0]}}", data: {{=d[1]}} }
