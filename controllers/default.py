@@ -274,6 +274,8 @@ def reports():
         response.headers['Content-Type']='application/pdf'
         response.headers['Content-Disposition']='attachment'
         return pdf.output(dest='S')
+    response.files.append(URL('static','css/chosen.css'))
+    response.files.append(URL('static','js/chosen.jquery.min.js'))
     return locals()
 
 def lt(str):

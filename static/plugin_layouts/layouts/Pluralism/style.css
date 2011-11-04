@@ -416,6 +416,21 @@ img.right {
   background-color: #dddddd;
 }
 
+
+#entries-count {
+	color: #5876A4;
+	font-family: times;
+	float: right;
+	font-weight: bold;
+	font-size: 4em;
+}
+#entries-count-text {
+	float: right;
+	width: 60px;	
+	margin-top: 7px;
+	font-size: 1.3em;
+}
+
 #time_entry input {width:94%;}
 #time_entry select {width:100%;margin-right:2px; margin-top:2px;}
 #time_entry textarea {width:97%;}
