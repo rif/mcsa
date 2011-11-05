@@ -369,6 +369,10 @@ img.right {
     float: left;
 }
 
+.rep .leftish select {
+    width: 550px;    
+}
+
 .rep .rightish, #earner-graph, #client-graph, #matter-graph {
     float: left;
     width: 50%;
