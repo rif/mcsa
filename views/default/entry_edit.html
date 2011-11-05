@@ -67,12 +67,13 @@
 
 $(function(){
     client = $("#time_entry_client");
-    
+    $("#time_entry_related_disbursements").chosen();
     if(client.val() == "") {
 	 $("#time_entry_matter").attr("disabled","disabled");
     } else {
 	old_matter = $('option:selected',  $("#time_entry_matter")).val();
-	$("#matter_span").load("{{=URL('matters_callback')}}/" + client.val(), function(){
+	$.get("{{=URL('matters_callback')}}/" + client.val(), function(data){
+		$("#matter_span>select").replaceWith(data);
 	    $("option[value=" + old_matter +"]", $("#time_entry_matter")).attr('selected', 'selected');
 	});
     }

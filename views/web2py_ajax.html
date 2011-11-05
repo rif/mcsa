@@ -6,7 +6,8 @@ response.files.insert(1,URL('static','css/calendar.css'))
 response.files.insert(2,URL('static','js/calendar.js'))
 response.files.insert(3,URL('static','css/fullcalendar.css'))
 response.files.insert(4,URL('static','js/fullcalendar.min.js'))
-response.files.insert(5,URL('static','js/jquery.qtip-1.0.0-rc3.min.js'))
+response.files.insert(5,URL('static','css/jquery.qtip.min.css'))
+response.files.insert(6,URL('static','js/jquery.qtip.min.js'))
 for _item in response.meta or []:}}
      <meta name="{{=_item}}" content="{{=response.meta[_item]}}" />{{
 pass

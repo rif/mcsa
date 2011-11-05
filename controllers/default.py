@@ -122,7 +122,9 @@ def entry_new():
     minutes = delta.days * 24 * 60 + delta.seconds / 60
     duration = minutes / 6 * 0.1
     db.time_entry.duration.default = duration
-    form = crud.create(db.time_entry, next=URL('index'), onvalidation=_strip)
+    form = crud.create(db.time_entry, next=URL('index'), onvalidation=_strip)    
+    response.files.append(URL('static','css/chosen.css'))
+    response.files.append(URL('static','js/chosen.jquery.min.js'))    
     return response.render('default/entry_edit.html', locals())
 
 @auth.requires_login()
@@ -142,7 +144,9 @@ def entry_edit():
         #db.time_entry.segment.requires=IS_EMPTY_OR(IS_IN_DB(db(db.segment.matter==entry.matter),db.segment.id, '%(name)s'))
         form=crud.update(db.time_entry, entry, next=URL('index'), onvalidation=_strip)
     else:
-        form = crud.create(db.time_entry, next=URL('index'), onvalidation=_strip)
+        form = crud.create(db.time_entry, next=URL('index'), onvalidation=_strip)    
+    response.files.append(URL('static','css/chosen.css'))
+    response.files.append(URL('static','js/chosen.jquery.min.js'))
     return locals()
 
 @auth.requires_login()
