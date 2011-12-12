@@ -25,6 +25,16 @@ def deploy():
             run('hg pul -uv')
     with cd('/home/www-data/web2py/applications/demo'):
         run('hg pul --rebase -uv')
+    recompile()
+
+@task
+@hosts('exserver@www.exstudio.ro:22011')
+def recompile():
+    'recompile application'
+    print(green('recompiling...'))
+    with cd('web2py'):
+        for app in ('mcsa', 'demo', 'init'):
+            run('python -c "import gluon.compileapp; gluon.compileapp.compile_application(\'applications/init\')"' % app)
 
 @task
 @hosts('rif@avocadosoft.ro:22011')
